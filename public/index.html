@@ -32,12 +32,14 @@
     
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 h-[100dvh] w-screen overflow-hidden">
+<body class="bg-slate-100 text-slate-800 h-[100dvh] w-screen overflow-x-hidden overflow-y-auto">
 
   <!-- VIEW 1: LOGIN USER / MERCHANT -->
-  <div id="view-login" class="flex h-[100dvh] w-full items-center justify-center p-3 overflow-y-auto">
+  <div id="view-login" class="flex min-h-[100dvh] w-full items-center justify-center p-3">
     <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl w-full max-w-sm fade-in border border-slate-100 text-center">
       <div class="mb-4 flex justify-center">
         <img src="https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg" alt="KasirinAja Logo" class="h-20 w-auto object-contain rounded-2xl shadow-sm">
@@ -62,37 +64,37 @@
 
   <!-- VIEW 2: DASHBOARD KASIR MERCHANT -->
   <div id="view-app" class="hidden h-[100dvh] w-full flex flex-col overflow-hidden">
-    <header id="main-header" class="bg-blue-600 text-white shadow-sm shrink-0 transition-colors duration-300">
-      <div class="max-w-7xl mx-auto px-3 py-2 flex justify-between items-center">
-        <div class="flex items-center space-x-2.5">
-          <img id="ui-logo" src="" class="w-8 h-8 rounded-lg object-cover border border-white/30 hidden">
-          <div>
-            <h1 id="ui-nama-toko" class="font-bold text-sm leading-tight">Nama Toko</h1>
-            <p id="ui-alamat" class="text-[10px] text-white/80 truncate max-w-[140px] sm:max-w-xs">Alamat Toko</p>
+    <!-- Header Toko -->
+    <header id="main-header" class="bg-blue-600 text-white shadow-sm shrink-0 transition-colors duration-300 w-full">
+      <div class="max-w-7xl mx-auto px-3 py-2 flex justify-between items-center gap-2 w-full">
+        <div class="flex items-center space-x-2 min-w-0 flex-1">
+          <img id="ui-logo" src="" class="w-8 h-8 rounded-lg object-cover border border-white/30 hidden shrink-0">
+          <div class="min-w-0 flex-1">
+            <h1 id="ui-nama-toko" class="font-bold text-sm leading-tight truncate">Nama Toko</h1>
+            <p id="ui-alamat" class="text-[10px] text-white/80 truncate">Alamat Toko</p>
           </div>
         </div>
-        <nav class="flex items-center space-x-1">
-          <button onclick="switchTab('kasir')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium">Kasir</button>
-          <button onclick="switchTab('produk')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium">Produk</button>
-          <button onclick="switchTab('keuangan')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium">Keuangan</button>
-          <button onclick="switchTab('pengaturan')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium">Struk</button>
-          <button onclick="logout()" class="px-2 py-1 rounded-lg bg-rose-500/80 hover:bg-rose-600 transition text-[10px] font-bold ml-1">Keluar</button>
+        <nav class="flex items-center space-x-1 shrink-0 overflow-x-auto no-scrollbar">
+          <button onclick="switchTab('kasir')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium whitespace-nowrap">Kasir</button>
+          <button onclick="switchTab('produk')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium whitespace-nowrap">Produk</button>
+          <button onclick="switchTab('keuangan')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium whitespace-nowrap">Keuangan</button>
+          <button onclick="switchTab('pengaturan')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition text-xs font-medium whitespace-nowrap">Struk</button>
+          <button onclick="logout()" class="px-2 py-1 rounded-lg bg-rose-500/80 hover:bg-rose-600 transition text-[10px] font-bold ml-1 whitespace-nowrap">Keluar</button>
         </nav>
       </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-3 overflow-hidden flex flex-col">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-3 overflow-y-auto overflow-x-hidden flex flex-col min-h-0">
 
       <!-- TAB KASIR (POS) -->
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
-        
         <!-- Katalog Produk -->
         <div class="md:col-span-2 bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60 flex flex-col h-full min-h-0">
           <h2 class="text-xs font-bold mb-2 text-slate-700 shrink-0">Katalog Produk</h2>
           <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto flex-1 pr-1"></div>
         </div>
 
-        <!-- Keranjang & Rincian Pembayaran (Mobile Fixed Layout) -->
+        <!-- Keranjang & Rincian Pembayaran -->
         <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60 flex flex-col h-full min-h-0 justify-between">
           <div class="flex flex-col flex-1 min-h-0">
             <h2 class="text-xs font-bold mb-2 text-slate-700 shrink-0">Keranjang Belanja</h2>
@@ -100,7 +102,6 @@
               <input type="text" id="kasir-bertugas" placeholder="Nama Kasir Jaga" class="w-full px-2.5 py-1.5 border rounded-lg text-xs bg-slate-50 outline-none focus:bg-white">
             </div>
             
-            <!-- List Keranjang HP Fix -->
             <div id="items-keranjang" class="space-y-1.5 overflow-y-auto flex-1 pr-1 divide-y divide-slate-100 min-h-0"></div>
           </div>
 
@@ -155,39 +156,48 @@
         </form>
       </section>
 
-      <!-- TAB KEUANGAN -->
-      <section id="tab-keuangan" class="hidden space-y-3 overflow-y-auto fade-in">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60">
-            <h3 class="font-bold text-emerald-600 text-xs mb-2">Catat Pemasukan</h3>
-            <form onsubmit="catatTransaksi(event, 'pemasukan')" class="flex gap-1.5">
-              <input type="number" id="in-pemasukan" placeholder="Jumlah (Rp)" required class="flex-1 p-2 border rounded-lg text-xs">
-              <input type="text" id="ket-pemasukan" placeholder="Keterangan" class="flex-1 p-2 border rounded-lg text-xs">
-              <button class="px-3 py-2 bg-emerald-600 text-white rounded-lg font-bold text-xs">Simpan</button>
+      <!-- TAB KEUANGAN (FIXED RESPONSIVE) -->
+      <section id="tab-keuangan" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+          <!-- Catat Pemasukan -->
+          <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-slate-200/60 w-full">
+            <h3 class="font-bold text-emerald-600 text-xs sm:text-sm mb-2.5">Catat Pemasukan</h3>
+            <form onsubmit="catatTransaksi(event, 'pemasukan')" class="flex flex-col gap-2">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input type="number" id="in-pemasukan" placeholder="Jumlah (Rp)" required class="w-full p-2 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500">
+                <input type="text" id="ket-pemasukan" placeholder="Keterangan" class="w-full p-2 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500">
+              </div>
+              <button class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs transition">Simpan Pemasukan</button>
             </form>
           </div>
-          <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60">
-            <h3 class="font-bold text-rose-600 text-xs mb-2">Catat Pengeluaran</h3>
-            <form onsubmit="catatTransaksi(event, 'pengeluaran')" class="flex gap-1.5">
-              <input type="number" id="in-pengeluaran" placeholder="Jumlah (Rp)" required class="flex-1 p-2 border rounded-lg text-xs">
-              <input type="text" id="ket-pengeluaran" placeholder="Keterangan" class="flex-1 p-2 border rounded-lg text-xs">
-              <button class="px-3 py-2 bg-rose-600 text-white rounded-lg font-bold text-xs">Simpan</button>
+
+          <!-- Catat Pengeluaran -->
+          <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-slate-200/60 w-full">
+            <h3 class="font-bold text-rose-600 text-xs sm:text-sm mb-2.5">Catat Pengeluaran</h3>
+            <form onsubmit="catatTransaksi(event, 'pengeluaran')" class="flex flex-col gap-2">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <input type="number" id="in-pengeluaran" placeholder="Jumlah (Rp)" required class="w-full p-2 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-rose-500">
+                <input type="text" id="ket-pengeluaran" placeholder="Keterangan" class="w-full p-2 border rounded-xl text-xs outline-none focus:ring-2 focus:ring-rose-500">
+              </div>
+              <button class="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-xs transition">Simpan Pengeluaran</button>
             </form>
           </div>
         </div>
-        <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60">
-          <h3 class="font-bold text-slate-800 text-xs mb-2">Riwayat Transaksi</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-slate-50 text-slate-500">
+
+        <!-- Tabel Riwayat -->
+        <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-sm border border-slate-200/60 w-full overflow-hidden">
+          <h3 class="font-bold text-slate-800 text-xs sm:text-sm mb-2.5">Riwayat Transaksi</h3>
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left text-xs min-w-[500px]">
+              <thead class="bg-slate-50 text-slate-500 border-b border-slate-100">
                 <tr>
-                  <th class="p-2">Tanggal</th>
-                  <th class="p-2">Tipe</th>
-                  <th class="p-2">Jumlah</th>
-                  <th class="p-2">Keterangan</th>
+                  <th class="p-2 sm:p-2.5">Tanggal</th>
+                  <th class="p-2 sm:p-2.5">Tipe</th>
+                  <th class="p-2 sm:p-2.5">Jumlah</th>
+                  <th class="p-2 sm:p-2.5">Keterangan</th>
                 </tr>
               </thead>
-              <tbody id="tabel-transaksi"></tbody>
+              <tbody id="tabel-transaksi" class="divide-y divide-slate-100"></tbody>
             </table>
           </div>
         </div>
@@ -334,11 +344,9 @@
         div.className = 'border rounded-xl p-2 text-center cursor-pointer hover:scale-[1.02] transition bg-white flex flex-col justify-between shadow-xs select-none relative group';
         div.onclick = () => tambahKeKeranjang(p);
         div.innerHTML = `
-          <!-- Tombol Hapus Produk dari Katalog -->
           <button onclick="hapusProduk('${p.id}', event)" class="absolute top-1 right-1 w-5 h-5 bg-rose-500 text-white rounded-full text-[10px] flex items-center justify-center font-bold shadow hover:bg-rose-600 transition" title="Hapus Produk">
             ✕
           </button>
-
           <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-16 sm:h-20 object-cover rounded-lg mb-1">
           <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1">${p.nama_produk}</div>
           <div class="text-[10px] text-emerald-600 font-bold mt-0.5">Rp ${Number(p.harga).toLocaleString()}</div>
@@ -353,7 +361,6 @@
 
       const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        // Hapus juga dari keranjang jika produk tersebut sedang ada di keranjang
         keranjang = keranjang.filter(k => k.id !== id);
         renderKeranjang();
         loadProduk();
@@ -395,7 +402,6 @@
       renderKeranjang();
     }
 
-    // LIST KERANJANG DISESUAIKAN PRESISI UNTUK LAYAR HP
     function renderKeranjang() {
       const container = document.getElementById('items-keranjang');
       container.innerHTML = '';
@@ -407,20 +413,15 @@
         const row = document.createElement('div');
         row.className = 'flex justify-between items-center py-1.5 text-xs gap-1.5';
         row.innerHTML = `
-          <!-- Nama Produk -->
           <div class="flex-1 min-w-0">
             <div class="font-semibold text-slate-800 text-[11px] truncate leading-tight">${k.nama_produk}</div>
             <div class="text-[9px] text-slate-400">Rp ${Number(k.harga).toLocaleString()}</div>
           </div>
-
-          <!-- Tombol Tambah & Kurang Qty -->
           <div class="flex items-center space-x-1 shrink-0">
             <button onclick="kurangQty('${k.id}')" class="w-5 h-5 rounded bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">-</button>
             <span class="text-[11px] font-bold px-1 min-w-[16px] text-center">${k.qty}</span>
             <button onclick="tambahQty('${k.id}')" class="w-5 h-5 rounded bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">+</button>
           </div>
-
-          <!-- Subtotal & Tombol Hapus -->
           <div class="text-right shrink-0 min-w-[55px]">
             <div class="font-bold text-[11px] text-slate-800">Rp ${sub.toLocaleString()}</div>
             <button onclick="hapusDariKeranjang('${k.id}')" class="text-[9px] text-rose-500 font-semibold hover:underline">Hapus</button>
@@ -481,7 +482,6 @@
       loadTransaksi();
     }
 
-    // CETAK STRUK EMBEDDED IFRAME (SUPORT APK & WEBVIEW)
     function cetakStrukThermal(total, uang, kembalian, namaKasir) {
       let printFrame = document.getElementById('print-iframe');
       if (!printFrame) {
