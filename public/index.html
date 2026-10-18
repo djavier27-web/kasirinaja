@@ -3,181 +3,253 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KasirinAja - Aplikasi Kasir Minimalis</title>
+  <title>KasirinAja - POS Kasir Modern</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .fade-in { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen antialiased">
+<body class="bg-slate-100 text-slate-800 min-h-screen">
 
-  <!-- Header Dinamis -->
-  <header id="main-header" class="bg-blue-600 text-white shadow-sm transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <img id="ui-logo" src="" alt="Logo" class="w-9 h-9 rounded-lg object-cover border border-white/20 hidden">
-        <div>
-          <h1 id="ui-nama-toko" class="font-bold text-lg leading-tight">KasirinAja</h1>
-          <select id="user-switcher" onchange="gantiUser(this.value)" class="bg-black/20 text-xs px-2 py-0.5 rounded border border-white/20 text-white focus:outline-none"></select>
-        </div>
+  <!-- VIEW 1: LOGIN USER / MERCHANT -->
+  <div id="view-login" class="flex min-h-screen items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md fade-in border border-slate-100">
+      <div class="text-center mb-8">
+        <div class="w-14 h-14 bg-blue-600 rounded-2xl mx-auto mb-3 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-blue-500/30">K</div>
+        <h1 class="text-2xl font-bold text-slate-900">Masuk KasirinAja</h1>
+        <p class="text-sm text-slate-500 mt-1">Kelola penjualan toko Anda dengan mudah</p>
       </div>
-      <nav class="flex space-x-1 text-sm font-medium">
-        <button onclick="switchTab('kasir')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition">Kasir</button>
-        <button onclick="switchTab('produk')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition">Produk</button>
-        <button onclick="switchTab('keuangan')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition">Keuangan</button>
-        <button onclick="switchTab('pengaturan')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition">Custom UI</button>
-        <button id="nav-dev" onclick="switchTab('developer')" class="px-3 py-1.5 rounded-lg bg-slate-900/40 hover:bg-slate-900/60 transition hidden">Dev Panel</button>
-      </nav>
+      <form onsubmit="loginUser(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Email Toko</label>
+          <input type="email" id="login-email" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm transition">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Password</label>
+          <input type="password" id="login-password" required class="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm transition">
+        </div>
+        <button type="submit" class="w-full py-3.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/25 transition">Masuk ke Kasir</button>
+      </form>
     </div>
-  </header>
+  </div>
 
-  <main class="max-w-7xl mx-auto p-4 md:p-6">
-
-    <!-- TAB 1: KASIR (POS) -->
-    <section id="tab-kasir" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="md:col-span-2 bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-        <h2 class="text-base font-bold mb-4 text-slate-700">Katalog Produk</h2>
-        <div id="grid-produk" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
-      </div>
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
-        <div>
-          <h2 class="text-base font-bold mb-4 text-slate-700">Keranjang Belanja</h2>
-          <div id="items-keranjang" class="space-y-2 max-h-64 overflow-y-auto pr-1 divide-y divide-slate-100"></div>
-        </div>
-        <div class="border-t pt-4 mt-4">
-          <div class="flex justify-between text-lg font-bold mb-4">
-            <span>Total:</span>
-            <span id="total-bayar" class="text-emerald-600">Rp 0</span>
+  <!-- VIEW 2: DASHBOARD KASIR MERCHANT -->
+  <div id="view-app" class="hidden min-h-screen flex flex-col">
+    <!-- Header -->
+    <header id="main-header" class="bg-blue-600 text-white shadow-md transition-colors duration-300">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <img id="ui-logo" src="" class="w-10 h-10 rounded-xl object-cover border-2 border-white/30 hidden">
+          <div>
+            <h1 id="ui-nama-toko" class="font-bold text-lg leading-tight">Nama Toko</h1>
+            <p id="ui-alamat" class="text-xs text-white/80">Alamat Toko</p>
           </div>
-          <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl shadow-sm hover:opacity-95 transition">
-            Bayar & Cetak Struk
-          </button>
         </div>
+        <nav class="flex items-center space-x-2">
+          <button onclick="switchTab('kasir')" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition text-sm font-medium">Kasir</button>
+          <button onclick="switchTab('produk')" class="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition text-sm font-medium">Produk</button>
+          <button onclick="switchTab('keuangan')" class="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition text-sm font-medium">Keuangan</button>
+          <button onclick="switchTab('pengaturan')" class="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition text-sm font-medium">Custom Struk</button>
+          <button onclick="logout()" class="px-3 py-1.5 rounded-xl bg-rose-500/80 hover:bg-rose-600 transition text-xs font-bold ml-2">Keluar</button>
+        </nav>
       </div>
-    </section>
+    </header>
 
-    <!-- TAB 2: TAMBAH PRODUK -->
-    <section id="tab-produk" class="hidden max-w-lg mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-      <h2 class="text-base font-bold mb-4 text-slate-700">Tambah Produk Baru</h2>
-      <form onsubmit="tambahProduk(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Produk</label>
-          <input type="text" id="prod-nama" required class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Harga (Rp)</label>
-          <input type="number" id="prod-harga" required class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">URL Foto Produk</label>
-          <input type="url" id="prod-foto" placeholder="https://..." class="w-full p-2.5 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm">
-        </div>
-        <button type="submit" class="w-full py-2.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition text-sm">Simpan Produk</button>
-      </form>
-    </section>
+    <main class="max-w-7xl mx-auto p-4 md:p-6 flex-1 w-full">
 
-    <!-- TAB 3: KEUANGAN -->
-    <section id="tab-keuangan" class="hidden space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-          <h3 class="font-bold text-emerald-600 text-sm mb-3">Catat Pemasukan Lain</h3>
-          <form onsubmit="catatTransaksi(event, 'pemasukan')" class="flex gap-2">
-            <input type="number" id="in-pemasukan" placeholder="Jumlah (Rp)" required class="flex-1 p-2 border rounded-xl text-sm">
-            <input type="text" id="ket-pemasukan" placeholder="Keterangan" class="flex-1 p-2 border rounded-xl text-sm">
-            <button class="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold text-sm">Simpan</button>
-          </form>
+      <!-- TAB KASIR -->
+      <section id="tab-kasir" class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in">
+        <div class="md:col-span-2 bg-white p-5 rounded-3xl shadow-sm border border-slate-200/60">
+          <h2 class="text-base font-bold mb-4 text-slate-800">Katalog Produk</h2>
+          <div id="grid-produk" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
         </div>
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-          <h3 class="font-bold text-rose-600 text-sm mb-3">Catat Pengeluaran</h3>
-          <form onsubmit="catatTransaksi(event, 'pengeluaran')" class="flex gap-2">
-            <input type="number" id="in-pengeluaran" placeholder="Jumlah (Rp)" required class="flex-1 p-2 border rounded-xl text-sm">
-            <input type="text" id="ket-pengeluaran" placeholder="Keterangan" class="flex-1 p-2 border rounded-xl text-sm">
-            <button class="px-4 py-2 bg-rose-600 text-white rounded-xl font-bold text-sm">Simpan</button>
-          </form>
+        <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-200/60 flex flex-col justify-between">
+          <div>
+            <h2 class="text-base font-bold mb-3 text-slate-800">Keranjang Belanja</h2>
+            <div class="mb-3">
+              <label class="block text-xs font-semibold text-slate-500 mb-1">Kasir Melayani</label>
+              <input type="text" id="kasir-bertugas" placeholder="Nama Kasir" class="w-full p-2.5 border rounded-xl text-xs bg-slate-50 outline-none">
+            </div>
+            <div id="items-keranjang" class="space-y-2 max-h-52 overflow-y-auto pr-1 divide-y"></div>
+          </div>
+          <div class="border-t pt-3 mt-3 space-y-2">
+            <div class="flex justify-between text-lg font-bold">
+              <span>Total:</span>
+              <span id="total-bayar" class="text-emerald-600">Rp 0</span>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 mb-1">Uang Tunai (Cash)</label>
+              <input type="number" id="uang-diterima" oninput="hitungKembalian()" placeholder="0" class="w-full p-2.5 border rounded-xl text-base font-bold outline-none">
+            </div>
+            <div class="flex justify-between text-sm font-semibold">
+              <span>Kembalian:</span>
+              <span id="uang-kembalian" class="text-blue-600">Rp 0</span>
+            </div>
+            <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="w-full py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition mt-2">
+              Bayar & Cetak Struk
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-        <h3 class="font-bold text-slate-700 text-sm mb-4">Riwayat Transaksi</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-slate-50 border-b border-slate-100 text-slate-500">
-              <tr>
-                <th class="p-3">Tanggal</th>
-                <th class="p-3">Tipe</th>
-                <th class="p-3">Jumlah</th>
-                <th class="p-3">Keterangan</th>
-              </tr>
-            </thead>
-            <tbody id="tabel-transaksi"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- TAB 4: CUSTOM UI & STRUK -->
-    <section id="tab-pengaturan" class="hidden max-w-lg mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-      <h2 class="text-base font-bold mb-4 text-slate-700">Kustomisasi Tampilan & Struk</h2>
-      <form onsubmit="simpanSettings(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Warna UI Kasir</label>
-          <input type="color" id="set-warna" class="w-full h-10 p-1 border rounded-xl cursor-pointer">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">URL Logo Toko</label>
-          <input type="url" id="set-logo" placeholder="https://..." class="w-full p-2.5 border rounded-xl text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Pesan Struk Footer</label>
-          <input type="text" id="set-header-struk" class="w-full p-2.5 border rounded-xl text-sm">
-        </div>
-        <button type="submit" class="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl text-sm">Simpan Perubahan</button>
-      </form>
-    </section>
+      <!-- TAB PRODUK -->
+      <section id="tab-produk" class="hidden max-w-xl mx-auto bg-white p-6 rounded-3xl shadow-sm border border-slate-200/60 fade-in">
+        <h2 class="text-base font-bold mb-4 text-slate-800">Tambah Produk Baru</h2>
+        <form onsubmit="tambahProduk(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Produk</label>
+            <input type="text" id="prod-nama" required class="w-full p-3 border rounded-xl text-sm outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Harga (Rp)</label>
+            <input type="number" id="prod-harga" required class="w-full p-3 border rounded-xl text-sm outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Foto Produk (Dari Perangkat)</label>
+            <input type="file" id="prod-foto-file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+          </div>
+          <button type="submit" class="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl shadow transition text-sm">Simpan Produk</button>
+        </form>
+      </section>
 
-    <!-- TAB 5: DEVELOPER DASHBOARD -->
-    <section id="tab-developer" class="hidden max-w-lg mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-      <div class="flex items-center space-x-2 mb-2">
-        <span class="bg-slate-900 text-white text-xs px-2 py-0.5 rounded font-mono">SUPERADMIN</span>
-        <h2 class="text-base font-bold text-slate-800">Developer Dashboard</h2>
-      </div>
-      <p class="text-xs text-slate-500 mb-4">Buat akun merchant/toko baru di bawah ini.</p>
-      <form onsubmit="buatAkun(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Toko Merchant</label>
-          <input type="text" id="dev-nama-toko" required class="w-full p-2.5 border rounded-xl text-sm">
+      <!-- TAB KEUANGAN -->
+      <section id="tab-keuangan" class="hidden space-y-6 fade-in">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60">
+            <h3 class="font-bold text-emerald-600 text-sm mb-3">Catat Pemasukan</h3>
+            <form onsubmit="catatTransaksi(event, 'pemasukan')" class="flex gap-2">
+              <input type="number" id="in-pemasukan" placeholder="Jumlah (Rp)" required class="flex-1 p-2.5 border rounded-xl text-sm">
+              <input type="text" id="ket-pemasukan" placeholder="Keterangan" class="flex-1 p-2.5 border rounded-xl text-sm">
+              <button class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-bold text-sm">Simpan</button>
+            </form>
+          </div>
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60">
+            <h3 class="font-bold text-rose-600 text-sm mb-3">Catat Pengeluaran</h3>
+            <form onsubmit="catatTransaksi(event, 'pengeluaran')" class="flex gap-2">
+              <input type="number" id="in-pengeluaran" placeholder="Jumlah (Rp)" required class="flex-1 p-2.5 border rounded-xl text-sm">
+              <input type="text" id="ket-pengeluaran" placeholder="Keterangan" class="flex-1 p-2.5 border rounded-xl text-sm">
+              <button class="px-4 py-2.5 bg-rose-600 text-white rounded-xl font-bold text-sm">Simpan</button>
+            </form>
+          </div>
         </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Email Merchant</label>
-          <input type="email" id="dev-email" required class="w-full p-2.5 border rounded-xl text-sm">
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/60">
+          <h3 class="font-bold text-slate-800 text-sm mb-4">Riwayat Transaksi</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-slate-50 text-slate-500">
+                <tr>
+                  <th class="p-3">Tanggal</th>
+                  <th class="p-3">Tipe</th>
+                  <th class="p-3">Jumlah</th>
+                  <th class="p-3">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody id="tabel-transaksi"></tbody>
+            </table>
+          </div>
         </div>
-        <button type="submit" class="w-full py-2.5 bg-slate-900 text-white font-bold rounded-xl text-sm hover:bg-slate-800 transition">Buat Akun Toko Baru</button>
-      </form>
-    </section>
+      </section>
 
-  </main>
+      <!-- TAB CUSTOM STRUK -->
+      <section id="tab-pengaturan" class="hidden max-w-xl mx-auto bg-white p-6 rounded-3xl shadow-sm border border-slate-200/60 fade-in">
+        <h2 class="text-base font-bold mb-4 text-slate-800">Kustomisasi Struk & Tampilan UI</h2>
+        <form onsubmit="simpanSettings(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Toko</label>
+            <input type="text" id="set-nama-toko" required class="w-full p-2.5 border rounded-xl text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Alamat Toko</label>
+            <input type="text" id="set-alamat-toko" class="w-full p-2.5 border rounded-xl text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kasir Default</label>
+            <input type="text" id="set-nama-kasir" class="w-full p-2.5 border rounded-xl text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Logo Toko (Dari Perangkat)</label>
+            <input type="file" id="set-logo-file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Pesan Struk Footer</label>
+            <input type="text" id="set-header-struk" class="w-full p-2.5 border rounded-xl text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Warna UI Kasir</label>
+            <input type="color" id="set-warna" class="w-full h-10 p-1 border rounded-xl cursor-pointer">
+          </div>
+          <button type="submit" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl text-sm">Simpan Perubahan</button>
+        </form>
+      </section>
+
+    </main>
+  </div>
 
   <script>
-    let allUsers = [];
-    let activeUser = null;
+    let activeUser = JSON.parse(localStorage.getItem('kasirin_user')) || null;
     let keranjang = [];
 
-    async function init() {
-      const res = await fetch('/api/users');
-      allUsers = await res.json();
-      
-      const select = document.getElementById('user-switcher');
-      select.innerHTML = '';
-      allUsers.forEach(u => {
-        const opt = document.createElement('option');
-        opt.value = u.id;
-        opt.innerText = `${u.nama_toko} (${u.role})`;
-        select.appendChild(opt);
+    // Utility: Kompresi File Gambar ke Base64 (Tanpa URL)
+    function compressImageToBase64(file, maxWidth = 300) {
+      return new Promise((resolve) => {
+        if (!file) return resolve('');
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const scale = maxWidth / img.width;
+            canvas.width = maxWidth;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', 0.8));
+          };
+        };
+      });
+    }
+
+    async function loginUser(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, expected_role: 'user' })
       });
 
-      if (allUsers.length > 0) {
-        gantiUser(allUsers[0].id);
+      const data = await res.json();
+      if (res.ok) {
+        activeUser = data;
+        localStorage.setItem('kasirin_user', JSON.stringify(data));
+        initApp();
+      } else {
+        alert(data.error || 'Login gagal!');
       }
     }
 
-    function gantiUser(userId) {
-      activeUser = allUsers.find(u => u.id === userId);
+    function logout() {
+      localStorage.removeItem('kasirin_user');
+      location.reload();
+    }
+
+    function initApp() {
+      if (!activeUser) {
+        document.getElementById('view-login').classList.remove('hidden');
+        document.getElementById('view-app').classList.add('hidden');
+        return;
+      }
+
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('view-app').classList.remove('hidden');
+
       terapkanUI(activeUser);
       loadProduk();
       loadTransaksi();
@@ -185,31 +257,28 @@
 
     function terapkanUI(u) {
       document.getElementById('ui-nama-toko').innerText = u.nama_toko;
+      document.getElementById('ui-alamat').innerText = u.alamat_toko || 'Alamat Toko';
       document.getElementById('main-header').style.backgroundColor = u.warna_ui || '#2563eb';
       document.getElementById('btn-proses-bayar').style.backgroundColor = u.warna_ui || '#2563eb';
 
       const img = document.getElementById('ui-logo');
-      if (u.logo_url) {
-        img.src = u.logo_url;
+      if (u.logo_data) {
+        img.src = u.logo_data;
         img.classList.remove('hidden');
       } else {
         img.classList.add('hidden');
       }
 
+      document.getElementById('set-nama-toko').value = u.nama_toko || '';
+      document.getElementById('set-alamat-toko').value = u.alamat_toko || '';
+      document.getElementById('set-nama-kasir').value = u.nama_kasir || 'Kasir 1';
+      document.getElementById('kasir-bertugas').value = u.nama_kasir || 'Kasir 1';
       document.getElementById('set-warna').value = u.warna_ui || '#2563eb';
-      document.getElementById('set-logo').value = u.logo_url || '';
       document.getElementById('set-header-struk').value = u.header_struk || 'Terima kasih!';
-
-      const devNav = document.getElementById('nav-dev');
-      if (u.role === 'developer') {
-        devNav.classList.remove('hidden');
-      } else {
-        devNav.classList.add('hidden');
-      }
     }
 
     function switchTab(tab) {
-      ['kasir', 'produk', 'keuangan', 'pengaturan', 'developer'].forEach(t => {
+      ['kasir', 'produk', 'keuangan', 'pengaturan'].forEach(t => {
         document.getElementById(`tab-${t}`).classList.add('hidden');
       });
       document.getElementById(`tab-${tab}`).classList.remove('hidden');
@@ -223,12 +292,12 @@
 
       prods.forEach(p => {
         const div = document.createElement('div');
-        div.className = 'border rounded-xl p-3 text-center cursor-pointer hover:shadow-md transition bg-white flex flex-col justify-between';
+        div.className = 'border rounded-2xl p-3 text-center cursor-pointer hover:scale-[1.02] transition bg-white flex flex-col justify-between shadow-sm';
         div.onclick = () => tambahKeKeranjang(p);
         div.innerHTML = `
-          <img src="${p.foto_url || 'https://via.placeholder.com/150'}" class="w-full h-24 object-cover rounded-lg mb-2">
+          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-24 object-cover rounded-xl mb-2">
           <div class="font-bold text-xs truncate text-slate-800">${p.nama_produk}</div>
-          <div class="text-xs text-emerald-600 font-semibold mt-1">Rp ${Number(p.harga).toLocaleString()}</div>
+          <div class="text-xs text-emerald-600 font-bold mt-1">Rp ${Number(p.harga).toLocaleString()}</div>
         `;
         grid.appendChild(div);
       });
@@ -253,7 +322,7 @@
         row.className = 'flex justify-between items-center py-2 text-xs';
         row.innerHTML = `
           <div>
-            <div class="font-semibold text-slate-700">${k.nama_produk}</div>
+            <div class="font-semibold text-slate-800">${k.nama_produk}</div>
             <div class="text-slate-400">${k.qty} x Rp ${Number(k.harga).toLocaleString()}</div>
           </div>
           <div class="font-bold">Rp ${sub.toLocaleString()}</div>
@@ -262,11 +331,32 @@
       });
 
       document.getElementById('total-bayar').innerText = `Rp ${total.toLocaleString()}`;
+      hitungKembalian();
+    }
+
+    function hitungKembalian() {
+      const total = keranjang.reduce((sum, k) => sum + (k.harga * k.qty), 0);
+      const uang = Number(document.getElementById('uang-diterima').value) || 0;
+      const kembalian = uang - total;
+
+      const spanKembalian = document.getElementById('uang-kembalian');
+      if (kembalian >= 0) {
+        spanKembalian.innerText = `Rp ${kembalian.toLocaleString()}`;
+        spanKembalian.className = 'text-blue-600 font-bold';
+      } else {
+        spanKembalian.innerText = `Kurang Rp ${Math.abs(kembalian).toLocaleString()}`;
+        spanKembalian.className = 'text-rose-600 font-bold';
+      }
     }
 
     async function prosesBayarCetak() {
       if (keranjang.length === 0) return alert('Keranjang belanja kosong!');
       const total = keranjang.reduce((sum, k) => sum + (k.harga * k.qty), 0);
+      const uang = Number(document.getElementById('uang-diterima').value) || 0;
+
+      if (uang < total) return alert('Uang pembayaran tunai kurang!');
+
+      const namaKasir = document.getElementById('kasir-bertugas').value || 'Kasir';
 
       await fetch('/api/transactions', {
         method: 'POST',
@@ -275,44 +365,58 @@
           user_id: activeUser.id,
           tipe: 'pemasukan',
           jumlah: total,
-          keterangan: 'Penjualan Kasir'
+          keterangan: `Penjualan Kasir (Kasir: ${namaKasir})`
         })
       });
 
-      cetakStrukThermal(total);
+      cetakStrukThermal(total, uang, uang - total, namaKasir);
       keranjang = [];
+      document.getElementById('uang-diterima').value = '';
       renderKeranjang();
       loadTransaksi();
     }
 
-    function cetakStrukThermal(total) {
+    function cetakStrukThermal(total, uang, kembalian, namaKasir) {
       const win = window.open('', '', 'width=300,height=600');
+      const wkt = new Date();
+      const tanggalWaktu = `${wkt.toLocaleDateString('id-ID')} ${wkt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
+
       let items = '';
       keranjang.forEach(k => {
-        items += `<div style="display:flex;justify-between;font-size:11px;"><span>${k.nama_produk} x${k.qty}</span><span>${(k.harga * k.qty).toLocaleString()}</span></div>`;
+        items += `<div style="display:flex;justify-content:space-between;font-size:11px;"><span>${k.nama_produk} x${k.qty}</span><span>${(k.harga * k.qty).toLocaleString()}</span></div>`;
       });
+
+      const logoHtml = activeUser.logo_data ? `<div style="text-align:center;"><img src="${activeUser.logo_data}" style="max-width:40px;margin-bottom:4px;"></div>` : '';
 
       win.document.write(`
         <html>
           <head>
             <style>
-              body { font-family: monospace; width: 58mm; padding: 4px; font-size: 11px; }
+              body { font-family: monospace; width: 58mm; padding: 4px; font-size: 11px; margin: 0; }
               .center { text-align: center; }
+              .flex-between { display: flex; justify-content: space-between; }
               hr { border-top: 1px dashed #000; margin: 4px 0; }
             </style>
           </head>
           <body>
+            ${logoHtml}
             <div class="center">
-              <h3>${activeUser.nama_toko}</h3>
+              <strong>${activeUser.nama_toko}</strong><br>
+              <span style="font-size:10px;">${activeUser.alamat_toko || ''}</span>
+            </div>
+            <hr>
+            <div style="font-size:10px;">
+              <div>Tgl  : ${tanggalWaktu}</div>
+              <div>Kasir: ${namaKasir}</div>
             </div>
             <hr>
             ${items}
             <hr>
-            <div style="display:flex;justify-between;font-weight:bold;">
-              <span>TOTAL</span><span>Rp ${total.toLocaleString()}</span>
-            </div>
+            <div class="flex-between" style="font-weight:bold;"><span>TOTAL</span><span>Rp ${total.toLocaleString()}</span></div>
+            <div class="flex-between"><span>TUNAI</span><span>Rp ${uang.toLocaleString()}</span></div>
+            <div class="flex-between"><span>KEMBALI</span><span>Rp ${kembalian.toLocaleString()}</span></div>
             <hr>
-            <div class="center"><p>${activeUser.header_struk || 'Terima Kasih!'}</p></div>
+            <div class="center" style="font-size:10px;"><p>${activeUser.header_struk || 'Terima Kasih!'}</p></div>
           </body>
         </html>
       `);
@@ -324,6 +428,9 @@
 
     async function tambahProduk(e) {
       e.preventDefault();
+      const fileInput = document.getElementById('prod-foto-file');
+      const foto_data = await compressImageToBase64(fileInput.files[0]);
+
       await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -331,9 +438,10 @@
           user_id: activeUser.id,
           nama_produk: document.getElementById('prod-nama').value,
           harga: document.getElementById('prod-harga').value,
-          foto_url: document.getElementById('prod-foto').value
+          foto_data
         })
       });
+
       alert('Produk berhasil disimpan!');
       e.target.reset();
       loadProduk();
@@ -352,7 +460,7 @@
           keterangan: document.getElementById(`ket-${tipe}`).value
         })
       });
-      alert('Transaksi berhasil disimpan!');
+      alert('Transaksi dicatat!');
       e.target.reset();
       loadTransaksi();
     }
@@ -365,11 +473,11 @@
 
       data.forEach(t => {
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-slate-50 hover:bg-slate-50';
+        tr.className = 'border-b border-slate-100 hover:bg-slate-50';
         tr.innerHTML = `
           <td class="p-3 text-xs text-slate-500">${new Date(t.created_at).toLocaleDateString('id-ID')}</td>
-          <td class="p-3 font-semibold ${t.tipe === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">${t.tipe.toUpperCase()}</td>
-          <td class="p-3 font-medium">Rp ${Number(t.jumlah).toLocaleString()}</td>
+          <td class="p-3 font-bold ${t.tipe === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">${t.tipe.toUpperCase()}</td>
+          <td class="p-3 font-semibold">Rp ${Number(t.jumlah).toLocaleString()}</td>
           <td class="p-3 text-slate-500">${t.keterangan || '-'}</td>
         `;
         tbody.appendChild(tr);
@@ -378,37 +486,34 @@
 
     async function simpanSettings(e) {
       e.preventDefault();
+      const logoFile = document.getElementById('set-logo-file').files[0];
+      let logo_data = activeUser.logo_data;
+
+      if (logoFile) {
+        logo_data = await compressImageToBase64(logoFile);
+      }
+
       const res = await fetch(`/api/users/${activeUser.id}/settings`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          nama_toko: document.getElementById('set-nama-toko').value,
+          alamat_toko: document.getElementById('set-alamat-toko').value,
+          nama_kasir: document.getElementById('set-nama-kasir').value,
           warna_ui: document.getElementById('set-warna').value,
-          logo_url: document.getElementById('set-logo').value,
+          logo_data,
           header_struk: document.getElementById('set-header-struk').value
         })
       });
-      await res.json();
-      alert('Custom UI & Struk berhasil disimpan!');
-      init();
+
+      const updated = await res.json();
+      activeUser = updated;
+      localStorage.setItem('kasirin_user', JSON.stringify(updated));
+      alert('Pengaturan disimpan!');
+      initApp();
     }
 
-    async function buatAkun(e) {
-      e.preventDefault();
-      await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nama_toko: document.getElementById('dev-nama-toko').value,
-          email: document.getElementById('dev-email').value,
-          role: 'user'
-        })
-      });
-      alert('Akun Toko Merchant berhasil dibuat oleh Developer!');
-      e.target.reset();
-      init();
-    }
-
-    window.onload = init;
+    window.onload = initApp;
   </script>
 </body>
 </html>
