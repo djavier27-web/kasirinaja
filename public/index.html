@@ -79,6 +79,17 @@
     ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 4px; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* FIX LAYOUT UNTUK HP LANDSCAPE / MIRING */
+    @media (max-height: 520px) {
+      header#main-header { padding-top: 2px !important; padding-bottom: 2px !important; }
+      main { padding: 4px !important; }
+      .glass-card { padding: 8px !important; border-radius: 16px !important; }
+      #items-keranjang { min-height: 80px !important; }
+      #kasir-bertugas { padding-top: 3px !important; padding-bottom: 3px !important; font-size: 11px !important; }
+      .cart-checkout-box { margin-top: 4px !important; padding-top: 4px !important; }
+      #btn-proses-bayar { padding-top: 6px !important; padding-bottom: 6px !important; font-size: 11px !important; }
+    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-slate-100 via-blue-50/50 to-indigo-100/60 text-slate-800 h-[100dvh] w-screen overflow-x-hidden overflow-y-auto relative">
@@ -167,7 +178,7 @@
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
         <!-- Katalog Produk Glassmorphism -->
         <div class="md:col-span-2 glass-card p-3 rounded-3xl flex flex-col h-full min-h-0">
-          <div class="flex justify-between items-center mb-2 shrink-0">
+          <div class="flex justify-between items-center mb-1.5 shrink-0">
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Katalog Produk</h2>
             <span class="text-[10px] text-slate-500 font-medium">Klik produk untuk menambah</span>
           </div>
@@ -175,45 +186,45 @@
         </div>
 
         <!-- Keranjang & Rincian Pembayaran Glassmorphism -->
-        <div id="cart-container" class="glass-card p-3 rounded-3xl flex flex-col h-full min-h-0 justify-between">
+        <div id="cart-container" class="glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0 justify-between">
           <div class="flex flex-col flex-1 min-h-0">
-            <div class="flex justify-between items-center mb-2 shrink-0">
+            <div class="flex justify-between items-center mb-1 shrink-0">
               <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Keranjang Belanja</h2>
               <span id="badge-total-items" class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">0 Item</span>
             </div>
             
-            <div class="mb-2 shrink-0">
-              <input type="text" id="kasir-bertugas" placeholder="Nama Kasir Jaga" class="w-full px-2.5 py-1.5 glass-input rounded-xl text-xs outline-none">
+            <div class="mb-1 shrink-0">
+              <input type="text" id="kasir-bertugas" placeholder="Nama Kasir Jaga" class="w-full px-2.5 py-1 glass-input rounded-xl text-xs outline-none">
             </div>
             
-            <div id="items-keranjang" class="space-y-1.5 overflow-y-auto flex-1 pr-1 divide-y divide-slate-200/50 min-h-0"></div>
+            <div id="items-keranjang" class="space-y-1 overflow-y-auto flex-1 pr-1 divide-y divide-slate-200/50 min-h-[80px]"></div>
           </div>
 
-          <div class="border-t border-slate-200/60 pt-2 mt-2 shrink-0 space-y-1.5">
-            <div class="flex justify-between text-sm font-extrabold">
-              <span class="text-xs text-slate-600">Total:</span>
+          <div class="cart-checkout-box border-t border-slate-200/60 pt-1.5 mt-1 shrink-0 space-y-1">
+            <div class="flex justify-between text-xs sm:text-sm font-extrabold">
+              <span class="text-[11px] text-slate-600">Total:</span>
               <span id="total-bayar" class="text-emerald-600">Rp 0</span>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 items-center">
+            <div class="grid grid-cols-2 gap-1.5 items-center">
               <div>
-                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Uang Tunai</label>
-                <input type="number" id="uang-diterima" oninput="hitungKembalian()" placeholder="0" class="w-full p-1.5 glass-input rounded-xl text-xs font-bold outline-none">
+                <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Uang Tunai</label>
+                <input type="number" id="uang-diterima" oninput="hitungKembalian()" placeholder="0" class="w-full px-2 py-1 glass-input rounded-xl text-xs font-bold outline-none">
               </div>
               <div>
-                <label class="block text-[10px] font-semibold text-slate-500 mb-0.5">Kembalian</label>
-                <div id="uang-kembalian" class="text-xs font-bold text-blue-600 truncate py-1.5">Rp 0</div>
+                <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Kembalian</label>
+                <div id="uang-kembalian" class="text-xs font-bold text-blue-600 truncate py-1">Rp 0</div>
               </div>
             </div>
 
-            <div class="flex items-center justify-between pt-1 border-t border-slate-200/50">
-              <label for="option-cetak-struk" class="text-[11px] font-semibold text-slate-600 cursor-pointer">
+            <div class="flex items-center justify-between pt-0.5 border-t border-slate-200/50">
+              <label for="option-cetak-struk" class="text-[10px] font-semibold text-slate-600 cursor-pointer">
                 <span>Cetak Struk Thermal</span>
               </label>
-              <input type="checkbox" id="option-cetak-struk" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+              <input type="checkbox" id="option-cetak-struk" checked class="w-3.5 h-3.5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
             </div>
 
-            <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-extrabold rounded-2xl shadow-lg shadow-blue-500/25 transition-all duration-200 text-xs mt-1">
+            <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-extrabold rounded-2xl shadow-lg shadow-blue-500/25 transition-all duration-200 text-xs">
               Selesaikan Transaksi
             </button>
           </div>
@@ -326,7 +337,6 @@
     let activeUser = null;
     let keranjang = [];
 
-    // NOTIFIKASI TOAST MELAYANG (ANIMATION)
     function showToast(msg) {
       const toast = document.getElementById('toast-notify');
       const toastMsg = document.getElementById('toast-msg');
@@ -341,7 +351,6 @@
       }, 1800);
     }
 
-    // INISIALISASI: SETIAP REFRESH WAJIB LOGIN ULANG
     function initApp() {
       localStorage.removeItem('kasirin_user');
       sessionStorage.removeItem('kasirin_user');
@@ -490,10 +499,9 @@
       renderKeranjang();
       showToast(`+1 ${p.nama_produk}`);
       
-      // Animasi Bouncing Kartu Keranjang
       const cartBox = document.getElementById('cart-container');
       cartBox.classList.remove('pop-bump');
-      void cartBox.offsetWidth; // trigger reflow
+      void cartBox.offsetWidth;
       cartBox.classList.add('pop-bump');
     }
 
