@@ -15,7 +15,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW register failed:', err));
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW failed:', err));
       });
     }
   </script>
@@ -29,7 +29,6 @@
     }
     .fade-in { animation: fadeIn 0.2s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-    
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
@@ -39,8 +38,6 @@
   <!-- VIEW 1: LOGIN USER / MERCHANT -->
   <div id="view-login" class="flex h-[100dvh] w-full items-center justify-center p-3 overflow-y-auto">
     <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl w-full max-w-sm fade-in border border-slate-100 text-center">
-      
-      <!-- LOGO BRAND -->
       <div class="mb-4 flex justify-center">
         <img src="https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg" alt="KasirinAja Logo" class="h-20 w-auto object-contain rounded-2xl shadow-sm">
       </div>
@@ -64,8 +61,6 @@
 
   <!-- VIEW 2: DASHBOARD KASIR MERCHANT -->
   <div id="view-app" class="hidden h-[100dvh] w-full flex flex-col overflow-hidden">
-    
-    <!-- Header Ringkas -->
     <header id="main-header" class="bg-blue-600 text-white shadow-sm shrink-0 transition-colors duration-300">
       <div class="max-w-7xl mx-auto px-3 py-2 flex justify-between items-center">
         <div class="flex items-center space-x-2.5">
@@ -89,26 +84,20 @@
 
       <!-- TAB KASIR (POS) -->
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
-        
-        <!-- Katalog Produk -->
         <div class="md:col-span-2 bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60 flex flex-col h-full min-h-0">
           <h2 class="text-xs font-bold mb-2 text-slate-700 shrink-0">Katalog Produk</h2>
           <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto flex-1 pr-1"></div>
         </div>
 
-        <!-- Keranjang & Rincian Pembayaran -->
         <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/60 flex flex-col h-full min-h-0 justify-between">
           <div class="flex flex-col flex-1 min-h-0">
             <h2 class="text-xs font-bold mb-2 text-slate-700 shrink-0">Keranjang Belanja</h2>
-            
             <div class="mb-2 shrink-0">
               <input type="text" id="kasir-bertugas" placeholder="Nama Kasir Jaga" class="w-full px-2.5 py-1.5 border rounded-lg text-xs bg-slate-50 outline-none focus:bg-white">
             </div>
-
             <div id="items-keranjang" class="space-y-1.5 overflow-y-auto flex-1 pr-1 divide-y divide-slate-100 min-h-0"></div>
           </div>
 
-          <!-- Total + Tunai + Kembalian + Opsi Struk -->
           <div class="border-t border-slate-100 pt-2 mt-2 shrink-0 space-y-1.5">
             <div class="flex justify-between text-sm font-bold">
               <span class="text-xs text-slate-600">Total:</span>
@@ -126,9 +115,8 @@
               </div>
             </div>
 
-            <!-- OPSI DENGAN / TANPA STRUK -->
             <div class="flex items-center justify-between pt-1 border-t border-slate-50">
-              <label for="option-cetak-struk" class="text-[11px] font-semibold text-slate-600 cursor-pointer flex items-center space-x-1.5">
+              <label for="option-cetak-struk" class="text-[11px] font-semibold text-slate-600 cursor-pointer">
                 <span>Cetak Struk Thermal</span>
               </label>
               <input type="checkbox" id="option-cetak-struk" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
@@ -427,8 +415,21 @@
       loadTransaksi();
     }
 
+    // FUNGSI CETAK STRUK BEBAS POP-UP (100% SUPORT APK & WEBVIEW)
     function cetakStrukThermal(total, uang, kembalian, namaKasir) {
-      const win = window.open('', '', 'width=300,height=600');
+      let printFrame = document.getElementById('print-iframe');
+      if (!printFrame) {
+        printFrame = document.createElement('iframe');
+        printFrame.id = 'print-iframe';
+        printFrame.style.position = 'fixed';
+        printFrame.style.right = '0';
+        printFrame.style.bottom = '0';
+        printFrame.style.width = '0';
+        printFrame.style.height = '0';
+        printFrame.style.border = '0';
+        document.body.appendChild(printFrame);
+      }
+
       const wkt = new Date();
       const tanggalWaktu = `${wkt.toLocaleDateString('id-ID')} ${wkt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
 
@@ -439,7 +440,7 @@
 
       const logoHtml = activeUser.logo_data ? `<div style="text-align:center;"><img src="${activeUser.logo_data}" style="max-width:40px;margin-bottom:4px;"></div>` : '';
 
-      win.document.write(`
+      const content = `
         <html>
           <head>
             <style>
@@ -470,11 +471,17 @@
             <div class="center" style="font-size:10px;"><p>${activeUser.header_struk || 'Terima Kasih!'}</p></div>
           </body>
         </html>
-      `);
-      win.document.close();
-      win.focus();
-      win.print();
-      win.close();
+      `;
+
+      const frameDoc = printFrame.contentWindow.document;
+      frameDoc.open();
+      frameDoc.write(content);
+      frameDoc.close();
+
+      setTimeout(() => {
+        printFrame.contentWindow.focus();
+        printFrame.contentWindow.print();
+      }, 300);
     }
 
     async function tambahProduk(e) {
