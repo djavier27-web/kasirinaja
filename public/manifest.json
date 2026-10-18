@@ -1,17 +1,23 @@
 {
   "short_name": "KasirinAja",
   "name": "KasirinAja - POS Kasir Modern",
-  "icons": [
-    {
-      "src": "https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg",
-      "sizes": "192x192 512x512",
-      "type": "image/jpeg",
-      "purpose": "any maskable"
-    }
-  ],
   "start_url": "/",
   "background_color": "#2563eb",
   "theme_color": "#2563eb",
   "display": "standalone",
-  "orientation": "any"
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
 }
