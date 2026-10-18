@@ -14,7 +14,6 @@
     .fade-in { animation: fadeIn 0.2s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Scrollbar halus untuk katalog & keranjang */
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
@@ -25,7 +24,7 @@
   <div id="view-login" class="flex h-[100dvh] w-full items-center justify-center p-3 overflow-y-auto">
     <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl w-full max-w-sm fade-in border border-slate-100 text-center">
       
-      <!-- LOGO BARU DARI LINK USER -->
+      <!-- LOGO HAKIM / BRAND -->
       <div class="mb-4 flex justify-center">
         <img src="https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg" alt="KasirinAja Logo" class="h-20 w-auto object-contain rounded-2xl shadow-sm">
       </div>
@@ -47,7 +46,7 @@
     </div>
   </div>
 
-  <!-- VIEW 2: DASHBOARD KASIR MERCHANT (FIT TO SCREEN / NO FULLPAGE SCROLL) -->
+  <!-- VIEW 2: DASHBOARD KASIR MERCHANT -->
   <div id="view-app" class="hidden h-[100dvh] w-full flex flex-col overflow-hidden">
     
     <!-- Header Ringkas -->
@@ -72,7 +71,7 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-3 overflow-hidden flex flex-col">
 
-      <!-- TAB KASIR (POS LAYOUT PRESISI HP) -->
+      <!-- TAB KASIR (POS) -->
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
         
         <!-- Katalog Produk -->
@@ -93,7 +92,7 @@
             <div id="items-keranjang" class="space-y-1.5 overflow-y-auto flex-1 pr-1 divide-y divide-slate-100 min-h-0"></div>
           </div>
 
-          <!-- Total + Tunai + Kembalian Ringkas -->
+          <!-- Total + Tunai + Kembalian + Opsi Struk -->
           <div class="border-t border-slate-100 pt-2 mt-2 shrink-0 space-y-1.5">
             <div class="flex justify-between text-sm font-bold">
               <span class="text-xs text-slate-600">Total:</span>
@@ -111,8 +110,16 @@
               </div>
             </div>
 
+            <!-- OPSI DENGAN / TANPA STRUK -->
+            <div class="flex items-center justify-between pt-1 border-t border-slate-50">
+              <label for="option-cetak-struk" class="text-[11px] font-semibold text-slate-600 cursor-pointer flex items-center space-x-1.5">
+                <span>Cetak Struk Thermal</span>
+              </label>
+              <input type="checkbox" id="option-cetak-struk" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+            </div>
+
             <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow transition text-xs mt-1 active:scale-[0.98]">
-              Bayar & Cetak Struk
+              Selesaikan Transaksi
             </button>
           </div>
         </div>
@@ -379,7 +386,9 @@
       if (uang < total) return alert('Uang pembayaran tunai kurang!');
 
       const namaKasir = document.getElementById('kasir-bertugas').value || 'Kasir';
+      const cetakStruk = document.getElementById('option-cetak-struk').checked;
 
+      // Catat Pemasukan ke Database
       await fetch('/api/transactions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -391,7 +400,13 @@
         })
       });
 
-      cetakStrukThermal(total, uang, uang - total, namaKasir);
+      // Pilihan Cetak atau Tanpa Struk
+      if (cetakStruk) {
+        cetakStrukThermal(total, uang, uang - total, namaKasir);
+      } else {
+        alert('Transaksi berhasil disimpan tanpa cetak struk!');
+      }
+
       keranjang = [];
       document.getElementById('uang-diterima').value = '';
       renderKeranjang();
