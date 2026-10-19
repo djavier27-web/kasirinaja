@@ -21,6 +21,9 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- CHART.JS UNTUK ANALITIK & GRAFIK PENJUALAN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { 
@@ -165,7 +168,8 @@
         <nav class="flex items-center space-x-1 shrink-0 overflow-x-auto no-scrollbar">
           <button onclick="switchTab('kasir')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Kasir</button>
           <button onclick="switchTab('produk')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Produk</button>
-          <button onclick="switchTab('keuangan')" class="px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Keuangan</button>
+          <button onclick="switchTab('keuangan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Keuangan</button>
+          <button onclick="switchTab('analitik')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Analitik</button>
           <button onclick="switchTab('pengaturan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Struk</button>
           <button onclick="logout()" class="px-2 py-1 rounded-xl bg-rose-500/80 hover:bg-rose-600 active:scale-95 transition text-[10px] font-bold ml-1 whitespace-nowrap shadow-sm">Keluar</button>
         </nav>
@@ -176,11 +180,14 @@
 
       <!-- TAB KASIR (POS) -->
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
-        <!-- Katalog Produk Glassmorphism -->
+        <!-- Katalog Produk Glassmorphism + SEARCH BAR -->
         <div class="md:col-span-2 glass-card p-3 rounded-3xl flex flex-col h-full min-h-0">
-          <div class="flex justify-between items-center mb-1.5 shrink-0">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 shrink-0">
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Katalog Produk</h2>
-            <span class="text-[10px] text-slate-500 font-medium">Klik produk untuk menambah</span>
+            <!-- Search Bar Produk -->
+            <div class="relative w-full sm:w-52">
+              <input type="text" id="search-produk" oninput="filterProduk()" placeholder="🔍 Cari nama produk..." class="w-full px-3 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
+            </div>
           </div>
           <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto flex-1 pr-1"></div>
         </div>
@@ -298,6 +305,48 @@
         </div>
       </section>
 
+      <!-- TAB ANALITIK & ANALISIS PENJUALAN (BARU) -->
+      <section id="tab-analitik" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
+        <!-- Grid Ringkasan KPI -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
+          <div class="glass-card p-3 rounded-2xl border-l-4 border-l-emerald-500">
+            <div class="text-[10px] font-bold text-slate-500 uppercase">Total Omset</div>
+            <div id="kpi-omset" class="text-sm sm:text-base font-extrabold text-emerald-600 mt-1">Rp 0</div>
+          </div>
+          <div class="glass-card p-3 rounded-2xl border-l-4 border-l-rose-500">
+            <div class="text-[10px] font-bold text-slate-500 uppercase">Total Pengeluaran</div>
+            <div id="kpi-pengeluaran" class="text-sm sm:text-base font-extrabold text-rose-600 mt-1">Rp 0</div>
+          </div>
+          <div class="glass-card p-3 rounded-2xl border-l-4 border-l-blue-500">
+            <div class="text-[10px] font-bold text-slate-500 uppercase">Laba Bersih</div>
+            <div id="kpi-laba" class="text-sm sm:text-base font-extrabold text-blue-600 mt-1">Rp 0</div>
+          </div>
+          <div class="glass-card p-3 rounded-2xl border-l-4 border-l-indigo-500">
+            <div class="text-[10px] font-bold text-slate-500 uppercase">Total Transaksi</div>
+            <div id="kpi-transaksi-count" class="text-sm sm:text-base font-extrabold text-indigo-600 mt-1">0 TRX</div>
+          </div>
+        </div>
+
+        <!-- Grid Grafik Penjualan -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
+          <!-- Grafik Bar Pemasukan vs Pengeluaran -->
+          <div class="md:col-span-2 glass-card p-3.5 rounded-3xl flex flex-col justify-between">
+            <h3 class="font-extrabold text-slate-800 text-xs mb-2">Grafik Penjualan & Keuangan</h3>
+            <div class="w-full h-52 relative">
+              <canvas id="chart-keuangan"></canvas>
+            </div>
+          </div>
+
+          <!-- Grafik Doughnut Tipe Transaksi -->
+          <div class="glass-card p-3.5 rounded-3xl flex flex-col justify-between">
+            <h3 class="font-extrabold text-slate-800 text-xs mb-2">Perbandingan Arus Kas</h3>
+            <div class="w-full h-52 relative flex items-center justify-center">
+              <canvas id="chart-pie-kas"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- TAB CUSTOM STRUK -->
       <section id="tab-pengaturan" class="hidden max-w-md mx-auto w-full glass-card p-4 rounded-3xl overflow-y-auto fade-in">
         <h2 class="text-sm font-extrabold mb-3 text-slate-800">Kustomisasi Struk & Tampilan UI</h2>
@@ -336,6 +385,11 @@
   <script>
     let activeUser = null;
     let keranjang = [];
+    let allProducts = [];
+    let allTransactions = [];
+
+    let chartKeuanganInstance = null;
+    let chartPieInstance = null;
 
     function showToast(msg) {
       const toast = document.getElementById('toast-notify');
@@ -448,17 +502,37 @@
     }
 
     function switchTab(tab) {
-      ['kasir', 'produk', 'keuangan', 'pengaturan'].forEach(t => {
+      ['kasir', 'produk', 'keuangan', 'analitik', 'pengaturan'].forEach(t => {
         document.getElementById(`tab-${t}`).classList.add('hidden');
       });
       document.getElementById(`tab-${tab}`).classList.remove('hidden');
+
+      if (tab === 'analitik') {
+        renderAnalitik();
+      }
+    }
+
+    // CARI & FILTER PRODUK (SEARCH BAR)
+    function filterProduk() {
+      const q = document.getElementById('search-produk').value.toLowerCase().trim();
+      const filtered = allProducts.filter(p => p.nama_produk.toLowerCase().includes(q));
+      renderGridProduk(filtered);
     }
 
     async function loadProduk() {
       const res = await fetch(`/api/products?user_id=${activeUser.id}`);
-      const prods = await res.json();
+      allProducts = await res.json();
+      renderGridProduk(allProducts);
+    }
+
+    function renderGridProduk(prods) {
       const grid = document.getElementById('grid-produk');
       grid.innerHTML = '';
+
+      if (prods.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-xs text-slate-400 py-6">Produk tidak ditemukan</div>`;
+        return;
+      }
 
       prods.forEach(p => {
         const div = document.createElement('div');
@@ -724,11 +798,11 @@
 
     async function loadTransaksi() {
       const res = await fetch(`/api/transactions?user_id=${activeUser.id}`);
-      const data = await res.json();
+      allTransactions = await res.json();
       const tbody = document.getElementById('tabel-transaksi');
       tbody.innerHTML = '';
 
-      data.forEach(t => {
+      allTransactions.forEach(t => {
         const tr = document.createElement('tr');
         tr.className = 'border-b border-slate-200/30 hover:bg-white/40 transition';
         tr.innerHTML = `
@@ -738,6 +812,98 @@
           <td class="p-2 text-[11px] text-slate-500">${t.keterangan || '-'}</td>
         `;
         tbody.appendChild(tr);
+      });
+
+      // Update Analitik jika sedang aktif
+      if (!document.getElementById('tab-analitik').classList.contains('hidden')) {
+        renderAnalitik();
+      }
+    }
+
+    // RENDER GRAFIK & ANALITIK PENJUALAN
+    function renderAnalitik() {
+      let totalOmset = 0;
+      let totalPengeluaran = 0;
+
+      const groupDates = {};
+
+      allTransactions.forEach(t => {
+        const val = Number(t.jumlah) || 0;
+        const d = new Date(t.created_at).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' });
+
+        if (!groupDates[d]) groupDates[d] = { masuk: 0, keluar: 0 };
+
+        if (t.tipe === 'pemasukan') {
+          totalOmset += val;
+          groupDates[d].masuk += val;
+        } else {
+          totalPengeluaran += val;
+          groupDates[d].keluar += val;
+        }
+      });
+
+      const labaBersih = totalOmset - totalPengeluaran;
+
+      document.getElementById('kpi-omset').innerText = `Rp ${totalOmset.toLocaleString()}`;
+      document.getElementById('kpi-pengeluaran').innerText = `Rp ${totalPengeluaran.toLocaleString()}`;
+      document.getElementById('kpi-laba').innerText = `Rp ${labaBersih.toLocaleString()}`;
+      document.getElementById('kpi-transaksi-count').innerText = `${allTransactions.length} TRX`;
+
+      // Hancurkan Chart Lama jika Ada
+      if (chartKeuanganInstance) chartKeuanganInstance.destroy();
+      if (chartPieInstance) chartPieInstance.destroy();
+
+      const labels = Object.keys(groupDates);
+      const dataMasuk = labels.map(l => groupDates[l].masuk);
+      const dataKeluar = labels.map(l => groupDates[l].keluar);
+
+      // 1. Chart Bar Keuangan
+      const ctx1 = document.getElementById('chart-keuangan').getContext('2d');
+      chartKeuanganInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: labels.length ? labels : ['Hari Ini'],
+          datasets: [
+            {
+              label: 'Pemasukan (Rp)',
+              data: dataMasuk.length ? dataMasuk : [0],
+              backgroundColor: 'rgba(16, 185, 129, 0.75)',
+              borderRadius: 8,
+            },
+            {
+              label: 'Pengeluaran (Rp)',
+              data: dataKeluar.length ? dataKeluar : [0],
+              backgroundColor: 'rgba(244, 63, 94, 0.75)',
+              borderRadius: 8,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      // 2. Chart Doughnut Perbandingan
+      const ctx2 = document.getElementById('chart-pie-kas').getContext('2d');
+      chartPieInstance = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Pemasukan', 'Pengeluaran'],
+          datasets: [{
+            data: [totalOmset || 1, totalPengeluaran || 0],
+            backgroundColor: ['#10b981', '#f43f5e'],
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } }
+        }
       });
     }
 
