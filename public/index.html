@@ -305,7 +305,7 @@
         </div>
       </section>
 
-      <!-- TAB ANALITIK & ANALISIS PENJUALAN (BARU) -->
+      <!-- TAB ANALITIK & ANALISIS PENJUALAN -->
       <section id="tab-analitik" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
         <!-- Grid Ringkasan KPI -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
@@ -394,8 +394,9 @@
     function showToast(msg) {
       const toast = document.getElementById('toast-notify');
       const toastMsg = document.getElementById('toast-msg');
-      toastMsg.innerText = msg;
+      if (!toast || !toastMsg) return;
       
+      toastMsg.innerText = msg;
       toast.classList.remove('opacity-0', 'translate-y-[-10px]');
       toast.classList.add('opacity-100', 'translate-y-0');
 
@@ -419,20 +420,22 @@
       return new Promise((resolve) => {
         if (!file) return resolve('');
         const reader = new FileReader();
-        reader.readAsDataURL(file);
         reader.onload = (e) => {
           const img = new Image();
-          img.src = e.target.result;
+          img.onerror = () => resolve('');
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const scale = maxWidth / img.width;
+            const scale = maxWidth / (img.width || maxWidth);
             canvas.width = maxWidth;
-            canvas.height = img.height * scale;
+            canvas.height = (img.height || maxWidth) * scale;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             resolve(canvas.toDataURL('image/jpeg', 0.8));
           };
+          img.src = e.target.result;
         };
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
       });
     }
 
@@ -441,23 +444,27 @@
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
 
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, expected_role: 'user' })
-      });
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, expected_role: 'user' })
+        });
 
-      const data = await res.json();
-      if (res.ok) {
-        activeUser = data;
+        const data = await res.json();
+        if (res.ok) {
+          activeUser = data;
 
-        document.getElementById('view-login').classList.add('hidden');
-        document.getElementById('view-modal-kasir').classList.remove('hidden');
-        
-        document.getElementById('input-kasir-awal').value = data.nama_kasir || '';
-        document.getElementById('input-kasir-awal').focus();
-      } else {
-        alert(data.error || 'Login gagal!');
+          document.getElementById('view-login').classList.add('hidden');
+          document.getElementById('view-modal-kasir').classList.remove('hidden');
+          
+          document.getElementById('input-kasir-awal').value = data.nama_kasir || '';
+          document.getElementById('input-kasir-awal').focus();
+        } else {
+          alert(data.error || 'Login gagal!');
+        }
+      } catch (err) {
+        alert('Gagal terhubung ke server. Periksa koneksi internet Anda!');
       }
     }
 
@@ -481,7 +488,8 @@
     }
 
     function terapkanUI(u) {
-      document.getElementById('ui-nama-toko').innerText = u.nama_toko;
+      if (!u) return;
+      document.getElementById('ui-nama-toko').innerText = u.nama_toko || 'KasirinAja';
       document.getElementById('ui-alamat').innerText = u.alamat_toko || 'Alamat Toko';
       document.getElementById('main-header').style.backgroundColor = u.warna_ui || '#2563eb';
       document.getElementById('btn-proses-bayar').style.backgroundColor = u.warna_ui || '#2563eb';
@@ -503,33 +511,42 @@
 
     function switchTab(tab) {
       ['kasir', 'produk', 'keuangan', 'analitik', 'pengaturan'].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const el = document.getElementById(`tab-${t}`);
+        if (el) el.classList.add('hidden');
       });
-      document.getElementById(`tab-${tab}`).classList.remove('hidden');
+      const activeEl = document.getElementById(`tab-${tab}`);
+      if (activeEl) activeEl.classList.remove('hidden');
 
       if (tab === 'analitik') {
         renderAnalitik();
       }
     }
 
-    // CARI & FILTER PRODUK (SEARCH BAR)
     function filterProduk() {
       const q = document.getElementById('search-produk').value.toLowerCase().trim();
-      const filtered = allProducts.filter(p => p.nama_produk.toLowerCase().includes(q));
+      if (!Array.isArray(allProducts)) allProducts = [];
+      const filtered = allProducts.filter(p => p.nama_produk && p.nama_produk.toLowerCase().includes(q));
       renderGridProduk(filtered);
     }
 
     async function loadProduk() {
-      const res = await fetch(`/api/products?user_id=${activeUser.id}`);
-      allProducts = await res.json();
-      renderGridProduk(allProducts);
+      if (!activeUser) return;
+      try {
+        const res = await fetch(`/api/products?user_id=${activeUser.id}`);
+        const data = await res.json();
+        allProducts = Array.isArray(data) ? data : [];
+        renderGridProduk(allProducts);
+      } catch (err) {
+        allProducts = [];
+        renderGridProduk([]);
+      }
     }
 
     function renderGridProduk(prods) {
       const grid = document.getElementById('grid-produk');
       grid.innerHTML = '';
 
-      if (prods.length === 0) {
+      if (!Array.isArray(prods) || prods.length === 0) {
         grid.innerHTML = `<div class="col-span-full text-center text-xs text-slate-400 py-6">Produk tidak ditemukan</div>`;
         return;
       }
@@ -544,7 +561,7 @@
           </button>
           <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-16 sm:h-20 object-cover rounded-xl mb-1 shadow-xs">
           <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1">${p.nama_produk}</div>
-          <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5">Rp ${Number(p.harga).toLocaleString()}</div>
+          <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
         `;
         grid.appendChild(div);
       });
@@ -554,14 +571,18 @@
       if (e) e.stopPropagation();
       if (!confirm('Yakin ingin menghapus produk ini dari katalog?')) return;
 
-      const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
-      if (res.ok) {
-        keranjang = keranjang.filter(k => k.id !== id);
-        renderKeranjang();
-        loadProduk();
-        showToast('Produk dihapus dari katalog');
-      } else {
-        alert('Gagal menghapus produk!');
+      try {
+        const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          keranjang = keranjang.filter(k => k.id !== id);
+          renderKeranjang();
+          loadProduk();
+          showToast('Produk dihapus dari katalog');
+        } else {
+          alert('Gagal menghapus produk!');
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan!');
       }
     }
 
@@ -574,9 +595,11 @@
       showToast(`+1 ${p.nama_produk}`);
       
       const cartBox = document.getElementById('cart-container');
-      cartBox.classList.remove('pop-bump');
-      void cartBox.offsetWidth;
-      cartBox.classList.add('pop-bump');
+      if (cartBox) {
+        cartBox.classList.remove('pop-bump');
+        void cartBox.offsetWidth;
+        cartBox.classList.add('pop-bump');
+      }
     }
 
     function tambahQty(id) {
@@ -611,17 +634,19 @@
       let total = 0;
       let totalItems = 0;
 
+      if (!Array.isArray(keranjang)) keranjang = [];
+
       keranjang.forEach(k => {
-        const sub = k.harga * k.qty;
+        const sub = (Number(k.harga) || 0) * (k.qty || 1);
         total += sub;
-        totalItems += k.qty;
+        totalItems += (k.qty || 1);
 
         const row = document.createElement('div');
         row.className = 'flex justify-between items-center py-1.5 text-xs gap-1.5 transition-all';
         row.innerHTML = `
           <div class="flex-1 min-w-0">
             <div class="font-bold text-slate-800 text-[11px] truncate leading-tight">${k.nama_produk}</div>
-            <div class="text-[9px] text-slate-500 font-medium">Rp ${Number(k.harga).toLocaleString()}</div>
+            <div class="text-[9px] text-slate-500 font-medium">Rp ${Number(k.harga || 0).toLocaleString('id-ID')}</div>
           </div>
           <div class="flex items-center space-x-1 shrink-0 bg-slate-100/70 p-0.5 rounded-lg border border-slate-200/50">
             <button onclick="kurangQty('${k.id}')" class="w-5 h-5 rounded-md bg-white hover:bg-slate-200 active:scale-90 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">-</button>
@@ -629,36 +654,36 @@
             <button onclick="tambahQty('${k.id}')" class="w-5 h-5 rounded-md bg-white hover:bg-slate-200 active:scale-90 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">+</button>
           </div>
           <div class="text-right shrink-0 min-w-[55px]">
-            <div class="font-extrabold text-[11px] text-slate-800">Rp ${sub.toLocaleString()}</div>
+            <div class="font-extrabold text-[11px] text-slate-800">Rp ${sub.toLocaleString('id-ID')}</div>
             <button onclick="hapusDariKeranjang('${k.id}')" class="text-[9px] text-rose-500 font-semibold hover:underline">Hapus</button>
           </div>
         `;
         container.appendChild(row);
       });
 
-      document.getElementById('total-bayar').innerText = `Rp ${total.toLocaleString()}`;
+      document.getElementById('total-bayar').innerText = `Rp ${total.toLocaleString('id-ID')}`;
       document.getElementById('badge-total-items').innerText = `${totalItems} Item`;
       hitungKembalian();
     }
 
     function hitungKembalian() {
-      const total = keranjang.reduce((sum, k) => sum + (k.harga * k.qty), 0);
+      const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
       const uang = Number(document.getElementById('uang-diterima').value) || 0;
       const kembalian = uang - total;
 
       const spanKembalian = document.getElementById('uang-kembalian');
       if (kembalian >= 0) {
-        spanKembalian.innerText = `Rp ${kembalian.toLocaleString()}`;
-        spanKembalian.className = 'text-xs font-bold text-blue-600 py-1.5 truncate';
+        spanKembalian.innerText = `Rp ${kembalian.toLocaleString('id-ID')}`;
+        spanKembalian.className = 'text-xs font-bold text-blue-600 py-1 truncate';
       } else {
-        spanKembalian.innerText = `Kurang Rp ${Math.abs(kembalian).toLocaleString()}`;
-        spanKembalian.className = 'text-xs font-bold text-rose-600 py-1.5 truncate';
+        spanKembalian.innerText = `Kurang Rp ${Math.abs(kembalian).toLocaleString('id-ID')}`;
+        spanKembalian.className = 'text-xs font-bold text-rose-600 py-1 truncate';
       }
     }
 
     async function prosesBayarCetak() {
-      if (keranjang.length === 0) return alert('Keranjang belanja kosong!');
-      const total = keranjang.reduce((sum, k) => sum + (k.harga * k.qty), 0);
+      if (!keranjang || keranjang.length === 0) return alert('Keranjang belanja kosong!');
+      const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
       const uang = Number(document.getElementById('uang-diterima').value) || 0;
 
       if (uang < total) return alert('Uang pembayaran tunai kurang!');
@@ -666,27 +691,36 @@
       const namaKasir = document.getElementById('kasir-bertugas').value || 'Kasir';
       const cetakStruk = document.getElementById('option-cetak-struk').checked;
 
-      await fetch('/api/transactions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: activeUser.id,
-          tipe: 'pemasukan',
-          jumlah: total,
-          keterangan: `Penjualan Kasir (Kasir: ${namaKasir})`
-        })
-      });
+      try {
+        const res = await fetch('/api/transactions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: activeUser.id,
+            tipe: 'pemasukan',
+            jumlah: total,
+            keterangan: `Penjualan Kasir (Kasir: ${namaKasir})`
+          })
+        });
 
-      if (cetakStruk) {
-        cetakStrukThermal(total, uang, uang - total, namaKasir);
-      } else {
-        showToast('Transaksi Berhasil Disimpan!');
+        if (!res.ok) {
+          alert('Gagal menyimpan transaksi!');
+          return;
+        }
+
+        if (cetakStruk) {
+          cetakStrukThermal(total, uang, uang - total, namaKasir);
+        } else {
+          showToast('Transaksi Berhasil Disimpan!');
+        }
+
+        keranjang = [];
+        document.getElementById('uang-diterima').value = '';
+        renderKeranjang();
+        loadTransaksi();
+      } catch (err) {
+        alert('Terjadi kesalahan saat memproses transaksi!');
       }
-
-      keranjang = [];
-      document.getElementById('uang-diterima').value = '';
-      renderKeranjang();
-      loadTransaksi();
     }
 
     function cetakStrukThermal(total, uang, kembalian, namaKasir) {
@@ -708,14 +742,15 @@
 
       let items = '';
       keranjang.forEach(k => {
-        items += `<div style="display:flex;justify-content:space-between;font-size:11px;"><span>${k.nama_produk} x${k.qty}</span><span>${(k.harga * k.qty).toLocaleString()}</span></div>`;
+        items += `<div style="display:flex;justify-content:space-between;font-size:11px;"><span>${k.nama_produk} x${k.qty}</span><span>${((Number(k.harga) || 0) * k.qty).toLocaleString('id-ID')}</span></div>`;
       });
 
-      const logoHtml = activeUser.logo_data ? `<div style="text-align:center;"><img src="${activeUser.logo_data}" style="max-width:40px;margin-bottom:4px;"></div>` : '';
+      const logoHtml = activeUser && activeUser.logo_data ? `<div style="text-align:center;"><img src="${activeUser.logo_data}" style="max-width:40px;margin-bottom:4px;"></div>` : '';
 
       const content = `
         <html>
           <head>
+            <title>Struk Pembayaran</title>
             <style>
               body { font-family: monospace; width: 58mm; padding: 4px; font-size: 11px; margin: 0; }
               .center { text-align: center; }
@@ -726,8 +761,8 @@
           <body>
             ${logoHtml}
             <div class="center">
-              <strong>${activeUser.nama_toko}</strong><br>
-              <span style="font-size:10px;">${activeUser.alamat_toko || ''}</span>
+              <strong>${(activeUser && activeUser.nama_toko) || 'Toko'}</strong><br>
+              <span style="font-size:10px;">${(activeUser && activeUser.alamat_toko) || ''}</span>
             </div>
             <hr>
             <div style="font-size:10px;">
@@ -737,11 +772,11 @@
             <hr>
             ${items}
             <hr>
-            <div class="flex-between" style="font-weight:bold;"><span>TOTAL</span><span>Rp ${total.toLocaleString()}</span></div>
-            <div class="flex-between"><span>TUNAI</span><span>Rp ${uang.toLocaleString()}</span></div>
-            <div class="flex-between"><span>KEMBALI</span><span>Rp ${kembalian.toLocaleString()}</span></div>
+            <div class="flex-between" style="font-weight:bold;"><span>TOTAL</span><span>Rp ${total.toLocaleString('id-ID')}</span></div>
+            <div class="flex-between"><span>TUNAI</span><span>Rp ${uang.toLocaleString('id-ID')}</span></div>
+            <div class="flex-between"><span>KEMBALI</span><span>Rp ${kembalian.toLocaleString('id-ID')}</span></div>
             <hr>
-            <div class="center" style="font-size:10px;"><p>${activeUser.header_struk || 'Terima Kasih!'}</p></div>
+            <div class="center" style="font-size:10px;"><p>${(activeUser && activeUser.header_struk) || 'Terima Kasih!'}</p></div>
           </body>
         </html>
       `;
@@ -762,177 +797,220 @@
       const fileInput = document.getElementById('prod-foto-file');
       const foto_data = await compressImageToBase64(fileInput.files[0]);
 
-      await fetch('/api/products', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: activeUser.id,
-          nama_produk: document.getElementById('prod-nama').value,
-          harga: document.getElementById('prod-harga').value,
-          foto_data
-        })
-      });
+      try {
+        const res = await fetch('/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: activeUser.id,
+            nama_produk: document.getElementById('prod-nama').value,
+            harga: document.getElementById('prod-harga').value,
+            foto_data
+          })
+        });
 
-      showToast('Produk Berhasil Disimpan!');
-      e.target.reset();
-      loadProduk();
-      switchTab('kasir');
+        if (res.ok) {
+          showToast('Produk Berhasil Disimpan!');
+          e.target.reset();
+          loadProduk();
+          switchTab('kasir');
+        } else {
+          alert('Gagal menyimpan produk!');
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan jaringan!');
+      }
     }
 
     async function catatTransaksi(e, tipe) {
       e.preventDefault();
-      await fetch('/api/transactions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: activeUser.id,
-          tipe,
-          jumlah: document.getElementById(`in-${tipe}`).value,
-          keterangan: document.getElementById(`ket-${tipe}`).value
-        })
-      });
-      showToast('Transaksi Dicatat!');
-      e.target.reset();
-      loadTransaksi();
-    }
+      try {
+        const res = await fetch('/api/transactions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: activeUser.id,
+            tipe,
+            jumlah: document.getElementById(`in-${tipe}`).value,
+            keterangan: document.getElementById(`ket-${tipe}`).value
+          })
+        });
 
-    async function loadTransaksi() {
-      const res = await fetch(`/api/transactions?user_id=${activeUser.id}`);
-      allTransactions = await res.json();
-      const tbody = document.getElementById('tabel-transaksi');
-      tbody.innerHTML = '';
-
-      allTransactions.forEach(t => {
-        const tr = document.createElement('tr');
-        tr.className = 'border-b border-slate-200/30 hover:bg-white/40 transition';
-        tr.innerHTML = `
-          <td class="p-2 text-[11px] text-slate-500 font-medium">${new Date(t.created_at).toLocaleDateString('id-ID')}</td>
-          <td class="p-2 font-bold text-[11px] ${t.tipe === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">${t.tipe.toUpperCase()}</td>
-          <td class="p-2 font-extrabold text-[11px]">Rp ${Number(t.jumlah).toLocaleString()}</td>
-          <td class="p-2 text-[11px] text-slate-500">${t.keterangan || '-'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      // Update Analitik jika sedang aktif
-      if (!document.getElementById('tab-analitik').classList.contains('hidden')) {
-        renderAnalitik();
+        if (res.ok) {
+          showToast('Transaksi Dicatat!');
+          e.target.reset();
+          loadTransaksi();
+        } else {
+          alert('Gagal mencatat transaksi!');
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan!');
       }
     }
 
-    // RENDER GRAFIK & ANALITIK PENJUALAN
+    async function loadTransaksi() {
+      if (!activeUser) return;
+      try {
+        const res = await fetch(`/api/transactions?user_id=${activeUser.id}`);
+        const data = await res.json();
+        allTransactions = Array.isArray(data) ? data : [];
+        
+        const tbody = document.getElementById('tabel-transaksi');
+        tbody.innerHTML = '';
+
+        allTransactions.forEach(t => {
+          const tr = document.createElement('tr');
+          tr.className = 'border-b border-slate-200/30 hover:bg-white/40 transition';
+          tr.innerHTML = `
+            <td class="p-2 text-[11px] text-slate-500 font-medium">${t.created_at ? new Date(t.created_at).toLocaleDateString('id-ID') : '-'}</td>
+            <td class="p-2 font-bold text-[11px] ${t.tipe === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">${(t.tipe || '').toUpperCase()}</td>
+            <td class="p-2 font-extrabold text-[11px]">Rp ${Number(t.jumlah || 0).toLocaleString('id-ID')}</td>
+            <td class="p-2 text-[11px] text-slate-500">${t.keterangan || '-'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        if (!document.getElementById('tab-analitik').classList.contains('hidden')) {
+          renderAnalitik();
+        }
+      } catch (err) {
+        allTransactions = [];
+      }
+    }
+
     function renderAnalitik() {
+      if (typeof Chart === 'undefined') return;
+
       let totalOmset = 0;
       let totalPengeluaran = 0;
-
       const groupDates = {};
 
-      allTransactions.forEach(t => {
-        const val = Number(t.jumlah) || 0;
-        const d = new Date(t.created_at).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' });
+      if (Array.isArray(allTransactions)) {
+        allTransactions.forEach(t => {
+          const val = Number(t.jumlah) || 0;
+          const d = t.created_at ? new Date(t.created_at).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' }) : 'Hari ini';
 
-        if (!groupDates[d]) groupDates[d] = { masuk: 0, keluar: 0 };
+          if (!groupDates[d]) groupDates[d] = { masuk: 0, keluar: 0 };
 
-        if (t.tipe === 'pemasukan') {
-          totalOmset += val;
-          groupDates[d].masuk += val;
-        } else {
-          totalPengeluaran += val;
-          groupDates[d].keluar += val;
-        }
-      });
+          if (t.tipe === 'pemasukan') {
+            totalOmset += val;
+            groupDates[d].masuk += val;
+          } else {
+            totalPengeluaran += val;
+            groupDates[d].keluar += val;
+          }
+        });
+      }
 
       const labaBersih = totalOmset - totalPengeluaran;
 
-      document.getElementById('kpi-omset').innerText = `Rp ${totalOmset.toLocaleString()}`;
-      document.getElementById('kpi-pengeluaran').innerText = `Rp ${totalPengeluaran.toLocaleString()}`;
-      document.getElementById('kpi-laba').innerText = `Rp ${labaBersih.toLocaleString()}`;
-      document.getElementById('kpi-transaksi-count').innerText = `${allTransactions.length} TRX`;
+      const elOmset = document.getElementById('kpi-omset');
+      const elPengeluaran = document.getElementById('kpi-pengeluaran');
+      const elLaba = document.getElementById('kpi-laba');
+      const elTrxCount = document.getElementById('kpi-transaksi-count');
 
-      // Hancurkan Chart Lama jika Ada
-      if (chartKeuanganInstance) chartKeuanganInstance.destroy();
-      if (chartPieInstance) chartPieInstance.destroy();
+      if (elOmset) elOmset.innerText = `Rp ${totalOmset.toLocaleString('id-ID')}`;
+      if (elPengeluaran) elPengeluaran.innerText = `Rp ${totalPengeluaran.toLocaleString('id-ID')}`;
+      if (elLaba) elLaba.innerText = `Rp ${labaBersih.toLocaleString('id-ID')}`;
+      if (elTrxCount) elTrxCount.innerText = `${(Array.isArray(allTransactions) ? allTransactions.length : 0)} TRX`;
+
+      const canvas1 = document.getElementById('chart-keuangan');
+      const canvas2 = document.getElementById('chart-pie-kas');
+      if (!canvas1 || !canvas2) return;
+
+      if (chartKeuanganInstance) { chartKeuanganInstance.destroy(); chartKeuanganInstance = null; }
+      if (chartPieInstance) { chartPieInstance.destroy(); chartPieInstance = null; }
 
       const labels = Object.keys(groupDates);
       const dataMasuk = labels.map(l => groupDates[l].masuk);
       const dataKeluar = labels.map(l => groupDates[l].keluar);
 
-      // 1. Chart Bar Keuangan
-      const ctx1 = document.getElementById('chart-keuangan').getContext('2d');
-      chartKeuanganInstance = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-          labels: labels.length ? labels : ['Hari Ini'],
-          datasets: [
-            {
-              label: 'Pemasukan (Rp)',
-              data: dataMasuk.length ? dataMasuk : [0],
-              backgroundColor: 'rgba(16, 185, 129, 0.75)',
-              borderRadius: 8,
-            },
-            {
-              label: 'Pengeluaran (Rp)',
-              data: dataKeluar.length ? dataKeluar : [0],
-              backgroundColor: 'rgba(244, 63, 94, 0.75)',
-              borderRadius: 8,
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom' } },
-          scales: { y: { beginAtZero: true } }
-        }
-      });
+      try {
+        const ctx1 = canvas1.getContext('2d');
+        chartKeuanganInstance = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: labels.length ? labels : ['Hari Ini'],
+            datasets: [
+              {
+                label: 'Pemasukan (Rp)',
+                data: dataMasuk.length ? dataMasuk : [0],
+                backgroundColor: 'rgba(16, 185, 129, 0.75)',
+                borderRadius: 6,
+              },
+              {
+                label: 'Pengeluaran (Rp)',
+                data: dataKeluar.length ? dataKeluar : [0],
+                backgroundColor: 'rgba(244, 63, 94, 0.75)',
+                borderRadius: 6,
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
 
-      // 2. Chart Doughnut Perbandingan
-      const ctx2 = document.getElementById('chart-pie-kas').getContext('2d');
-      chartPieInstance = new Chart(ctx2, {
-        type: 'doughnut',
-        data: {
-          labels: ['Pemasukan', 'Pengeluaran'],
-          datasets: [{
-            data: [totalOmset || 1, totalPengeluaran || 0],
-            backgroundColor: ['#10b981', '#f43f5e'],
-            borderWidth: 2,
-            borderColor: '#ffffff'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom' } }
-        }
-      });
+        const ctx2 = canvas2.getContext('2d');
+        chartPieInstance = new Chart(ctx2, {
+          type: 'doughnut',
+          data: {
+            labels: ['Pemasukan', 'Pengeluaran'],
+            datasets: [{
+              data: [totalOmset || (totalPengeluaran ? 0 : 1), totalPengeluaran || 0],
+              backgroundColor: ['#10b981', '#f43f5e'],
+              borderWidth: 2,
+              borderColor: '#ffffff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      } catch (err) {
+        console.error('Gagal membuat grafik:', err);
+      }
     }
 
     async function simpanSettings(e) {
       e.preventDefault();
       const logoFile = document.getElementById('set-logo-file').files[0];
-      let logo_data = activeUser.logo_data;
+      let logo_data = activeUser ? activeUser.logo_data : '';
 
       if (logoFile) {
         logo_data = await compressImageToBase64(logoFile);
       }
 
-      const res = await fetch(`/api/users/${activeUser.id}/settings`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nama_toko: document.getElementById('set-nama-toko').value,
-          alamat_toko: document.getElementById('set-alamat-toko').value,
-          nama_kasir: document.getElementById('set-nama-kasir').value,
-          warna_ui: document.getElementById('set-warna').value,
-          logo_data,
-          header_struk: document.getElementById('set-header-struk').value
-        })
-      });
+      try {
+        const res = await fetch(`/api/users/${activeUser.id}/settings`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nama_toko: document.getElementById('set-nama-toko').value,
+            alamat_toko: document.getElementById('set-alamat-toko').value,
+            nama_kasir: document.getElementById('set-nama-kasir').value,
+            warna_ui: document.getElementById('set-warna').value,
+            logo_data,
+            header_struk: document.getElementById('set-header-struk').value
+          })
+        });
 
-      const updated = await res.json();
-      activeUser = updated;
-      showToast('Pengaturan Disimpan!');
-      terapkanUI(activeUser);
+        if (res.ok) {
+          const updated = await res.json();
+          activeUser = updated;
+          showToast('Pengaturan Disimpan!');
+          terapkanUI(activeUser);
+        } else {
+          alert('Gagal menyimpan pengaturan!');
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan jaringan!');
+      }
     }
 
     window.onload = initApp;
