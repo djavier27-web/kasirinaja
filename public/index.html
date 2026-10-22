@@ -88,7 +88,8 @@
       header#main-header { padding-top: 2px !important; padding-bottom: 2px !important; }
       main { padding: 4px !important; }
       .glass-card { padding: 8px !important; border-radius: 16px !important; }
-      #items-keranjang { min-height: 80px !important; }
+      #grid-produk { max-height: 140px !important; }
+      #items-keranjang { min-height: 70px !important; }
       #kasir-bertugas { padding-top: 3px !important; padding-bottom: 3px !important; font-size: 11px !important; }
       .cart-checkout-box { margin-top: 4px !important; padding-top: 4px !important; }
       #btn-proses-bayar { padding-top: 6px !important; padding-bottom: 6px !important; font-size: 11px !important; }
@@ -180,8 +181,8 @@
 
       <!-- TAB KASIR (POS) -->
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
-        <!-- Katalog Produk Glassmorphism + SEARCH BAR -->
-        <div class="md:col-span-2 glass-card p-3 rounded-3xl flex flex-col h-full min-h-0">
+        <!-- Katalog Produk (Di-fix tinggi max pada HP) -->
+        <div class="md:col-span-2 glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 shrink-0">
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Katalog Produk</h2>
             <!-- Search Bar Produk -->
@@ -189,7 +190,8 @@
               <input type="text" id="search-produk" oninput="filterProduk()" placeholder="🔍 Cari nama produk..." class="w-full px-3 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
             </div>
           </div>
-          <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto flex-1 pr-1"></div>
+          <!-- Grid Produk Terbatas pada HP (max-h-[200px] md:max-h-full) -->
+          <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto flex-1 pr-1 max-h-[200px] md:max-h-full"></div>
         </div>
 
         <!-- Keranjang & Rincian Pembayaran Glassmorphism -->
@@ -559,7 +561,7 @@
           <button onclick="hapusProduk('${p.id}', event)" class="absolute top-1 right-1 w-5 h-5 bg-rose-500/90 text-white rounded-full text-[10px] flex items-center justify-center font-bold shadow hover:bg-rose-600 transition active:scale-90 z-10" title="Hapus Produk">
             ✕
           </button>
-          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-16 sm:h-20 object-cover rounded-xl mb-1 shadow-xs">
+          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-14 sm:h-20 object-cover rounded-xl mb-1 shadow-xs">
           <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1">${p.nama_produk}</div>
           <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
         `;
