@@ -95,7 +95,7 @@
   <!-- TOAST NOTIFICATION -->
   <div id="toast-notify" class="fixed top-4 right-4 z-50 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-[-10px] bg-slate-900/90 text-white text-xs font-semibold px-4 py-2.5 rounded-2xl shadow-xl backdrop-blur-md flex items-center space-x-2 border border-white/20">
     <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-    <span id="toast-msg">Produk ditambahkan</span>
+    <span id="toast-msg">Notifikasi</span>
   </div>
 
   <!-- MODAL DISPLAY QRIS -->
@@ -110,9 +110,7 @@
 
       <div class="bg-white p-3 rounded-2xl shadow-inner border border-slate-100 flex flex-col items-center justify-center mb-2">
         <div class="text-[11px] font-extrabold text-blue-600 mb-1" id="qris-nama-toko">NAMA TOKO</div>
-        
         <img id="img-qris-code" src="" alt="QRIS Code" class="w-52 h-52 object-contain my-1 rounded-lg border border-slate-200">
-        
         <div class="text-[10px] font-bold text-slate-500 mt-1">Total Tagihan:</div>
         <div id="qris-nominal-tagihan" class="text-base font-extrabold text-emerald-600">Rp 0</div>
       </div>
@@ -170,7 +168,6 @@
 
   <!-- VIEW 2: DASHBOARD UTAMA -->
   <div id="view-app" class="hidden h-[100dvh] w-full flex flex-col overflow-hidden relative z-10">
-    <!-- Header Toko -->
     <header id="main-header" class="glass-nav text-white shadow-md shrink-0 transition-colors duration-300 w-full">
       <div class="max-w-7xl mx-auto px-3 py-2 flex justify-between items-center gap-2 w-full">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
@@ -199,9 +196,20 @@
         <div class="md:col-span-2 glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 shrink-0">
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Katalog Produk</h2>
-            <div class="relative w-full sm:w-52">
-              <input type="text" id="search-produk" oninput="filterProduk()" placeholder="Cari nama produk..." class="w-full pl-8 pr-3 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
-              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2 fill-current" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <div class="flex gap-2 w-full sm:w-auto">
+              <!-- Filter Kategori -->
+              <select id="filter-kategori" onchange="filterProduk()" class="px-2 py-1 glass-input rounded-xl text-xs outline-none">
+                <option value="">Semua Kategori</option>
+                <option value="Makanan">Makanan</option>
+                <option value="Minuman">Minuman</option>
+                <option value="Snack">Snack</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+              <!-- Search Bar -->
+              <div class="relative flex-1 sm:w-48">
+                <input type="text" id="search-produk" oninput="filterProduk()" placeholder="Cari produk..." class="w-full pl-7 pr-2 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
+                <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2 fill-current" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              </div>
             </div>
           </div>
           <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5 overflow-y-auto flex-1 pr-1 content-start auto-rows-max"></div>
@@ -215,14 +223,21 @@
               <span id="badge-total-items" class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">0 Item</span>
             </div>
             
-            <div class="mb-1 shrink-0">
-              <input type="text" id="kasir-bertugas" placeholder="Nama Kasir Jaga" class="w-full px-2.5 py-1 glass-input rounded-xl text-xs outline-none">
+            <div class="grid grid-cols-2 gap-1 mb-1 shrink-0">
+              <input type="text" id="kasir-bertugas" placeholder="Nama Kasir" class="w-full px-2 py-1 glass-input rounded-xl text-xs outline-none">
+              <input type="text" id="pelanggan-nama" placeholder="Nama Pelanggan" class="w-full px-2 py-1 glass-input rounded-xl text-xs outline-none">
             </div>
             
-            <div id="items-keranjang" class="space-y-1 overflow-y-auto flex-1 pr-1 divide-y divide-slate-200/50 min-h-[80px]"></div>
+            <div id="items-keranjang" class="space-y-1 overflow-y-auto flex-1 pr-1 divide-y divide-slate-200/50 min-h-[70px]"></div>
           </div>
 
-          <div class="cart-checkout-box border-t border-slate-200/60 pt-1.5 mt-1 shrink-0 space-y-1.5">
+          <div class="cart-checkout-box border-t border-slate-200/60 pt-1.5 mt-1 shrink-0 space-y-1">
+            <!-- Diskon Nominal/Persen -->
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-[10px] font-semibold text-slate-600">Diskon (Rp):</span>
+              <input type="number" id="input-diskon" oninput="renderKeranjang()" placeholder="0" class="w-24 px-1.5 py-0.5 glass-input rounded-lg text-xs text-right font-bold outline-none">
+            </div>
+
             <div class="flex justify-between text-xs sm:text-sm font-extrabold">
               <span class="text-[11px] text-slate-600">Total Tagihan:</span>
               <span id="total-bayar" class="text-emerald-600">Rp 0</span>
@@ -231,9 +246,10 @@
             <!-- PILIHAN METODE PEMBAYARAN -->
             <div>
               <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Metode Pembayaran</label>
-              <div class="grid grid-cols-2 gap-1 bg-slate-200/60 p-0.5 rounded-xl text-[11px] font-bold">
+              <div class="grid grid-cols-3 gap-1 bg-slate-200/60 p-0.5 rounded-xl text-[10px] font-bold">
                 <button type="button" id="btn-metode-tunai" onclick="pilihMetodeBayar('tunai')" class="py-1 rounded-lg bg-blue-600 text-white shadow-xs transition">Tunai</button>
                 <button type="button" id="btn-metode-qris" onclick="pilihMetodeBayar('qris')" class="py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">QRIS</button>
+                <button type="button" id="btn-metode-kasbon" onclick="pilihMetodeBayar('kasbon')" class="py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">Kasbon</button>
               </div>
             </div>
 
@@ -250,11 +266,16 @@
             </div>
 
             <!-- BOX QRIS INFO -->
-            <div id="box-pembayaran-qris" class="hidden p-2 rounded-xl bg-blue-50/80 border border-blue-200/60 text-center">
-              <button type="button" onclick="bukaModalQRIS()" class="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-extrabold shadow-sm active:scale-95 transition flex items-center justify-center">
+            <div id="box-pembayaran-qris" class="hidden p-1.5 rounded-xl bg-blue-50/80 border border-blue-200/60 text-center">
+              <button type="button" onclick="bukaModalQRIS()" class="w-full py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-extrabold shadow-sm active:scale-95 transition flex items-center justify-center">
                 <svg class="w-3.5 h-3.5 fill-current mr-1.5" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v3h-2v-3zm3 3h3v5h-3v-5zm-3 2h2v3h-2v-3zm0-2h3v2h-3v-2z"/></svg>
                 Tampilkan QRIS (Rp <span id="label-qris-btn">0</span>)
               </button>
+            </div>
+
+            <!-- BOX KASBON INFO -->
+            <div id="box-pembayaran-kasbon" class="hidden p-1.5 rounded-xl bg-amber-50/80 border border-amber-200/60 text-center text-[10px] text-amber-800 font-bold">
+              Pembayaran Kasbon/Hutang dicatat atas Nama Pelanggan.
             </div>
 
             <div class="flex items-center justify-between pt-0.5 border-t border-slate-200/50">
@@ -264,27 +285,47 @@
               <input type="checkbox" id="option-cetak-struk" checked class="w-3.5 h-3.5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
             </div>
 
-            <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-extrabold rounded-2xl shadow-lg shadow-blue-500/25 transition-all duration-200 text-xs">
-              Selesaikan Transaksi
-            </button>
+            <div class="grid grid-cols-5 gap-1">
+              <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="col-span-4 py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-extrabold rounded-xl shadow-lg shadow-blue-500/25 transition-all text-xs">
+                Selesaikan Transaksi
+              </button>
+              <button onclick="hubungkanBluetoothPrinter()" title="Cetak Bluetooth Direct" class="col-span-1 py-2 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white rounded-xl flex items-center justify-center">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 5.83l1.88 1.88L13 9.59V5.83zm1.88 10.46L13 18.17v-3.76l1.88 1.88z"/></svg>
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- TAB PRODUK -->
       <section id="tab-produk" class="hidden max-w-md mx-auto w-full glass-card p-4 rounded-3xl overflow-y-auto fade-in">
-        <h2 class="text-sm font-extrabold mb-3 text-slate-800">Tambah Produk Baru</h2>
+        <h2 class="text-sm font-extrabold mb-3 text-slate-800">Tambah / Kelola Produk</h2>
         <form onsubmit="tambahProduk(event)" class="space-y-3">
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Produk</label>
             <input type="text" id="prod-nama" required class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Harga (Rp)</label>
-            <input type="number" id="prod-harga" required class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Harga (Rp)</label>
+              <input type="number" id="prod-harga" required class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Stok</label>
+              <input type="number" id="prod-stok" required value="10" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+            </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Foto Produk (Dari Perangkat)</label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Kategori Produk</label>
+            <select id="prod-kategori" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+              <option value="Makanan">Makanan</option>
+              <option value="Minuman">Minuman</option>
+              <option value="Snack">Snack</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Foto Produk</label>
             <input type="file" id="prod-foto-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600/10 file:text-blue-700 hover:file:bg-blue-600/20">
           </div>
           <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all text-xs">Simpan Produk</button>
@@ -318,7 +359,13 @@
         </div>
 
         <div class="glass-card p-3 sm:p-4 rounded-3xl w-full overflow-hidden">
-          <h3 class="font-extrabold text-slate-800 text-xs sm:text-sm mb-2.5">Riwayat Transaksi</h3>
+          <div class="flex justify-between items-center mb-2.5">
+            <h3 class="font-extrabold text-slate-800 text-xs sm:text-sm">Riwayat Transaksi</h3>
+            <button onclick="eksporLaporanCSV()" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[10px] flex items-center transition shadow-xs">
+              <svg class="w-3 h-3 fill-current mr-1" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+              Ekspor Laporan (CSV)
+            </button>
+          </div>
           <div class="overflow-x-auto w-full">
             <table class="w-full text-left text-xs min-w-[500px]">
               <thead class="bg-white/40 text-slate-500 border-b border-slate-200/50">
@@ -377,7 +424,6 @@
       <section id="tab-pengaturan" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
           
-          <!-- Kustomisasi Toko & Pengaturan QRIS -->
           <div class="glass-card p-4 rounded-3xl">
             <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Kustomisasi Toko & QRIS</h2>
             <form onsubmit="simpanSettings(event)" class="space-y-2.5">
@@ -398,7 +444,7 @@
                 <input type="file" id="set-logo-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600/10 file:text-blue-700">
               </div>
 
-              <!-- PILIHAN OPSIONAL QRIS: GAMBAR VS PAYMENT GATEWAY -->
+              <!-- PILIHAN OPSIONAL QRIS -->
               <div class="p-2.5 rounded-2xl bg-blue-50/70 border border-blue-200/60 space-y-2">
                 <label class="block text-xs font-extrabold text-blue-900">Pengaturan QRIS Pembayaran</label>
                 <div>
@@ -409,13 +455,11 @@
                   </select>
                 </div>
 
-                <!-- Opsi A: Gambar Statis -->
                 <div id="box-set-qris-statis">
                   <label class="block text-[10px] text-slate-600 mb-1">Unggah File Barcode QRIS Toko</label>
                   <input type="file" id="set-qris-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white">
                 </div>
 
-                <!-- Opsi B: Payment Gateway -->
                 <div id="box-set-qris-gateway" class="hidden space-y-1.5 pt-1">
                   <div>
                     <label class="block text-[10px] text-slate-600">Penyedia Gateway</label>
@@ -449,7 +493,6 @@
           </div>
 
           <div class="space-y-3">
-            <!-- Form Ganti Password Toko -->
             <div class="glass-card p-4 rounded-3xl">
               <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider flex items-center">
                 <svg class="w-3.5 h-3.5 mr-1.5 fill-current text-slate-700" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
@@ -468,7 +511,6 @@
               </form>
             </div>
 
-            <!-- Tabel Riwayat Shift & Login Kasir -->
             <div class="glass-card p-4 rounded-3xl">
               <div class="flex justify-between items-center mb-2">
                 <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center">
@@ -746,24 +788,43 @@
       metodePembayaran = m;
       const btnTunai = document.getElementById('btn-metode-tunai');
       const btnQris = document.getElementById('btn-metode-qris');
+      const btnKasbon = document.getElementById('btn-metode-kasbon');
       const boxTunai = document.getElementById('box-pembayaran-tunai');
       const boxQris = document.getElementById('box-pembayaran-qris');
+      const boxKasbon = document.getElementById('box-pembayaran-kasbon');
+
+      btnTunai.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+      btnQris.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+      btnKasbon.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+
+      boxTunai.classList.add('hidden');
+      boxQris.classList.add('hidden');
+      boxKasbon.classList.add('hidden');
 
       if (m === 'tunai') {
         btnTunai.className = 'py-1 rounded-lg bg-blue-600 text-white shadow-xs transition';
-        btnQris.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
         boxTunai.classList.remove('hidden');
-        boxQris.classList.add('hidden');
-      } else {
+      } else if (m === 'qris') {
         btnQris.className = 'py-1 rounded-lg bg-blue-600 text-white shadow-xs transition';
-        btnTunai.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
-        boxTunai.classList.add('hidden');
         boxQris.classList.remove('hidden');
+      } else if (m === 'kasbon') {
+        btnKasbon.className = 'py-1 rounded-lg bg-amber-600 text-white shadow-xs transition';
+        boxKasbon.classList.remove('hidden');
       }
     }
 
+    function hitungSubtotal() {
+      return keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
+    }
+
+    function hitungTotalTagihanAkhir() {
+      const subtotal = hitungSubtotal();
+      const diskon = Number(document.getElementById('input-diskon')?.value) || 0;
+      return Math.max(0, subtotal - diskon);
+    }
+
     function bukaModalQRIS() {
-      const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
+      const total = hitungTotalTagihanAkhir();
       if (total <= 0) return alert('Keranjang belanja masih kosong!');
 
       const namaToko = (activeUser && activeUser.nama_toko) ? activeUser.nama_toko : 'KasirinAja';
@@ -802,8 +863,17 @@
 
     function filterProduk() {
       const q = document.getElementById('search-produk').value.toLowerCase().trim();
+      const kat = document.getElementById('filter-kategori').value;
+
       if (!Array.isArray(allProducts)) allProducts = [];
-      const filtered = allProducts.filter(p => p.nama_produk && p.nama_produk.toLowerCase().includes(q));
+      let filtered = allProducts;
+
+      if (kat) {
+        filtered = filtered.filter(p => (p.kategori || 'Lainnya') === kat);
+      }
+      if (q) {
+        filtered = filtered.filter(p => p.nama_produk && p.nama_produk.toLowerCase().includes(q));
+      }
       renderGridProduk(filtered);
     }
 
@@ -830,15 +900,17 @@
       }
 
       prods.forEach(p => {
+        const stok = Number(p.stok) || 0;
         const div = document.createElement('div');
         div.className = 'glass-card rounded-2xl p-2 text-center cursor-pointer transition-all duration-200 active:scale-95 hover:shadow-md hover:bg-white/80 flex flex-col justify-between select-none relative group h-auto';
         div.innerHTML = `
           <button onclick="hapusProduk('${p.id}', event)" class="absolute top-1 right-1 w-5 h-5 bg-rose-500/90 text-white rounded-full flex items-center justify-center hover:bg-rose-600 transition active:scale-90 z-10" title="Hapus Produk">
             <svg class="w-2.5 h-2.5 stroke-current" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
-          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-20 sm:h-24 object-cover rounded-xl mb-1.5 shadow-xs">
-          <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1 mb-1">${p.nama_produk}</div>
-          <div class="text-[10px] text-emerald-600 font-extrabold">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
+          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-16 sm:h-20 object-cover rounded-xl mb-1 shadow-xs">
+          <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1">${p.nama_produk}</div>
+          <div class="text-[9px] font-semibold text-slate-400 truncate">[${p.kategori || 'Umum'}] Stok: ${stok}</div>
+          <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
         `;
         div.onclick = () => tambahKeKeranjang(p);
         grid.appendChild(div);
@@ -855,7 +927,7 @@
           keranjang = keranjang.filter(k => k.id !== id);
           renderKeranjang();
           loadProduk();
-          showToast('Produk dihapus dari katalog');
+          showToast('Produk dihapus');
         } else {
           alert('Gagal menghapus produk!');
         }
@@ -865,7 +937,14 @@
     }
 
     function tambahKeKeranjang(p) {
+      const stokAvailable = Number(p.stok) || 0;
       const exist = keranjang.find(k => k.id === p.id);
+      const currentQty = exist ? exist.qty : 0;
+
+      if (stokAvailable > 0 && currentQty >= stokAvailable) {
+        return alert(`Stok ${p.nama_produk} tidak mencukupi (Tersisa: ${stokAvailable})!`);
+      }
+
       if (exist) exist.qty += 1;
       else keranjang.push({ ...p, qty: 1 });
       
@@ -882,7 +961,13 @@
 
     function tambahQty(id) {
       const item = keranjang.find(k => k.id === id);
+      const originalProd = allProducts.find(p => p.id === id);
+      const stokAvailable = originalProd ? Number(originalProd.stok) || 0 : 999;
+
       if (item) {
+        if (stokAvailable > 0 && item.qty >= stokAvailable) {
+          return alert('Stok produk telah mencapai batas maksimum!');
+        }
         item.qty += 1;
         renderKeranjang();
       }
@@ -909,44 +994,44 @@
     function renderKeranjang() {
       const container = document.getElementById('items-keranjang');
       container.innerHTML = '';
-      let total = 0;
       let totalItems = 0;
 
       if (!Array.isArray(keranjang)) keranjang = [];
 
       keranjang.forEach(k => {
         const sub = (Number(k.harga) || 0) * (k.qty || 1);
-        total += sub;
         totalItems += (k.qty || 1);
 
         const row = document.createElement('div');
-        row.className = 'flex justify-between items-center py-1.5 text-xs gap-1.5 transition-all';
+        row.className = 'flex justify-between items-center py-1 text-xs gap-1.5 transition-all';
         row.innerHTML = `
           <div class="flex-1 min-w-0">
             <div class="font-bold text-slate-800 text-[11px] truncate leading-tight">${k.nama_produk}</div>
             <div class="text-[9px] text-slate-500 font-medium">Rp ${Number(k.harga || 0).toLocaleString('id-ID')}</div>
           </div>
           <div class="flex items-center space-x-1 shrink-0 bg-slate-100/70 p-0.5 rounded-lg border border-slate-200/50">
-            <button onclick="kurangQty('${k.id}')" class="w-5 h-5 rounded-md bg-white hover:bg-slate-200 active:scale-90 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">-</button>
-            <span class="text-[11px] font-extrabold px-1 min-w-[16px] text-center">${k.qty}</span>
-            <button onclick="tambahQty('${k.id}')" class="w-5 h-5 rounded-md bg-white hover:bg-slate-200 active:scale-90 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">+</button>
+            <button onclick="kurangQty('${k.id}')" class="w-4 h-4 rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">-</button>
+            <span class="text-[10px] font-extrabold px-1 text-center">${k.qty}</span>
+            <button onclick="tambahQty('${k.id}')" class="w-4 h-4 rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">+</button>
           </div>
-          <div class="text-right shrink-0 min-w-[55px]">
-            <div class="font-extrabold text-[11px] text-slate-800">Rp ${sub.toLocaleString('id-ID')}</div>
-            <button onclick="hapusDariKeranjang('${k.id}')" class="text-[9px] text-rose-500 font-semibold hover:underline">Hapus</button>
+          <div class="text-right shrink-0 min-w-[50px]">
+            <div class="font-extrabold text-[10px] text-slate-800">Rp ${sub.toLocaleString('id-ID')}</div>
+            <button onclick="hapusDariKeranjang('${k.id}')" class="text-[8px] text-rose-500 font-semibold hover:underline">Hapus</button>
           </div>
         `;
         container.appendChild(row);
       });
 
-      document.getElementById('total-bayar').innerText = `Rp ${total.toLocaleString('id-ID')}`;
-      document.getElementById('label-qris-btn').innerText = total.toLocaleString('id-ID');
+      const totalAkhir = hitungTotalTagihanAkhir();
+
+      document.getElementById('total-bayar').innerText = `Rp ${totalAkhir.toLocaleString('id-ID')}`;
+      document.getElementById('label-qris-btn').innerText = totalAkhir.toLocaleString('id-ID');
       document.getElementById('badge-total-items').innerText = `${totalItems} Item`;
       hitungKembalian();
     }
 
     function hitungKembalian() {
-      const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
+      const total = hitungTotalTagihanAkhir();
       const uang = Number(document.getElementById('uang-diterima').value) || 0;
       const kembalian = uang - total;
 
@@ -962,7 +1047,7 @@
 
     async function prosesBayarCetak() {
       if (!keranjang || keranjang.length === 0) return alert('Keranjang belanja kosong!');
-      const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
+      const total = hitungTotalTagihanAkhir();
       const uang = Number(document.getElementById('uang-diterima').value) || 0;
 
       if (metodePembayaran === 'tunai' && uang < total) {
@@ -970,11 +1055,10 @@
       }
 
       const namaKasir = document.getElementById('kasir-bertugas').value || 'Kasir';
+      const namaPelanggan = document.getElementById('pelanggan-nama').value || 'Umum';
       const cetakStruk = document.getElementById('option-cetak-struk').checked;
 
-      const ketBayar = metodePembayaran === 'qris' 
-        ? `Penjualan QRIS (Kasir: ${namaKasir})` 
-        : `Penjualan Tunai (Kasir: ${namaKasir})`;
+      let ketBayar = `Penjualan ${metodePembayaran.toUpperCase()} (Kasir: ${namaKasir}, Pelanggan: ${namaPelanggan})`;
 
       try {
         const res = await fetch('/api/transactions', {
@@ -994,23 +1078,25 @@
         }
 
         if (cetakStruk) {
-          const nominalDiterima = metodePembayaran === 'qris' ? total : uang;
-          const nominalKembali = metodePembayaran === 'qris' ? 0 : (uang - total);
-          cetakStrukThermal(total, nominalDiterima, nominalKembali, namaKasir);
+          const nominalDiterima = (metodePembayaran === 'qris' || metodePembayaran === 'kasbon') ? total : uang;
+          const nominalKembali = (metodePembayaran === 'qris' || metodePembayaran === 'kasbon') ? 0 : (uang - total);
+          cetakStrukThermal(total, nominalDiterima, nominalKembali, namaKasir, namaPelanggan);
         } else {
           showToast('Transaksi Berhasil Disimpan!');
         }
 
         keranjang = [];
         document.getElementById('uang-diterima').value = '';
+        document.getElementById('input-diskon').value = '';
         renderKeranjang();
         loadTransaksi();
+        loadProduk();
       } catch (err) {
         alert('Terjadi kesalahan saat memproses transaksi!');
       }
     }
 
-    function cetakStrukThermal(total, uang, kembalian, namaKasir) {
+    function cetakStrukThermal(total, uang, kembalian, namaKasir, namaPelanggan) {
       let printFrame = document.getElementById('print-iframe');
       if (!printFrame) {
         printFrame = document.createElement('iframe');
@@ -1054,6 +1140,7 @@
             <div style="font-size:10px;">
               <div>Waktu  : ${tanggalWaktu}</div>
               <div>Kasir  : ${namaKasir}</div>
+              <div>Member : ${namaPelanggan}</div>
               <div>Metode : ${metodePembayaran.toUpperCase()}</div>
             </div>
             <hr>
@@ -1079,6 +1166,21 @@
       }, 300);
     }
 
+    async function hubungkanBluetoothPrinter() {
+      if (!('bluetooth' in navigator)) {
+        return alert('Web Bluetooth API tidak didukung pada browser ini. Gunakan Google Chrome!');
+      }
+      try {
+        const device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
+        });
+        showToast(`Bluetooth terhubung: ${device.name}`);
+      } catch (err) {
+        alert('Gagal menghubungkan Bluetooth Printer.');
+      }
+    }
+
     async function tambahProduk(e) {
       e.preventDefault();
       const fileInput = document.getElementById('prod-foto-file');
@@ -1092,6 +1194,8 @@
             user_id: activeUser.id,
             nama_produk: document.getElementById('prod-nama').value,
             harga: document.getElementById('prod-harga').value,
+            stok: document.getElementById('prod-stok').value,
+            kategori: document.getElementById('prod-kategori').value,
             foto_data
           })
         });
@@ -1163,6 +1267,22 @@
       } catch (err) {
         allTransactions = [];
       }
+    }
+
+    function eksporLaporanCSV() {
+      if (!allTransactions || allTransactions.length === 0) {
+        return alert('Tidak ada transaksi untuk diekspor!');
+      }
+      let csv = 'Waktu,Tipe,Jumlah,Keterangan\n';
+      allTransactions.forEach(t => {
+        csv += `"${formatWaktuLengkap(t.created_at)}","${t.tipe}","${t.jumlah}","${t.keterangan || ''}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `Laporan_Keuangan_${Date.now()}.csv`);
+      a.click();
     }
 
     function renderAnalitik() {
