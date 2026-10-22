@@ -111,6 +111,29 @@
     <span id="toast-msg">Produk ditambahkan</span>
   </div>
 
+  <!-- MODAL DISPLAY QRIS DINAMIS -->
+  <div id="modal-qris-display" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-3">
+    <div class="glass-card p-6 rounded-3xl shadow-2xl w-full max-w-xs fade-in text-center border border-white/60">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-extrabold text-slate-900 text-sm">Pembayaran QRIS</h3>
+        <button onclick="tutupModalQRIS()" class="text-slate-400 hover:text-slate-600 font-bold text-base">✕</button>
+      </div>
+
+      <div class="bg-white p-4 rounded-2xl shadow-inner border border-slate-100 flex flex-col items-center justify-center mb-3">
+        <div class="text-[11px] font-extrabold text-blue-600 mb-1" id="qris-nama-toko">KASIRINAJA QRIS</div>
+        <img id="img-qris-code" src="" alt="QRIS Code" class="w-48 h-48 object-contain my-1 rounded-lg">
+        <div class="text-xs font-bold text-slate-500 mt-1">Total Tagihan:</div>
+        <div id="qris-nominal-tagihan" class="text-base font-extrabold text-emerald-600">Rp 0</div>
+      </div>
+
+      <p class="text-[10px] text-slate-500 mb-4">Minta pelanggan memindai QRIS di atas dengan aplikasi m-Banking atau E-Wallet.</p>
+
+      <button onclick="prosesBayarQRISSelesai()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold rounded-xl shadow-lg shadow-emerald-600/25 transition text-xs">
+        Konfirmasi Pembayaran Lunas ➔
+      </button>
+    </div>
+  </div>
+
   <!-- VIEW 1: LOGIN USER / MERCHANT -->
   <div id="view-login" class="flex min-h-[100dvh] w-full items-center justify-center p-3 relative z-10">
     <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-2xl w-full max-w-sm fade-in text-center">
@@ -141,7 +164,7 @@
       <div class="w-12 h-12 bg-blue-600/10 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 font-bold text-xl shadow-inner">
         👤
       </div>
-      <h2 class="text-lg font-extrabold text-slate-900">Kasir Bertugas</h2>
+      <h2 class="text-lg font-extrabold text-slate-900">Shift Kerja Kasir</h2>
       <p class="text-xs text-slate-500 mt-0.5 mb-5">Siapa nama kasir yang melayani Shift ini?</p>
 
       <form onsubmit="simpanKasirBertugas(event)" class="space-y-4 text-left">
@@ -149,7 +172,7 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kasir</label>
           <input type="text" id="input-kasir-awal" required placeholder="Contoh: Budi / Siti" class="w-full px-3.5 py-2.5 glass-input rounded-xl outline-none text-xs transition">
         </div>
-        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-200 text-xs">Lanjutkan ke Kasir ➔</button>
+        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-200 text-xs">Buka Shift Kasir ➔</button>
       </form>
     </div>
   </div>
@@ -171,7 +194,7 @@
           <button onclick="switchTab('produk')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Produk</button>
           <button onclick="switchTab('keuangan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Keuangan</button>
           <button onclick="switchTab('analitik')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Analitik</button>
-          <button onclick="switchTab('pengaturan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Struk</button>
+          <button onclick="switchTab('pengaturan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Struk & Akun</button>
           <button onclick="logout()" class="px-2 py-1 rounded-xl bg-rose-500/80 hover:bg-rose-600 active:scale-95 transition text-[10px] font-bold ml-1 whitespace-nowrap shadow-sm">Keluar</button>
         </nav>
       </div>
@@ -190,7 +213,6 @@
               <input type="text" id="search-produk" oninput="filterProduk()" placeholder="🔍 Cari nama produk..." class="w-full px-3 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
             </div>
           </div>
-          <!-- Grid Produk (content-start & auto-rows-max mencegah produk melar ke bawah) -->
           <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5 overflow-y-auto flex-1 pr-1 content-start auto-rows-max"></div>
         </div>
 
@@ -209,13 +231,23 @@
             <div id="items-keranjang" class="space-y-1 overflow-y-auto flex-1 pr-1 divide-y divide-slate-200/50 min-h-[80px]"></div>
           </div>
 
-          <div class="cart-checkout-box border-t border-slate-200/60 pt-1.5 mt-1 shrink-0 space-y-1">
+          <div class="cart-checkout-box border-t border-slate-200/60 pt-1.5 mt-1 shrink-0 space-y-1.5">
             <div class="flex justify-between text-xs sm:text-sm font-extrabold">
-              <span class="text-[11px] text-slate-600">Total:</span>
+              <span class="text-[11px] text-slate-600">Total Tagihan:</span>
               <span id="total-bayar" class="text-emerald-600">Rp 0</span>
             </div>
 
-            <div class="grid grid-cols-2 gap-1.5 items-center">
+            <!-- PILIHAN METODE PEMBAYARAN (TUNAI VS QRIS) -->
+            <div>
+              <label class="block text-[9px] font-semibold text-slate-500 mb-1">Metode Pembayaran</label>
+              <div class="grid grid-cols-2 gap-1 bg-slate-200/60 p-0.5 rounded-xl text-[11px] font-bold">
+                <button type="button" id="btn-metode-tunai" onclick="pilihMetodeBayar('tunai')" class="py-1 rounded-lg bg-blue-600 text-white shadow-xs transition">Tunai</button>
+                <button type="button" id="btn-metode-qris" onclick="pilihMetodeBayar('qris')" class="py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">QRIS Otomatis</button>
+              </div>
+            </div>
+
+            <!-- INPUT UANG TUNAI (JIKA TUNAI) -->
+            <div id="box-pembayaran-tunai" class="grid grid-cols-2 gap-1.5 items-center">
               <div>
                 <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Uang Tunai</label>
                 <input type="number" id="uang-diterima" oninput="hitungKembalian()" placeholder="0" class="w-full px-2 py-1 glass-input rounded-xl text-xs font-bold outline-none">
@@ -224,6 +256,14 @@
                 <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Kembalian</label>
                 <div id="uang-kembalian" class="text-xs font-bold text-blue-600 truncate py-1">Rp 0</div>
               </div>
+            </div>
+
+            <!-- BOX QRIS DINAMIS INFO (JIKA QRIS) -->
+            <div id="box-pembayaran-qris" class="hidden p-2 rounded-xl bg-blue-50/80 border border-blue-200/60 text-center">
+              <div class="text-[10px] font-bold text-blue-800 mb-1">QRIS Menyesuaikan Nominal Belanja</div>
+              <button type="button" onclick="bukaModalQRIS()" class="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-extrabold shadow-sm active:scale-95 transition">
+                📱 Tampilkan QRIS Scan (Rp <span id="label-qris-btn">0</span>)
+              </button>
             </div>
 
             <div class="flex items-center justify-between pt-0.5 border-t border-slate-200/50">
@@ -349,36 +389,81 @@
         </div>
       </section>
 
-      <!-- TAB CUSTOM STRUK -->
-      <section id="tab-pengaturan" class="hidden max-w-md mx-auto w-full glass-card p-4 rounded-3xl overflow-y-auto fade-in">
-        <h2 class="text-sm font-extrabold mb-3 text-slate-800">Kustomisasi Struk & Tampilan UI</h2>
-        <form onsubmit="simpanSettings(event)" class="space-y-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Toko</label>
-            <input type="text" id="set-nama-toko" required class="w-full p-2 glass-input rounded-xl text-xs">
+      <!-- TAB CUSTOM STRUK, AKUN, GANTI PASSWORD & SHIFT LOG -->
+      <section id="tab-pengaturan" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+          
+          <!-- Kustomisasi Toko & Struk -->
+          <div class="glass-card p-4 rounded-3xl">
+            <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Kustomisasi Struk & UI</h2>
+            <form onsubmit="simpanSettings(event)" class="space-y-2.5">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Toko</label>
+                <input type="text" id="set-nama-toko" required class="w-full p-2 glass-input rounded-xl text-xs">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Alamat Toko</label>
+                <input type="text" id="set-alamat-toko" class="w-full p-2 glass-input rounded-xl text-xs">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kasir Default</label>
+                <input type="text" id="set-nama-kasir" class="w-full p-2 glass-input rounded-xl text-xs">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Logo Toko (Dari Perangkat)</label>
+                <input type="file" id="set-logo-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600/10 file:text-blue-700">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Pesan Struk Footer</label>
+                <input type="text" id="set-header-struk" class="w-full p-2 glass-input rounded-xl text-xs">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Warna UI Kasir</label>
+                <input type="color" id="set-warna" class="w-full h-8 p-0.5 border rounded-lg cursor-pointer">
+              </div>
+              <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl text-xs transition shadow-md shadow-blue-500/20">Simpan Pengaturan Toko</button>
+            </form>
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Alamat Toko</label>
-            <input type="text" id="set-alamat-toko" class="w-full p-2 glass-input rounded-xl text-xs">
+
+          <!-- Form Ganti Password Toko -->
+          <div class="space-y-3">
+            <div class="glass-card p-4 rounded-3xl">
+              <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">🔒 Ganti Password Toko</h2>
+              <form onsubmit="gantiPasswordToko(event)" class="space-y-2.5">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Password Baru</label>
+                  <input type="password" id="pass-baru" required placeholder="Masukkan password baru" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Konfirmasi Password Baru</label>
+                  <input type="password" id="pass-konfirmasi" required placeholder="Ulangi password baru" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+                </div>
+                <button type="submit" class="w-full py-2 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white font-bold rounded-xl text-xs transition shadow-md">Perbarui Password</button>
+              </form>
+            </div>
+
+            <!-- Tabel Riwayat Shift & Login Kasir -->
+            <div class="glass-card p-4 rounded-3xl">
+              <div class="flex justify-between items-center mb-2">
+                <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">📜 Riwayat Shift & Login Kasir</h2>
+                <button onclick="hapusRiwayatShift()" class="text-[10px] text-rose-500 hover:underline font-semibold">Bersihkan Log</button>
+              </div>
+              <div class="overflow-y-auto max-h-48 rounded-xl border border-slate-200/50">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-white/60 text-slate-500 border-b border-slate-200/50 sticky top-0">
+                    <tr>
+                      <th class="p-2 font-bold">Kasir Shift</th>
+                      <th class="p-2 font-bold">Jam & Tanggal Masuk</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabel-shift-kasir" class="divide-y divide-slate-200/40"></tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kasir Default</label>
-            <input type="text" id="set-nama-kasir" class="w-full p-2 glass-input rounded-xl text-xs">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Logo Toko (Dari Perangkat)</label>
-            <input type="file" id="set-logo-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600/10 file:text-blue-700">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Pesan Struk Footer</label>
-            <input type="text" id="set-header-struk" class="w-full p-2 glass-input rounded-xl text-xs">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Warna UI Kasir</label>
-            <input type="color" id="set-warna" class="w-full h-8 p-0.5 border rounded-lg cursor-pointer">
-          </div>
-          <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl text-xs transition shadow-lg shadow-blue-500/25">Simpan Perubahan</button>
-        </form>
+
+        </div>
       </section>
 
     </main>
@@ -389,6 +474,7 @@
     let keranjang = [];
     let allProducts = [];
     let allTransactions = [];
+    let metodePembayaran = 'tunai'; // 'tunai' atau 'qris'
 
     let chartKeuanganInstance = null;
     let chartPieInstance = null;
@@ -477,12 +563,88 @@
 
       document.getElementById('kasir-bertugas').value = namaKasir;
 
+      // CATAT RIWAYAT SHIFT LOGIN KASIR
+      catatRiwayatShift(namaKasir);
+
       document.getElementById('view-modal-kasir').classList.add('hidden');
       document.getElementById('view-app').classList.remove('hidden');
 
       terapkanUI(activeUser);
       loadProduk();
       loadTransaksi();
+      renderRiwayatShift();
+    }
+
+    // MEMPROSES KASIR SHIFT INTO LOCALSTORAGE
+    function catatRiwayatShift(namaKasir) {
+      let shifts = JSON.parse(localStorage.getItem('kasirin_shift_history')) || [];
+      const now = new Date();
+      shifts.unshift({
+        kasir: namaKasir,
+        waktu: `${now.toLocaleDateString('id-ID')} ${now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`
+      });
+      localStorage.setItem('kasirin_shift_history', JSON.stringify(shifts));
+    }
+
+    function renderRiwayatShift() {
+      const tbody = document.getElementById('tabel-shift-kasir');
+      if (!tbody) return;
+      
+      let shifts = JSON.parse(localStorage.getItem('kasirin_shift_history')) || [];
+      tbody.innerHTML = '';
+
+      if (shifts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="2" class="p-3 text-center text-slate-400 text-xs">Belum ada riwayat shift</td></tr>`;
+        return;
+      }
+
+      shifts.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-white/40';
+        tr.innerHTML = `
+          <td class="p-2 font-bold text-slate-800">${s.kasir}</td>
+          <td class="p-2 text-slate-500 text-[11px]">${s.waktu}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function hapusRiwayatShift() {
+      if (!confirm('Bersihkan semua catatatan riwayat shift kasir?')) return;
+      localStorage.removeItem('kasirin_shift_history');
+      renderRiwayatShift();
+      showToast('Riwayat Shift Dibersihkan');
+    }
+
+    // FITUR GANTI PASSWORD TOKO
+    async function gantiPasswordToko(e) {
+      e.preventDefault();
+      const passBaru = document.getElementById('pass-baru').value;
+      const passKonfirmasi = document.getElementById('pass-konfirmasi').value;
+
+      if (passBaru !== passKonfirmasi) {
+        return alert('Konfirmasi password baru tidak cocok!');
+      }
+
+      try {
+        const res = await fetch(`/api/users/${activeUser.id}/settings`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...activeUser,
+            password: passBaru
+          })
+        });
+
+        if (res.ok) {
+          showToast('Password Berhasil Diperbarui!');
+          e.target.reset();
+        } else {
+          alert('Gagal memperbarui password!');
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan jaringan!');
+      }
     }
 
     function logout() {
@@ -521,7 +683,55 @@
 
       if (tab === 'analitik') {
         renderAnalitik();
+      } else if (tab === 'pengaturan') {
+        renderRiwayatShift();
       }
+    }
+
+    // PILIH METODE PEMBAYARAN (TUNAI / QRIS)
+    function pilihMetodeBayar(m) {
+      metodePembayaran = m;
+      const btnTunai = document.getElementById('btn-metode-tunai');
+      const btnQris = document.getElementById('btn-metode-qris');
+      const boxTunai = document.getElementById('box-pembayaran-tunai');
+      const boxQris = document.getElementById('box-pembayaran-qris');
+
+      if (m === 'tunai') {
+        btnTunai.className = 'py-1 rounded-lg bg-blue-600 text-white shadow-xs transition';
+        btnQris.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+        boxTunai.classList.remove('hidden');
+        boxQris.classList.add('hidden');
+      } else {
+        btnQris.className = 'py-1 rounded-lg bg-blue-600 text-white shadow-xs transition';
+        btnTunai.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+        boxTunai.classList.add('hidden');
+        boxQris.classList.remove('hidden');
+      }
+    }
+
+    // MODAL & BUKA QRIS AUTOMATIC WITH DYNAMIC TOTAL PRICE
+    function bukaModalQRIS() {
+      const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
+      if (total <= 0) return alert('Keranjang belanja masih kosong!');
+
+      const namaToko = (activeUser && activeUser.nama_toko) ? activeUser.nama_toko : 'KasirinAja';
+      document.getElementById('qris-nama-toko').innerText = namaToko.toUpperCase();
+      document.getElementById('qris-nominal-tagihan').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+
+      // DYNAMIC QR CODE GENERATOR DENGAN AMOUNT
+      const qrisData = `QRIS-${encodeURIComponent(namaToko)}-AMOUNT-${total}`;
+      document.getElementById('img-qris-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrisData}`;
+
+      document.getElementById('modal-qris-display').classList.remove('hidden');
+    }
+
+    function tutupModalQRIS() {
+      document.getElementById('modal-qris-display').classList.add('hidden');
+    }
+
+    function prosesBayarQRISSelesai() {
+      tutupModalQRIS();
+      prosesBayarCetak();
     }
 
     function filterProduk() {
@@ -564,6 +774,7 @@
           <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1 mb-1">${p.nama_produk}</div>
           <div class="text-[10px] text-emerald-600 font-extrabold">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
         `;
+        div.onclick = () => tambahKeKeranjang(p);
         grid.appendChild(div);
       });
     }
@@ -663,6 +874,7 @@
       });
 
       document.getElementById('total-bayar').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+      document.getElementById('label-qris-btn').innerText = total.toLocaleString('id-ID');
       document.getElementById('badge-total-items').innerText = `${totalItems} Item`;
       hitungKembalian();
     }
@@ -687,10 +899,16 @@
       const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
       const uang = Number(document.getElementById('uang-diterima').value) || 0;
 
-      if (uang < total) return alert('Uang pembayaran tunai kurang!');
+      if (metodePembayaran === 'tunai' && uang < total) {
+        return alert('Uang pembayaran tunai kurang!');
+      }
 
       const namaKasir = document.getElementById('kasir-bertugas').value || 'Kasir';
       const cetakStruk = document.getElementById('option-cetak-struk').checked;
+
+      const ketBayar = metodePembayaran === 'qris' 
+        ? `Penjualan QRIS (Kasir: ${namaKasir})` 
+        : `Penjualan Tunai (Kasir: ${namaKasir})`;
 
       try {
         const res = await fetch('/api/transactions', {
@@ -700,7 +918,7 @@
             user_id: activeUser.id,
             tipe: 'pemasukan',
             jumlah: total,
-            keterangan: `Penjualan Kasir (Kasir: ${namaKasir})`
+            keterangan: ketBayar
           })
         });
 
@@ -710,7 +928,9 @@
         }
 
         if (cetakStruk) {
-          cetakStrukThermal(total, uang, uang - total, namaKasir);
+          const nominalDiterima = metodePembayaran === 'qris' ? total : uang;
+          const nominalKembali = metodePembayaran === 'qris' ? 0 : (uang - total);
+          cetakStrukThermal(total, nominalDiterima, nominalKembali, namaKasir);
         } else {
           showToast('Transaksi Berhasil Disimpan!');
         }
@@ -767,14 +987,15 @@
             </div>
             <hr>
             <div style="font-size:10px;">
-              <div>Tgl  : ${tanggalWaktu}</div>
-              <div>Kasir: ${namaKasir}</div>
+              <div>Tgl   : ${tanggalWaktu}</div>
+              <div>Kasir : ${namaKasir}</div>
+              <div>Metode: ${metodePembayaran.toUpperCase()}</div>
             </div>
             <hr>
             ${items}
             <hr>
             <div class="flex-between" style="font-weight:bold;"><span>TOTAL</span><span>Rp ${total.toLocaleString('id-ID')}</span></div>
-            <div class="flex-between"><span>TUNAI</span><span>Rp ${uang.toLocaleString('id-ID')}</span></div>
+            <div class="flex-between"><span>BAYAR</span><span>Rp ${uang.toLocaleString('id-ID')}</span></div>
             <div class="flex-between"><span>KEMBALI</span><span>Rp ${kembalian.toLocaleString('id-ID')}</span></div>
             <hr>
             <div class="center" style="font-size:10px;"><p>${(activeUser && activeUser.header_struk) || 'Terima Kasih!'}</p></div>
