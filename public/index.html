@@ -181,7 +181,7 @@
 
       <!-- TAB KASIR (POS) -->
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
-        <!-- Katalog Produk (Di-fix tinggi max pada HP) -->
+        <!-- Katalog Produk -->
         <div class="md:col-span-2 glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 shrink-0">
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Katalog Produk</h2>
@@ -190,8 +190,8 @@
               <input type="text" id="search-produk" oninput="filterProduk()" placeholder="🔍 Cari nama produk..." class="w-full px-3 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
             </div>
           </div>
-          <!-- Grid Produk Terbatas pada HP (max-h-[200px] md:max-h-full) -->
-          <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2 overflow-y-auto flex-1 pr-1 max-h-[200px] md:max-h-full"></div>
+          <!-- Grid Produk (content-start & auto-rows-max mencegah produk melar ke bawah) -->
+          <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5 overflow-y-auto flex-1 pr-1 content-start auto-rows-max"></div>
         </div>
 
         <!-- Keranjang & Rincian Pembayaran Glassmorphism -->
@@ -555,15 +555,14 @@
 
       prods.forEach(p => {
         const div = document.createElement('div');
-        div.className = 'glass-card rounded-2xl p-2 text-center cursor-pointer transition-all duration-200 active:scale-95 hover:shadow-md hover:bg-white/80 flex flex-col justify-between select-none relative group';
-        div.onclick = () => tambahKeKeranjang(p);
+        div.className = 'glass-card rounded-2xl p-2 text-center cursor-pointer transition-all duration-200 active:scale-95 hover:shadow-md hover:bg-white/80 flex flex-col justify-between select-none relative group h-auto';
         div.innerHTML = `
           <button onclick="hapusProduk('${p.id}', event)" class="absolute top-1 right-1 w-5 h-5 bg-rose-500/90 text-white rounded-full text-[10px] flex items-center justify-center font-bold shadow hover:bg-rose-600 transition active:scale-90 z-10" title="Hapus Produk">
             ✕
           </button>
-          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-14 sm:h-20 object-cover rounded-xl mb-1 shadow-xs">
-          <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1">${p.nama_produk}</div>
-          <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
+          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-20 sm:h-24 object-cover rounded-xl mb-1.5 shadow-xs">
+          <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1 mb-1">${p.nama_produk}</div>
+          <div class="text-[10px] text-emerald-600 font-extrabold">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
         `;
         grid.appendChild(div);
       });
