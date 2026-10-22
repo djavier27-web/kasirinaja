@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>KasirinAja - POS Kasir Modern</title>
   
-  <!-- KONFIGURASI PWA & iOS APP -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#2563eb">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,17 +20,13 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- CHART.JS UNTUK ANALITIK & GRAFIK PENJUALAN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { 
       font-family: 'Plus Jakarta Sans', sans-serif;
       touch-action: manipulation;
     }
-    
-    /* GLASSMORPHISM UTILITIES */
     .glass-card {
       background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(16px);
@@ -39,14 +34,12 @@
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
-    
     .glass-nav {
       background: rgba(37, 99, 235, 0.85);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
-
     .glass-input {
       background: rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(8px);
@@ -57,33 +50,27 @@
       border-color: rgba(37, 99, 235, 0.8);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
-
-    /* KEYFRAME ANIMATIONS */
     .fade-in { animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
     @keyframes fadeIn { 
       from { opacity: 0; transform: translateY(6px) scale(0.98); } 
       to { opacity: 1; transform: translateY(0) scale(1); } 
     }
-
     .pop-bump { animation: popBump 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
     @keyframes popBump {
       0% { transform: scale(1); }
       50% { transform: scale(1.08); }
       100% { transform: scale(1); }
     }
-
     @keyframes floatBlob {
       0%, 100% { transform: translate(0px, 0px) scale(1); }
       50% { transform: translate(20px, -20px) scale(1.05); }
     }
     .animate-blob { animation: floatBlob 8s infinite ease-in-out; }
-
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 4px; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* FIX LAYOUT UNTUK HP LANDSCAPE / MIRING */
     @media (max-height: 520px) {
       header#main-header { padding-top: 2px !important; padding-bottom: 2px !important; }
       main { padding: 4px !important; }
@@ -98,43 +85,47 @@
 </head>
 <body class="bg-gradient-to-br from-slate-100 via-blue-50/50 to-indigo-100/60 text-slate-800 h-[100dvh] w-screen overflow-x-hidden overflow-y-auto relative">
 
-  <!-- AMBIENT GLASS BACKGROUND BLOBS -->
+  <!-- BACKGROUND BLOBS -->
   <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
     <div class="absolute -top-24 -left-24 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl animate-blob"></div>
     <div class="absolute top-1/3 -right-24 w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl animate-blob" style="animation-delay: 2s;"></div>
     <div class="absolute -bottom-24 left-1/3 w-80 h-80 bg-emerald-400/15 rounded-full blur-3xl animate-blob" style="animation-delay: 4s;"></div>
   </div>
 
-  <!-- TOAST NOTIFICATION FLOATING -->
+  <!-- TOAST NOTIFICATION -->
   <div id="toast-notify" class="fixed top-4 right-4 z-50 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-[-10px] bg-slate-900/90 text-white text-xs font-semibold px-4 py-2.5 rounded-2xl shadow-xl backdrop-blur-md flex items-center space-x-2 border border-white/20">
-    <span class="text-emerald-400 font-bold">✓</span>
+    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
     <span id="toast-msg">Produk ditambahkan</span>
   </div>
 
-  <!-- MODAL DISPLAY QRIS DINAMIS -->
+  <!-- MODAL DISPLAY QRIS -->
   <div id="modal-qris-display" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-3">
-    <div class="glass-card p-6 rounded-3xl shadow-2xl w-full max-w-xs fade-in text-center border border-white/60">
-      <div class="flex justify-between items-center mb-3">
-        <h3 class="font-extrabold text-slate-900 text-sm">Pembayaran QRIS</h3>
-        <button onclick="tutupModalQRIS()" class="text-slate-400 hover:text-slate-600 font-bold text-base">✕</button>
+    <div class="glass-card p-5 rounded-3xl shadow-2xl w-full max-w-xs fade-in text-center border border-white/60">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Pembayaran QRIS</h3>
+        <button onclick="tutupModalQRIS()" class="text-slate-400 hover:text-slate-600">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
       </div>
 
-      <div class="bg-white p-4 rounded-2xl shadow-inner border border-slate-100 flex flex-col items-center justify-center mb-3">
-        <div class="text-[11px] font-extrabold text-blue-600 mb-1" id="qris-nama-toko">KASIRINAJA QRIS</div>
-        <img id="img-qris-code" src="" alt="QRIS Code" class="w-48 h-48 object-contain my-1 rounded-lg">
-        <div class="text-xs font-bold text-slate-500 mt-1">Total Tagihan:</div>
+      <div class="bg-white p-3 rounded-2xl shadow-inner border border-slate-100 flex flex-col items-center justify-center mb-2">
+        <div class="text-[11px] font-extrabold text-blue-600 mb-1" id="qris-nama-toko">NAMA TOKO</div>
+        
+        <img id="img-qris-code" src="" alt="QRIS Code" class="w-52 h-52 object-contain my-1 rounded-lg border border-slate-200">
+        
+        <div class="text-[10px] font-bold text-slate-500 mt-1">Total Tagihan:</div>
         <div id="qris-nominal-tagihan" class="text-base font-extrabold text-emerald-600">Rp 0</div>
       </div>
 
-      <p class="text-[10px] text-slate-500 mb-4">Minta pelanggan memindai QRIS di atas dengan aplikasi m-Banking atau E-Wallet.</p>
+      <p class="text-[10px] text-slate-500 mb-3 leading-tight" id="qris-keterangan-instruksi">Pindai QRIS di atas menggunakan m-Banking atau E-Wallet.</p>
 
-      <button onclick="prosesBayarQRISSelesai()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold rounded-xl shadow-lg shadow-emerald-600/25 transition text-xs">
-        Konfirmasi Pembayaran Lunas ➔
+      <button onclick="prosesBayarQRISSelesai()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold rounded-xl shadow-lg shadow-emerald-600/25 transition text-xs">
+        Konfirmasi Lunas
       </button>
     </div>
   </div>
 
-  <!-- VIEW 1: LOGIN USER / MERCHANT -->
+  <!-- VIEW 1: LOGIN USER -->
   <div id="view-login" class="flex min-h-[100dvh] w-full items-center justify-center p-3 relative z-10">
     <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-2xl w-full max-w-sm fade-in text-center">
       <div class="mb-4 flex justify-center">
@@ -158,11 +149,11 @@
     </div>
   </div>
 
-  <!-- VIEW MODAL: INPUT NAMA KASIR BERTUGAS (SETELAH LOGIN) -->
+  <!-- VIEW MODAL: SHIFT KASIR -->
   <div id="view-modal-kasir" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-3">
     <div class="glass-card p-6 rounded-3xl shadow-2xl w-full max-w-sm fade-in text-center border border-white/60">
-      <div class="w-12 h-12 bg-blue-600/10 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 font-bold text-xl shadow-inner">
-        👤
+      <div class="w-12 h-12 bg-blue-600/10 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
       </div>
       <h2 class="text-lg font-extrabold text-slate-900">Shift Kerja Kasir</h2>
       <p class="text-xs text-slate-500 mt-0.5 mb-5">Siapa nama kasir yang melayani Shift ini?</p>
@@ -172,14 +163,14 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kasir</label>
           <input type="text" id="input-kasir-awal" required placeholder="Contoh: Budi / Siti" class="w-full px-3.5 py-2.5 glass-input rounded-xl outline-none text-xs transition">
         </div>
-        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-200 text-xs">Buka Shift Kasir ➔</button>
+        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-200 text-xs">Buka Shift Kasir</button>
       </form>
     </div>
   </div>
 
-  <!-- VIEW 2: DASHBOARD KASIR MERCHANT -->
+  <!-- VIEW 2: DASHBOARD UTAMA -->
   <div id="view-app" class="hidden h-[100dvh] w-full flex flex-col overflow-hidden relative z-10">
-    <!-- Header Toko Glassmorphism -->
+    <!-- Header Toko -->
     <header id="main-header" class="glass-nav text-white shadow-md shrink-0 transition-colors duration-300 w-full">
       <div class="max-w-7xl mx-auto px-3 py-2 flex justify-between items-center gap-2 w-full">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
@@ -208,15 +199,15 @@
         <div class="md:col-span-2 glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 shrink-0">
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Katalog Produk</h2>
-            <!-- Search Bar Produk -->
             <div class="relative w-full sm:w-52">
-              <input type="text" id="search-produk" oninput="filterProduk()" placeholder="🔍 Cari nama produk..." class="w-full px-3 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
+              <input type="text" id="search-produk" oninput="filterProduk()" placeholder="Cari nama produk..." class="w-full pl-8 pr-3 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2 fill-current" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             </div>
           </div>
           <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5 overflow-y-auto flex-1 pr-1 content-start auto-rows-max"></div>
         </div>
 
-        <!-- Keranjang & Rincian Pembayaran Glassmorphism -->
+        <!-- Keranjang & Rincian Pembayaran -->
         <div id="cart-container" class="glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0 justify-between">
           <div class="flex flex-col flex-1 min-h-0">
             <div class="flex justify-between items-center mb-1 shrink-0">
@@ -237,16 +228,16 @@
               <span id="total-bayar" class="text-emerald-600">Rp 0</span>
             </div>
 
-            <!-- PILIHAN METODE PEMBAYARAN (TUNAI VS QRIS) -->
+            <!-- PILIHAN METODE PEMBAYARAN -->
             <div>
-              <label class="block text-[9px] font-semibold text-slate-500 mb-1">Metode Pembayaran</label>
+              <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Metode Pembayaran</label>
               <div class="grid grid-cols-2 gap-1 bg-slate-200/60 p-0.5 rounded-xl text-[11px] font-bold">
                 <button type="button" id="btn-metode-tunai" onclick="pilihMetodeBayar('tunai')" class="py-1 rounded-lg bg-blue-600 text-white shadow-xs transition">Tunai</button>
-                <button type="button" id="btn-metode-qris" onclick="pilihMetodeBayar('qris')" class="py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">QRIS Otomatis</button>
+                <button type="button" id="btn-metode-qris" onclick="pilihMetodeBayar('qris')" class="py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">QRIS</button>
               </div>
             </div>
 
-            <!-- INPUT UANG TUNAI (JIKA TUNAI) -->
+            <!-- INPUT TUNAI -->
             <div id="box-pembayaran-tunai" class="grid grid-cols-2 gap-1.5 items-center">
               <div>
                 <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Uang Tunai</label>
@@ -258,11 +249,11 @@
               </div>
             </div>
 
-            <!-- BOX QRIS DINAMIS INFO (JIKA QRIS) -->
+            <!-- BOX QRIS INFO -->
             <div id="box-pembayaran-qris" class="hidden p-2 rounded-xl bg-blue-50/80 border border-blue-200/60 text-center">
-              <div class="text-[10px] font-bold text-blue-800 mb-1">QRIS Menyesuaikan Nominal Belanja</div>
-              <button type="button" onclick="bukaModalQRIS()" class="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-extrabold shadow-sm active:scale-95 transition">
-                📱 Tampilkan QRIS Scan (Rp <span id="label-qris-btn">0</span>)
+              <button type="button" onclick="bukaModalQRIS()" class="w-full py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-extrabold shadow-sm active:scale-95 transition flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 fill-current mr-1.5" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v3h-2v-3zm3 3h3v5h-3v-5zm-3 2h2v3h-2v-3zm0-2h3v2h-3v-2z"/></svg>
+                Tampilkan QRIS (Rp <span id="label-qris-btn">0</span>)
               </button>
             </div>
 
@@ -303,7 +294,6 @@
       <!-- TAB KEUANGAN -->
       <section id="tab-keuangan" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-          <!-- Catat Pemasukan -->
           <div class="glass-card p-3 sm:p-4 rounded-3xl w-full">
             <h3 class="font-extrabold text-emerald-600 text-xs sm:text-sm mb-2.5">Catat Pemasukan</h3>
             <form onsubmit="catatTransaksi(event, 'pemasukan')" class="flex flex-col gap-2">
@@ -315,7 +305,6 @@
             </form>
           </div>
 
-          <!-- Catat Pengeluaran -->
           <div class="glass-card p-3 sm:p-4 rounded-3xl w-full">
             <h3 class="font-extrabold text-rose-600 text-xs sm:text-sm mb-2.5">Catat Pengeluaran</h3>
             <form onsubmit="catatTransaksi(event, 'pengeluaran')" class="flex flex-col gap-2">
@@ -328,14 +317,13 @@
           </div>
         </div>
 
-        <!-- Tabel Riwayat -->
         <div class="glass-card p-3 sm:p-4 rounded-3xl w-full overflow-hidden">
           <h3 class="font-extrabold text-slate-800 text-xs sm:text-sm mb-2.5">Riwayat Transaksi</h3>
           <div class="overflow-x-auto w-full">
             <table class="w-full text-left text-xs min-w-[500px]">
               <thead class="bg-white/40 text-slate-500 border-b border-slate-200/50">
                 <tr>
-                  <th class="p-2 sm:p-2.5 font-bold">Tanggal</th>
+                  <th class="p-2 sm:p-2.5 font-bold">Tanggal & Waktu</th>
                   <th class="p-2 sm:p-2.5 font-bold">Tipe</th>
                   <th class="p-2 sm:p-2.5 font-bold">Jumlah</th>
                   <th class="p-2 sm:p-2.5 font-bold">Keterangan</th>
@@ -347,9 +335,8 @@
         </div>
       </section>
 
-      <!-- TAB ANALITIK & ANALISIS PENJUALAN -->
+      <!-- TAB ANALITIK -->
       <section id="tab-analitik" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
-        <!-- Grid Ringkasan KPI -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
           <div class="glass-card p-3 rounded-2xl border-l-4 border-l-emerald-500">
             <div class="text-[10px] font-bold text-slate-500 uppercase">Total Omset</div>
@@ -369,9 +356,7 @@
           </div>
         </div>
 
-        <!-- Grid Grafik Penjualan -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
-          <!-- Grafik Bar Pemasukan vs Pengeluaran -->
           <div class="md:col-span-2 glass-card p-3.5 rounded-3xl flex flex-col justify-between">
             <h3 class="font-extrabold text-slate-800 text-xs mb-2">Grafik Penjualan & Keuangan</h3>
             <div class="w-full h-52 relative">
@@ -379,7 +364,6 @@
             </div>
           </div>
 
-          <!-- Grafik Doughnut Tipe Transaksi -->
           <div class="glass-card p-3.5 rounded-3xl flex flex-col justify-between">
             <h3 class="font-extrabold text-slate-800 text-xs mb-2">Perbandingan Arus Kas</h3>
             <div class="w-full h-52 relative flex items-center justify-center">
@@ -389,13 +373,13 @@
         </div>
       </section>
 
-      <!-- TAB CUSTOM STRUK, AKUN, GANTI PASSWORD & SHIFT LOG -->
+      <!-- TAB CUSTOM STRUK, AKUN, OPSI QRIS DUAL & SHIFT LOG -->
       <section id="tab-pengaturan" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
           
-          <!-- Kustomisasi Toko & Struk -->
+          <!-- Kustomisasi Toko & Pengaturan QRIS -->
           <div class="glass-card p-4 rounded-3xl">
-            <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Kustomisasi Struk & UI</h2>
+            <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Kustomisasi Toko & QRIS</h2>
             <form onsubmit="simpanSettings(event)" class="space-y-2.5">
               <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Toko</label>
@@ -410,9 +394,48 @@
                 <input type="text" id="set-nama-kasir" class="w-full p-2 glass-input rounded-xl text-xs">
               </div>
               <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Logo Toko (Dari Perangkat)</label>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Logo Toko</label>
                 <input type="file" id="set-logo-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600/10 file:text-blue-700">
               </div>
+
+              <!-- PILIHAN OPSIONAL QRIS: GAMBAR VS PAYMENT GATEWAY -->
+              <div class="p-2.5 rounded-2xl bg-blue-50/70 border border-blue-200/60 space-y-2">
+                <label class="block text-xs font-extrabold text-blue-900">Pengaturan QRIS Pembayaran</label>
+                <div>
+                  <label class="block text-[10px] text-slate-600 mb-0.5">Tipe QRIS Toko</label>
+                  <select id="set-qris-type" onchange="toggleQrisSettingsView()" class="w-full p-1.5 glass-input rounded-xl text-xs outline-none">
+                    <option value="statis">QRIS Gambar (Upload Manual)</option>
+                    <option value="gateway">Payment Gateway (Dinamis / Otomatis)</option>
+                  </select>
+                </div>
+
+                <!-- Opsi A: Gambar Statis -->
+                <div id="box-set-qris-statis">
+                  <label class="block text-[10px] text-slate-600 mb-1">Unggah File Barcode QRIS Toko</label>
+                  <input type="file" id="set-qris-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white">
+                </div>
+
+                <!-- Opsi B: Payment Gateway -->
+                <div id="box-set-qris-gateway" class="hidden space-y-1.5 pt-1">
+                  <div>
+                    <label class="block text-[10px] text-slate-600">Penyedia Gateway</label>
+                    <select id="set-qris-provider" class="w-full p-1.5 glass-input rounded-lg text-xs">
+                      <option value="midtrans">Midtrans</option>
+                      <option value="tripay">Tripay</option>
+                      <option value="xendit">Xendit</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-slate-600">API Key / Server Key</label>
+                    <input type="text" id="set-qris-apikey" placeholder="SK-xxxxxxx" class="w-full p-1.5 glass-input rounded-lg text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-slate-600">Merchant Code / ID</label>
+                    <input type="text" id="set-qris-merchantid" placeholder="M-xxxxxxx" class="w-full p-1.5 glass-input rounded-lg text-xs">
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Pesan Struk Footer</label>
                 <input type="text" id="set-header-struk" class="w-full p-2 glass-input rounded-xl text-xs">
@@ -425,10 +448,13 @@
             </form>
           </div>
 
-          <!-- Form Ganti Password Toko -->
           <div class="space-y-3">
+            <!-- Form Ganti Password Toko -->
             <div class="glass-card p-4 rounded-3xl">
-              <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">🔒 Ganti Password Toko</h2>
+              <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider flex items-center">
+                <svg class="w-3.5 h-3.5 mr-1.5 fill-current text-slate-700" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                Ganti Password Toko
+              </h2>
               <form onsubmit="gantiPasswordToko(event)" class="space-y-2.5">
                 <div>
                   <label class="block text-xs font-semibold text-slate-600 mb-1">Password Baru</label>
@@ -445,7 +471,10 @@
             <!-- Tabel Riwayat Shift & Login Kasir -->
             <div class="glass-card p-4 rounded-3xl">
               <div class="flex justify-between items-center mb-2">
-                <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">📜 Riwayat Shift & Login Kasir</h2>
+                <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center">
+                  <svg class="w-3.5 h-3.5 mr-1.5 fill-current text-slate-700" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+                  Riwayat Shift & Login Kasir
+                </h2>
                 <button onclick="hapusRiwayatShift()" class="text-[10px] text-rose-500 hover:underline font-semibold">Bersihkan Log</button>
               </div>
               <div class="overflow-y-auto max-h-48 rounded-xl border border-slate-200/50">
@@ -453,7 +482,7 @@
                   <thead class="bg-white/60 text-slate-500 border-b border-slate-200/50 sticky top-0">
                     <tr>
                       <th class="p-2 font-bold">Kasir Shift</th>
-                      <th class="p-2 font-bold">Jam & Tanggal Masuk</th>
+                      <th class="p-2 font-bold">Waktu Masuk</th>
                     </tr>
                   </thead>
                   <tbody id="tabel-shift-kasir" class="divide-y divide-slate-200/40"></tbody>
@@ -474,10 +503,18 @@
     let keranjang = [];
     let allProducts = [];
     let allTransactions = [];
-    let metodePembayaran = 'tunai'; // 'tunai' atau 'qris'
+    let metodePembayaran = 'tunai';
 
     let chartKeuanganInstance = null;
     let chartPieInstance = null;
+
+    function formatWaktuLengkap(dStr) {
+      if (!dStr) return '-';
+      const d = new Date(dStr);
+      if (isNaN(d.getTime())) return '-';
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
 
     function showToast(msg) {
       const toast = document.getElementById('toast-notify');
@@ -552,7 +589,7 @@
           alert(data.error || 'Login gagal!');
         }
       } catch (err) {
-        alert('Gagal terhubung ke server. Periksa koneksi internet Anda!');
+        alert('Gagal terhubung ke server.');
       }
     }
 
@@ -563,7 +600,6 @@
 
       document.getElementById('kasir-bertugas').value = namaKasir;
 
-      // CATAT RIWAYAT SHIFT LOGIN KASIR
       catatRiwayatShift(namaKasir);
 
       document.getElementById('view-modal-kasir').classList.add('hidden');
@@ -575,13 +611,11 @@
       renderRiwayatShift();
     }
 
-    // MEMPROSES KASIR SHIFT INTO LOCALSTORAGE
     function catatRiwayatShift(namaKasir) {
       let shifts = JSON.parse(localStorage.getItem('kasirin_shift_history')) || [];
-      const now = new Date();
       shifts.unshift({
         kasir: namaKasir,
-        waktu: `${now.toLocaleDateString('id-ID')} ${now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`
+        waktu: formatWaktuLengkap(new Date())
       });
       localStorage.setItem('kasirin_shift_history', JSON.stringify(shifts));
     }
@@ -610,13 +644,12 @@
     }
 
     function hapusRiwayatShift() {
-      if (!confirm('Bersihkan semua catatatan riwayat shift kasir?')) return;
+      if (!confirm('Bersihkan semua catatan riwayat shift kasir?')) return;
       localStorage.removeItem('kasirin_shift_history');
       renderRiwayatShift();
       showToast('Riwayat Shift Dibersihkan');
     }
 
-    // FITUR GANTI PASSWORD TOKO
     async function gantiPasswordToko(e) {
       e.preventDefault();
       const passBaru = document.getElementById('pass-baru').value;
@@ -651,6 +684,20 @@
       initApp();
     }
 
+    function toggleQrisSettingsView() {
+      const type = document.getElementById('set-qris-type').value;
+      const boxStatis = document.getElementById('box-set-qris-statis');
+      const boxGateway = document.getElementById('box-set-qris-gateway');
+
+      if (type === 'statis') {
+        boxStatis.classList.remove('hidden');
+        boxGateway.classList.add('hidden');
+      } else {
+        boxStatis.classList.add('hidden');
+        boxGateway.classList.remove('hidden');
+      }
+    }
+
     function terapkanUI(u) {
       if (!u) return;
       document.getElementById('ui-nama-toko').innerText = u.nama_toko || 'KasirinAja';
@@ -671,6 +718,13 @@
       document.getElementById('set-nama-kasir').value = u.nama_kasir || 'Kasir 1';
       document.getElementById('set-warna').value = u.warna_ui || '#2563eb';
       document.getElementById('set-header-struk').value = u.header_struk || 'Terima kasih!';
+
+      document.getElementById('set-qris-type').value = u.qris_type || 'statis';
+      document.getElementById('set-qris-provider').value = u.qris_provider || 'midtrans';
+      document.getElementById('set-qris-apikey').value = u.qris_apikey || '';
+      document.getElementById('set-qris-merchantid').value = u.qris_merchantid || '';
+
+      toggleQrisSettingsView();
     }
 
     function switchTab(tab) {
@@ -688,7 +742,6 @@
       }
     }
 
-    // PILIH METODE PEMBAYARAN (TUNAI / QRIS)
     function pilihMetodeBayar(m) {
       metodePembayaran = m;
       const btnTunai = document.getElementById('btn-metode-tunai');
@@ -709,7 +762,6 @@
       }
     }
 
-    // MODAL & BUKA QRIS AUTOMATIC WITH DYNAMIC TOTAL PRICE
     function bukaModalQRIS() {
       const total = keranjang.reduce((sum, k) => sum + ((Number(k.harga) || 0) * (k.qty || 1)), 0);
       if (total <= 0) return alert('Keranjang belanja masih kosong!');
@@ -718,9 +770,23 @@
       document.getElementById('qris-nama-toko').innerText = namaToko.toUpperCase();
       document.getElementById('qris-nominal-tagihan').innerText = `Rp ${total.toLocaleString('id-ID')}`;
 
-      // DYNAMIC QR CODE GENERATOR DENGAN AMOUNT
-      const qrisData = `QRIS-${encodeURIComponent(namaToko)}-AMOUNT-${total}`;
-      document.getElementById('img-qris-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrisData}`;
+      const imgQris = document.getElementById('img-qris-code');
+      const txtInstruksi = document.getElementById('qris-keterangan-instruksi');
+
+      if (activeUser && activeUser.qris_type === 'gateway') {
+        const provider = activeUser.qris_provider || 'MIDTRANS';
+        const merchant = activeUser.qris_merchantid || 'DEMO';
+        const payload = `GATEWAY-${provider.toUpperCase()}-MERCHANT-${merchant}-AMOUNT-${total}`;
+        imgQris.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}`;
+        txtInstruksi.innerText = `[${provider.toUpperCase()}] QRIS Dinamis Otomatis nominal Rp ${total.toLocaleString('id-ID')}.`;
+      } else if (activeUser && activeUser.qris_image_data) {
+        imgQris.src = activeUser.qris_image_data;
+        txtInstruksi.innerText = `Pindai QRIS di atas dengan m-Banking atau E-Wallet.`;
+      } else {
+        const payloadDefault = `QRIS-${encodeURIComponent(namaToko)}-AMOUNT-${total}`;
+        imgQris.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${payloadDefault}`;
+        txtInstruksi.innerText = `Pindai QRIS di atas dengan m-Banking atau E-Wallet.`;
+      }
 
       document.getElementById('modal-qris-display').classList.remove('hidden');
     }
@@ -767,8 +833,8 @@
         const div = document.createElement('div');
         div.className = 'glass-card rounded-2xl p-2 text-center cursor-pointer transition-all duration-200 active:scale-95 hover:shadow-md hover:bg-white/80 flex flex-col justify-between select-none relative group h-auto';
         div.innerHTML = `
-          <button onclick="hapusProduk('${p.id}', event)" class="absolute top-1 right-1 w-5 h-5 bg-rose-500/90 text-white rounded-full text-[10px] flex items-center justify-center font-bold shadow hover:bg-rose-600 transition active:scale-90 z-10" title="Hapus Produk">
-            ✕
+          <button onclick="hapusProduk('${p.id}', event)" class="absolute top-1 right-1 w-5 h-5 bg-rose-500/90 text-white rounded-full flex items-center justify-center hover:bg-rose-600 transition active:scale-90 z-10" title="Hapus Produk">
+            <svg class="w-2.5 h-2.5 stroke-current" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
           <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-20 sm:h-24 object-cover rounded-xl mb-1.5 shadow-xs">
           <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1 mb-1">${p.nama_produk}</div>
@@ -958,8 +1024,7 @@
         document.body.appendChild(printFrame);
       }
 
-      const wkt = new Date();
-      const tanggalWaktu = `${wkt.toLocaleDateString('id-ID')} ${wkt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`;
+      const tanggalWaktu = formatWaktuLengkap(new Date());
 
       let items = '';
       keranjang.forEach(k => {
@@ -987,9 +1052,9 @@
             </div>
             <hr>
             <div style="font-size:10px;">
-              <div>Tgl   : ${tanggalWaktu}</div>
-              <div>Kasir : ${namaKasir}</div>
-              <div>Metode: ${metodePembayaran.toUpperCase()}</div>
+              <div>Waktu  : ${tanggalWaktu}</div>
+              <div>Kasir  : ${namaKasir}</div>
+              <div>Metode : ${metodePembayaran.toUpperCase()}</div>
             </div>
             <hr>
             ${items}
@@ -1084,7 +1149,7 @@
           const tr = document.createElement('tr');
           tr.className = 'border-b border-slate-200/30 hover:bg-white/40 transition';
           tr.innerHTML = `
-            <td class="p-2 text-[11px] text-slate-500 font-medium">${t.created_at ? new Date(t.created_at).toLocaleDateString('id-ID') : '-'}</td>
+            <td class="p-2 text-[11px] text-slate-500 font-medium">${formatWaktuLengkap(t.created_at)}</td>
             <td class="p-2 font-bold text-[11px] ${t.tipe === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">${(t.tipe || '').toUpperCase()}</td>
             <td class="p-2 font-extrabold text-[11px]">Rp ${Number(t.jumlah || 0).toLocaleString('id-ID')}</td>
             <td class="p-2 text-[11px] text-slate-500">${t.keterangan || '-'}</td>
@@ -1202,11 +1267,22 @@
     async function simpanSettings(e) {
       e.preventDefault();
       const logoFile = document.getElementById('set-logo-file').files[0];
+      const qrisFile = document.getElementById('set-qris-file').files[0];
+
       let logo_data = activeUser ? activeUser.logo_data : '';
+      let qris_image_data = activeUser ? activeUser.qris_image_data : '';
 
       if (logoFile) {
         logo_data = await compressImageToBase64(logoFile);
       }
+      if (qrisFile) {
+        qris_image_data = await compressImageToBase64(qrisFile, 400);
+      }
+
+      const qris_type = document.getElementById('set-qris-type').value;
+      const qris_provider = document.getElementById('set-qris-provider').value;
+      const qris_apikey = document.getElementById('set-qris-apikey').value;
+      const qris_merchantid = document.getElementById('set-qris-merchantid').value;
 
       try {
         const res = await fetch(`/api/users/${activeUser.id}/settings`, {
@@ -1218,6 +1294,11 @@
             nama_kasir: document.getElementById('set-nama-kasir').value,
             warna_ui: document.getElementById('set-warna').value,
             logo_data,
+            qris_type,
+            qris_image_data,
+            qris_provider,
+            qris_apikey,
+            qris_merchantid,
             header_struk: document.getElementById('set-header-struk').value
           })
         });
