@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>KasirinAja - POS Kasir Modern</title>
+  <title>KasirinAja Super App - POS & Business Management</title>
   
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#2563eb">
@@ -28,14 +28,14 @@
       touch-action: manipulation;
     }
     .glass-card {
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.68);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
     .glass-nav {
-      background: rgba(37, 99, 235, 0.85);
+      background: rgba(37, 99, 235, 0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -70,22 +70,11 @@
     ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 4px; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    @media (max-height: 520px) {
-      header#main-header { padding-top: 2px !important; padding-bottom: 2px !important; }
-      main { padding: 4px !important; }
-      .glass-card { padding: 8px !important; border-radius: 16px !important; }
-      #grid-produk { max-height: 140px !important; }
-      #items-keranjang { min-height: 70px !important; }
-      #kasir-bertugas { padding-top: 3px !important; padding-bottom: 3px !important; font-size: 11px !important; }
-      .cart-checkout-box { margin-top: 4px !important; padding-top: 4px !important; }
-      #btn-proses-bayar { padding-top: 6px !important; padding-bottom: 6px !important; font-size: 11px !important; }
-    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-slate-100 via-blue-50/50 to-indigo-100/60 text-slate-800 h-[100dvh] w-screen overflow-x-hidden overflow-y-auto relative">
 
-  <!-- BACKGROUND BLOBS -->
+  <!-- AMBIENT BLOBS -->
   <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
     <div class="absolute -top-24 -left-24 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl animate-blob"></div>
     <div class="absolute top-1/3 -right-24 w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl animate-blob" style="animation-delay: 2s;"></div>
@@ -94,7 +83,7 @@
 
   <!-- TOAST NOTIFICATION -->
   <div id="toast-notify" class="fixed top-4 right-4 z-50 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-[-10px] bg-slate-900/90 text-white text-xs font-semibold px-4 py-2.5 rounded-2xl shadow-xl backdrop-blur-md flex items-center space-x-2 border border-white/20">
-    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+    <svg class="w-4 h-4 text-emerald-400 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
     <span id="toast-msg">Notifikasi</span>
   </div>
 
@@ -104,7 +93,7 @@
       <div class="flex justify-between items-center mb-2">
         <h3 class="font-extrabold text-slate-900 text-xs uppercase tracking-wider">Pembayaran QRIS</h3>
         <button onclick="tutupModalQRIS()" class="text-slate-400 hover:text-slate-600">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
@@ -127,11 +116,11 @@
   <div id="view-login" class="flex min-h-[100dvh] w-full items-center justify-center p-3 relative z-10">
     <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-2xl w-full max-w-sm fade-in text-center">
       <div class="mb-4 flex justify-center">
-        <img src="https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg" alt="KasirinAja Logo" class="h-20 w-auto object-contain rounded-2xl shadow-md transition-transform duration-300 hover:scale-105">
+        <img src="https://cdn.phototourl.com/member/2026-10-18-33bdbb8f-a966-41a6-87be-da3d97986566.jpg" alt="KasirinAja Logo" class="h-20 w-auto object-contain rounded-2xl shadow-md">
       </div>
 
-      <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Masuk KasirinAja</h1>
-      <p class="text-xs text-slate-500 mt-0.5 mb-6">Kelola penjualan toko Anda dengan mudah</p>
+      <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Masuk Super App</h1>
+      <p class="text-xs text-slate-500 mt-0.5 mb-6">Kelola POS, Stok, Dapur, PPOB & Multi-Cabang</p>
 
       <form onsubmit="loginUser(event)" class="space-y-3.5 text-left">
         <div>
@@ -142,7 +131,7 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1">Password</label>
           <input type="password" id="login-password" required class="w-full px-3.5 py-2.5 glass-input rounded-xl outline-none text-xs transition">
         </div>
-        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-200 text-xs mt-2">Masuk ke Kasir</button>
+        <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-200 text-xs mt-2">Masuk ke Sistem</button>
       </form>
     </div>
   </div>
@@ -154,7 +143,7 @@
         <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
       </div>
       <h2 class="text-lg font-extrabold text-slate-900">Shift Kerja Kasir</h2>
-      <p class="text-xs text-slate-500 mt-0.5 mb-5">Siapa nama kasir yang melayani Shift ini?</p>
+      <p class="text-xs text-slate-500 mt-0.5 mb-5">Siapa nama kasir yang bertugas saat ini?</p>
 
       <form onsubmit="simpanKasirBertugas(event)" class="space-y-4 text-left">
         <div>
@@ -168,36 +157,45 @@
 
   <!-- VIEW 2: DASHBOARD UTAMA -->
   <div id="view-app" class="hidden h-[100dvh] w-full flex flex-col overflow-hidden relative z-10">
+    <!-- Header Utama -->
     <header id="main-header" class="glass-nav text-white shadow-md shrink-0 transition-colors duration-300 w-full">
       <div class="max-w-7xl mx-auto px-3 py-2 flex justify-between items-center gap-2 w-full">
         <div class="flex items-center space-x-2.5 min-w-0 flex-1">
           <img id="ui-logo" src="" class="w-8 h-8 rounded-lg object-cover border border-white/40 shadow-sm hidden shrink-0">
           <div class="min-w-0 flex-1">
             <h1 id="ui-nama-toko" class="font-extrabold text-sm leading-tight truncate">Nama Toko</h1>
-            <p id="ui-alamat" class="text-[10px] text-white/80 truncate">Alamat Toko</p>
+            <div class="flex items-center gap-1">
+              <p id="ui-alamat" class="text-[10px] text-white/80 truncate">Alamat Toko</p>
+              <!-- Multi Cabang Dropdown -->
+              <select id="select-outlet" onchange="gantiOutlet()" class="bg-black/20 text-white text-[9px] px-1.5 py-0.5 rounded border border-white/30 outline-none">
+                <option value="Cabang Utama">Cabang Utama</option>
+                <option value="Cabang 2">Cabang 2</option>
+              </select>
+            </div>
           </div>
         </div>
         <nav class="flex items-center space-x-1 shrink-0 overflow-x-auto no-scrollbar">
-          <button onclick="switchTab('kasir')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Kasir</button>
-          <button onclick="switchTab('produk')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Produk</button>
-          <button onclick="switchTab('keuangan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Keuangan</button>
-          <button onclick="switchTab('analitik')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Analitik</button>
-          <button onclick="switchTab('pengaturan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap backdrop-blur-xs">Struk & Akun</button>
-          <button onclick="logout()" class="px-2 py-1 rounded-xl bg-rose-500/80 hover:bg-rose-600 active:scale-95 transition text-[10px] font-bold ml-1 whitespace-nowrap shadow-sm">Keluar</button>
+          <button onclick="switchTab('kasir')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">Kasir</button>
+          <button onclick="switchTab('dapur')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">Dapur (KDS)</button>
+          <button onclick="switchTab('ppob')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">PPOB</button>
+          <button onclick="switchTab('produk')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">Produk & Resep</button>
+          <button onclick="switchTab('karyawan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">Karyawan</button>
+          <button onclick="switchTab('keuangan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">Keuangan</button>
+          <button onclick="switchTab('analitik')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">Analitik</button>
+          <button onclick="switchTab('pengaturan')" class="px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 transition text-xs font-semibold whitespace-nowrap">Pengaturan</button>
+          <button onclick="logout()" class="px-2 py-1 rounded-xl bg-rose-500/80 hover:bg-rose-600 active:scale-95 transition text-[10px] font-bold ml-1 whitespace-nowrap">Keluar</button>
         </nav>
       </div>
     </header>
 
     <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-3 overflow-y-auto overflow-x-hidden flex flex-col min-h-0">
 
-      <!-- TAB KASIR (POS) -->
+      <!-- TAB 1: KASIR (POS) -->
       <section id="tab-kasir" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2.5 overflow-hidden h-full fade-in">
-        <!-- Katalog Produk -->
         <div class="md:col-span-2 glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 shrink-0">
             <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Katalog Produk</h2>
             <div class="flex gap-2 w-full sm:w-auto">
-              <!-- Filter Kategori -->
               <select id="filter-kategori" onchange="filterProduk()" class="px-2 py-1 glass-input rounded-xl text-xs outline-none">
                 <option value="">Semua Kategori</option>
                 <option value="Makanan">Makanan</option>
@@ -205,9 +203,8 @@
                 <option value="Snack">Snack</option>
                 <option value="Lainnya">Lainnya</option>
               </select>
-              <!-- Search Bar -->
-              <div class="relative flex-1 sm:w-48">
-                <input type="text" id="search-produk" oninput="filterProduk()" placeholder="Cari produk..." class="w-full pl-7 pr-2 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
+              <div class="relative flex-1 sm:w-44">
+                <input type="text" id="search-produk" oninput="filterProduk()" placeholder="Cari..." class="w-full pl-7 pr-2 py-1 glass-input rounded-xl text-xs outline-none focus:ring-2 focus:ring-blue-500/50">
                 <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2 top-2 fill-current" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
               </div>
             </div>
@@ -215,7 +212,7 @@
           <div id="grid-produk" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5 overflow-y-auto flex-1 pr-1 content-start auto-rows-max"></div>
         </div>
 
-        <!-- Keranjang & Rincian Pembayaran -->
+        <!-- Keranjang & Rincian -->
         <div id="cart-container" class="glass-card p-2.5 sm:p-3 rounded-3xl flex flex-col h-full min-h-0 justify-between">
           <div class="flex flex-col flex-1 min-h-0">
             <div class="flex justify-between items-center mb-1 shrink-0">
@@ -223,73 +220,68 @@
               <span id="badge-total-items" class="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">0 Item</span>
             </div>
             
-            <div class="grid grid-cols-2 gap-1 mb-1 shrink-0">
-              <input type="text" id="kasir-bertugas" placeholder="Nama Kasir" class="w-full px-2 py-1 glass-input rounded-xl text-xs outline-none">
-              <input type="text" id="pelanggan-nama" placeholder="Nama Pelanggan" class="w-full px-2 py-1 glass-input rounded-xl text-xs outline-none">
+            <div class="grid grid-cols-3 gap-1 mb-1 shrink-0">
+              <input type="text" id="kasir-bertugas" placeholder="Kasir" class="w-full px-2 py-1 glass-input rounded-xl text-xs outline-none">
+              <input type="text" id="pelanggan-nama" placeholder="Member" class="w-full px-2 py-1 glass-input rounded-xl text-xs outline-none">
+              <input type="text" id="nomor-meja" placeholder="No Meja" class="w-full px-2 py-1 glass-input rounded-xl text-xs outline-none">
             </div>
             
-            <div id="items-keranjang" class="space-y-1 overflow-y-auto flex-1 pr-1 divide-y divide-slate-200/50 min-h-[70px]"></div>
+            <div id="items-keranjang" class="space-y-1 overflow-y-auto flex-1 pr-1 divide-y divide-slate-200/50 min-h-[60px]"></div>
           </div>
 
-          <div class="cart-checkout-box border-t border-slate-200/60 pt-1.5 mt-1 shrink-0 space-y-1">
-            <!-- Diskon Nominal/Persen -->
+          <div class="cart-checkout-box border-t border-slate-200/60 pt-1 mt-1 shrink-0 space-y-1">
             <div class="flex justify-between items-center text-xs">
               <span class="text-[10px] font-semibold text-slate-600">Diskon (Rp):</span>
-              <input type="number" id="input-diskon" oninput="renderKeranjang()" placeholder="0" class="w-24 px-1.5 py-0.5 glass-input rounded-lg text-xs text-right font-bold outline-none">
+              <input type="number" id="input-diskon" oninput="renderKeranjang()" placeholder="0" class="w-20 px-1.5 py-0.5 glass-input rounded-lg text-xs text-right font-bold outline-none">
             </div>
 
-            <div class="flex justify-between text-xs sm:text-sm font-extrabold">
-              <span class="text-[11px] text-slate-600">Total Tagihan:</span>
+            <div class="text-[9px] text-slate-500 space-y-0.5 pt-0.5 border-t border-slate-200/40">
+              <div class="flex justify-between"><span>Subtotal:</span><span id="label-subtotal">Rp 0</span></div>
+              <div class="flex justify-between"><span>Pajak (<span id="label-tax-percent">0</span>%):</span><span id="label-tax-val">Rp 0</span></div>
+              <div class="flex justify-between"><span>Layanan (<span id="label-service-percent">0</span>%):</span><span id="label-service-val">Rp 0</span></div>
+            </div>
+
+            <div class="flex justify-between text-xs sm:text-sm font-extrabold pt-0.5">
+              <span class="text-[11px] text-slate-700">Total Tagihan:</span>
               <span id="total-bayar" class="text-emerald-600">Rp 0</span>
             </div>
 
-            <!-- PILIHAN METODE PEMBAYARAN -->
             <div>
-              <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Metode Pembayaran</label>
               <div class="grid grid-cols-3 gap-1 bg-slate-200/60 p-0.5 rounded-xl text-[10px] font-bold">
-                <button type="button" id="btn-metode-tunai" onclick="pilihMetodeBayar('tunai')" class="py-1 rounded-lg bg-blue-600 text-white shadow-xs transition">Tunai</button>
-                <button type="button" id="btn-metode-qris" onclick="pilihMetodeBayar('qris')" class="py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">QRIS</button>
-                <button type="button" id="btn-metode-kasbon" onclick="pilihMetodeBayar('kasbon')" class="py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">Kasbon</button>
+                <button type="button" id="btn-metode-tunai" onclick="pilihMetodeBayar('tunai')" class="py-1 rounded-lg bg-blue-600 text-white transition">Tunai</button>
+                <button type="button" id="btn-metode-qris" onclick="pilihMetodeBayar('qris')" class="py-1 rounded-lg text-slate-600 transition">QRIS</button>
+                <button type="button" id="btn-metode-kasbon" onclick="pilihMetodeBayar('kasbon')" class="py-1 rounded-lg text-slate-600 transition">Kasbon</button>
               </div>
             </div>
 
-            <!-- INPUT TUNAI -->
-            <div id="box-pembayaran-tunai" class="grid grid-cols-2 gap-1.5 items-center">
-              <div>
-                <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Uang Tunai</label>
-                <input type="number" id="uang-diterima" oninput="hitungKembalian()" placeholder="0" class="w-full px-2 py-1 glass-input rounded-xl text-xs font-bold outline-none">
-              </div>
-              <div>
-                <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Kembalian</label>
-                <div id="uang-kembalian" class="text-xs font-bold text-blue-600 truncate py-1">Rp 0</div>
-              </div>
+            <div id="box-pembayaran-tunai" class="grid grid-cols-2 gap-1 items-center">
+              <input type="number" id="uang-diterima" oninput="hitungKembalian()" placeholder="Tunai (Rp)" class="w-full px-2 py-1 glass-input rounded-xl text-xs font-bold outline-none">
+              <div id="uang-kembalian" class="text-xs font-bold text-blue-600 truncate py-1">Rp 0</div>
             </div>
 
-            <!-- BOX QRIS INFO -->
-            <div id="box-pembayaran-qris" class="hidden p-1.5 rounded-xl bg-blue-50/80 border border-blue-200/60 text-center">
-              <button type="button" onclick="bukaModalQRIS()" class="w-full py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-extrabold shadow-sm active:scale-95 transition flex items-center justify-center">
-                <svg class="w-3.5 h-3.5 fill-current mr-1.5" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v3h-2v-3zm3 3h3v5h-3v-5zm-3 2h2v3h-2v-3zm0-2h3v2h-3v-2z"/></svg>
+            <div id="box-pembayaran-qris" class="hidden p-1 rounded-xl bg-blue-50/80 border border-blue-200/60 text-center">
+              <button type="button" onclick="bukaModalQRIS()" class="w-full py-1 bg-blue-600 text-white rounded-lg text-xs font-extrabold flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 fill-current mr-1" viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v3h-2v-3zm3 3h3v5h-3v-5zm-3 2h2v3h-2v-3zm0-2h3v2h-3v-2z"/></svg>
                 Tampilkan QRIS (Rp <span id="label-qris-btn">0</span>)
               </button>
             </div>
 
-            <!-- BOX KASBON INFO -->
-            <div id="box-pembayaran-kasbon" class="hidden p-1.5 rounded-xl bg-amber-50/80 border border-amber-200/60 text-center text-[10px] text-amber-800 font-bold">
-              Pembayaran Kasbon/Hutang dicatat atas Nama Pelanggan.
+            <div id="box-pembayaran-kasbon" class="hidden p-1 rounded-xl bg-amber-50/80 border border-amber-200/60 text-center text-[10px] text-amber-800 font-bold">
+              Kasbon/Hutang atas nama Member.
             </div>
 
             <div class="flex items-center justify-between pt-0.5 border-t border-slate-200/50">
-              <label for="option-cetak-struk" class="text-[10px] font-semibold text-slate-600 cursor-pointer">
-                <span>Cetak Struk Thermal</span>
+              <label class="text-[10px] font-semibold text-slate-600 cursor-pointer">
+                <input type="checkbox" id="option-cetak-struk" checked class="w-3 h-3 text-blue-600 rounded"> Cetak Struk
               </label>
-              <input type="checkbox" id="option-cetak-struk" checked class="w-3.5 h-3.5 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+              <button onclick="kirimKeDapur()" class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-lg font-bold">Kirim Ke Dapur</button>
             </div>
 
             <div class="grid grid-cols-5 gap-1">
-              <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="col-span-4 py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-extrabold rounded-xl shadow-lg shadow-blue-500/25 transition-all text-xs">
+              <button id="btn-proses-bayar" onclick="prosesBayarCetak()" class="col-span-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs">
                 Selesaikan Transaksi
               </button>
-              <button onclick="hubungkanBluetoothPrinter()" title="Cetak Bluetooth Direct" class="col-span-1 py-2 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white rounded-xl flex items-center justify-center">
+              <button onclick="hubungkanBluetoothPrinter()" title="Cetak Bluetooth" class="col-span-1 py-2 bg-slate-800 text-white rounded-xl flex items-center justify-center">
                 <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 5.83l1.88 1.88L13 9.59V5.83zm1.88 10.46L13 18.17v-3.76l1.88 1.88z"/></svg>
               </button>
             </div>
@@ -297,83 +289,160 @@
         </div>
       </section>
 
-      <!-- TAB PRODUK -->
-      <section id="tab-produk" class="hidden max-w-md mx-auto w-full glass-card p-4 rounded-3xl overflow-y-auto fade-in">
-        <h2 class="text-sm font-extrabold mb-3 text-slate-800">Tambah / Kelola Produk</h2>
-        <form onsubmit="tambahProduk(event)" class="space-y-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Produk</label>
-            <input type="text" id="prod-nama" required class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Harga (Rp)</label>
-              <input type="number" id="prod-harga" required class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Stok</label>
-              <input type="number" id="prod-stok" required value="10" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Kategori Produk</label>
-            <select id="prod-kategori" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
-              <option value="Makanan">Makanan</option>
-              <option value="Minuman">Minuman</option>
-              <option value="Snack">Snack</option>
-              <option value="Lainnya">Lainnya</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Foto Produk</label>
-            <input type="file" id="prod-foto-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600/10 file:text-blue-700 hover:file:bg-blue-600/20">
-          </div>
-          <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all text-xs">Simpan Produk</button>
-        </form>
+      <!-- TAB 2: DAPUR / KITCHEN DISPLAY SYSTEM (KDS) -->
+      <section id="tab-dapur" class="hidden space-y-3 overflow-y-auto fade-in w-full">
+        <div class="flex justify-between items-center glass-card p-3 rounded-2xl">
+          <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Antrean Pesanan Dapur (KDS)</h2>
+          <button onclick="renderAntreanDapur()" class="px-3 py-1 bg-blue-600 text-white rounded-xl text-xs font-bold">Refresh Pesanan</button>
+        </div>
+        <div id="grid-antrean-dapur" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
       </section>
 
-      <!-- TAB KEUANGAN -->
-      <section id="tab-keuangan" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-          <div class="glass-card p-3 sm:p-4 rounded-3xl w-full">
-            <h3 class="font-extrabold text-emerald-600 text-xs sm:text-sm mb-2.5">Catat Pemasukan</h3>
-            <form onsubmit="catatTransaksi(event, 'pemasukan')" class="flex flex-col gap-2">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <input type="number" id="in-pemasukan" placeholder="Jumlah (Rp)" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
-                <input type="text" id="ket-pemasukan" placeholder="Keterangan" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+      <!-- TAB 3: PPOB & LAYANAN DIGITAL -->
+      <section id="tab-ppob" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-lg mx-auto">
+        <div class="glass-card p-4 rounded-3xl">
+          <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-3">Layanan PPOB & Digital</h2>
+          <form onsubmit="prosesPPOB(event)" class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Layanan</label>
+              <select id="ppob-jenis" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+                <option value="Pulsa">Pulsa Seluler</option>
+                <option value="Paket Data">Paket Data</option>
+                <option value="Token PLN">Token Listrik PLN</option>
+                <option value="Voucher Game">Voucher Game</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Nomor HP / ID Pelanggan</label>
+              <input type="text" id="ppob-nomor" required placeholder="08xxxxxx / ID PLN" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Nominal / Produk</label>
+              <select id="ppob-nominal" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+                <option value="20000">Nominal 20.000 (Rp 21.500)</option>
+                <option value="50000">Nominal 50.000 (Rp 51.500)</option>
+                <option value="100000">Nominal 100.000 (Rp 101.500)</option>
+              </select>
+            </div>
+            <button type="submit" class="w-full py-2.5 bg-emerald-600 text-white font-bold rounded-xl text-xs">Proses PPOB & Bayar</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 4: PRODUK, STOK & RESEP (BOM) -->
+      <section id="tab-produk" class="hidden space-y-3 overflow-y-auto fade-in w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Form Tambah Produk -->
+          <div class="glass-card p-4 rounded-3xl">
+            <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Tambah Produk Baru</h2>
+            <form onsubmit="tambahProduk(event)" class="space-y-2.5">
+              <input type="text" id="prod-nama" placeholder="Nama Produk" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+              <div class="grid grid-cols-2 gap-2">
+                <input type="number" id="prod-harga" placeholder="Harga (Rp)" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+                <input type="number" id="prod-stok" placeholder="Stok Jadi" required value="20" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
               </div>
-              <button class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white rounded-xl font-bold text-xs transition shadow-md shadow-emerald-600/20">Simpan Pemasukan</button>
+              <select id="prod-kategori" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+                <option value="Makanan">Makanan</option>
+                <option value="Minuman">Minuman</option>
+                <option value="Snack">Snack</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+              <input type="file" id="prod-foto-file" accept="image/*" class="w-full text-[11px] text-slate-500">
+              <button type="submit" class="w-full py-2 bg-emerald-600 text-white font-bold rounded-xl text-xs">Simpan Produk</button>
             </form>
           </div>
 
-          <div class="glass-card p-3 sm:p-4 rounded-3xl w-full">
+          <!-- Form Tambah Bahan Baku (BOM) -->
+          <div class="glass-card p-4 rounded-3xl">
+            <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Manajemen Bahan Mentah (Resep)</h2>
+            <form onsubmit="tambahBahanBaku(event)" class="space-y-2.5 mb-3">
+              <div class="grid grid-cols-3 gap-2">
+                <input type="text" id="bahan-nama" placeholder="Nama Bahan" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+                <input type="number" id="bahan-stok" placeholder="Stok" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+                <input type="text" id="bahan-satuan" placeholder="Satuan (gram/ml)" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+              </div>
+              <button type="submit" class="w-full py-2 bg-blue-600 text-white font-bold rounded-xl text-xs">Simpan Bahan Baku</button>
+            </form>
+            <div class="overflow-y-auto max-h-40 rounded-xl border border-slate-200/50">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-white/60 text-slate-500 sticky top-0">
+                  <tr><th class="p-1.5 font-bold">Bahan</th><th class="p-1.5 font-bold">Stok</th><th class="p-1.5 font-bold">Satuan</th></tr>
+                </thead>
+                <tbody id="tabel-bahan-baku" class="divide-y divide-slate-200/40"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: KARYAWAN & ABSENSI -->
+      <section id="tab-karyawan" class="hidden space-y-3 overflow-y-auto fade-in w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="glass-card p-4 rounded-3xl">
+            <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Absensi Kasir</h2>
+            <form onsubmit="catatAbsensi(event)" class="space-y-3">
+              <input type="text" id="absen-nama" placeholder="Nama Karyawan" required class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+              <select id="absen-tipe" class="w-full p-2.5 glass-input rounded-xl text-xs outline-none">
+                <option value="MASUK">Absen Masuk Shift</option>
+                <option value="KELUAR">Absen Keluar Shift</option>
+              </select>
+              <button type="submit" class="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl text-xs">Catat Absensi</button>
+            </form>
+          </div>
+
+          <div class="glass-card p-4 rounded-3xl">
+            <h2 class="text-xs font-extrabold mb-2 text-slate-800 uppercase tracking-wider">Riwayat Absensi Karyawan</h2>
+            <div class="overflow-y-auto max-h-52 rounded-xl border border-slate-200/50">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-white/60 text-slate-500 sticky top-0">
+                  <tr><th class="p-2 font-bold">Nama</th><th class="p-2 font-bold">Tipe</th><th class="p-2 font-bold">Waktu Presisi</th></tr>
+                </thead>
+                <tbody id="tabel-absensi" class="divide-y divide-slate-200/40"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: KEUANGAN -->
+      <section id="tab-keuangan" class="hidden space-y-3 overflow-y-auto fade-in w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="glass-card p-3 sm:p-4 rounded-3xl">
+            <h3 class="font-extrabold text-emerald-600 text-xs sm:text-sm mb-2.5">Catat Pemasukan</h3>
+            <form onsubmit="catatTransaksi(event, 'pemasukan')" class="flex flex-col gap-2">
+              <div class="grid grid-cols-2 gap-2">
+                <input type="number" id="in-pemasukan" placeholder="Jumlah (Rp)" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+                <input type="text" id="ket-pemasukan" placeholder="Keterangan" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
+              </div>
+              <button class="w-full py-2 bg-emerald-600 text-white rounded-xl font-bold text-xs">Simpan Pemasukan</button>
+            </form>
+          </div>
+
+          <div class="glass-card p-3 sm:p-4 rounded-3xl">
             <h3 class="font-extrabold text-rose-600 text-xs sm:text-sm mb-2.5">Catat Pengeluaran</h3>
             <form onsubmit="catatTransaksi(event, 'pengeluaran')" class="flex flex-col gap-2">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div class="grid grid-cols-2 gap-2">
                 <input type="number" id="in-pengeluaran" placeholder="Jumlah (Rp)" required class="w-full p-2 glass-input rounded-xl text-xs outline-none">
                 <input type="text" id="ket-pengeluaran" placeholder="Keterangan" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
               </div>
-              <button class="w-full py-2 bg-rose-600 hover:bg-rose-700 active:scale-[0.98] text-white rounded-xl font-bold text-xs transition shadow-md shadow-rose-600/20">Simpan Pengeluaran</button>
+              <button class="w-full py-2 bg-rose-600 text-white rounded-xl font-bold text-xs">Simpan Pengeluaran</button>
             </form>
           </div>
         </div>
 
-        <div class="glass-card p-3 sm:p-4 rounded-3xl w-full overflow-hidden">
-          <div class="flex justify-between items-center mb-2.5">
-            <h3 class="font-extrabold text-slate-800 text-xs sm:text-sm">Riwayat Transaksi</h3>
-            <button onclick="eksporLaporanCSV()" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[10px] flex items-center transition shadow-xs">
-              <svg class="w-3 h-3 fill-current mr-1" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-              Ekspor Laporan (CSV)
-            </button>
+        <div class="glass-card p-3 rounded-3xl overflow-hidden">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-extrabold text-slate-800 text-xs">Riwayat Transaksi Keuangan</h3>
+            <button onclick="eksporLaporanCSV()" class="px-2.5 py-1 bg-emerald-600 text-white rounded-lg font-bold text-[10px]">Ekspor CSV</button>
           </div>
           <div class="overflow-x-auto w-full">
             <table class="w-full text-left text-xs min-w-[500px]">
               <thead class="bg-white/40 text-slate-500 border-b border-slate-200/50">
                 <tr>
-                  <th class="p-2 sm:p-2.5 font-bold">Tanggal & Waktu</th>
-                  <th class="p-2 sm:p-2.5 font-bold">Tipe</th>
-                  <th class="p-2 sm:p-2.5 font-bold">Jumlah</th>
-                  <th class="p-2 sm:p-2.5 font-bold">Keterangan</th>
+                  <th class="p-2 font-bold">Waktu Presisi</th>
+                  <th class="p-2 font-bold">Tipe</th>
+                  <th class="p-2 font-bold">Jumlah</th>
+                  <th class="p-2 font-bold">Keterangan</th>
                 </tr>
               </thead>
               <tbody id="tabel-transaksi" class="divide-y divide-slate-200/40"></tbody>
@@ -382,158 +451,106 @@
         </div>
       </section>
 
-      <!-- TAB ANALITIK -->
-      <section id="tab-analitik" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
+      <!-- TAB 7: ANALITIK -->
+      <section id="tab-analitik" class="hidden space-y-3 overflow-y-auto fade-in w-full">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
           <div class="glass-card p-3 rounded-2xl border-l-4 border-l-emerald-500">
             <div class="text-[10px] font-bold text-slate-500 uppercase">Total Omset</div>
-            <div id="kpi-omset" class="text-sm sm:text-base font-extrabold text-emerald-600 mt-1">Rp 0</div>
+            <div id="kpi-omset" class="text-sm font-extrabold text-emerald-600 mt-1">Rp 0</div>
           </div>
           <div class="glass-card p-3 rounded-2xl border-l-4 border-l-rose-500">
             <div class="text-[10px] font-bold text-slate-500 uppercase">Total Pengeluaran</div>
-            <div id="kpi-pengeluaran" class="text-sm sm:text-base font-extrabold text-rose-600 mt-1">Rp 0</div>
+            <div id="kpi-pengeluaran" class="text-sm font-extrabold text-rose-600 mt-1">Rp 0</div>
           </div>
           <div class="glass-card p-3 rounded-2xl border-l-4 border-l-blue-500">
             <div class="text-[10px] font-bold text-slate-500 uppercase">Laba Bersih</div>
-            <div id="kpi-laba" class="text-sm sm:text-base font-extrabold text-blue-600 mt-1">Rp 0</div>
+            <div id="kpi-laba" class="text-sm font-extrabold text-blue-600 mt-1">Rp 0</div>
           </div>
           <div class="glass-card p-3 rounded-2xl border-l-4 border-l-indigo-500">
             <div class="text-[10px] font-bold text-slate-500 uppercase">Total Transaksi</div>
-            <div id="kpi-transaksi-count" class="text-sm sm:text-base font-extrabold text-indigo-600 mt-1">0 TRX</div>
+            <div id="kpi-transaksi-count" class="text-sm font-extrabold text-indigo-600 mt-1">0 TRX</div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
-          <div class="md:col-span-2 glass-card p-3.5 rounded-3xl flex flex-col justify-between">
-            <h3 class="font-extrabold text-slate-800 text-xs mb-2">Grafik Penjualan & Keuangan</h3>
-            <div class="w-full h-52 relative">
-              <canvas id="chart-keuangan"></canvas>
-            </div>
+          <div class="md:col-span-2 glass-card p-3.5 rounded-3xl">
+            <h3 class="font-extrabold text-slate-800 text-xs mb-2">Grafik Penjualan</h3>
+            <div class="w-full h-52 relative"><canvas id="chart-keuangan"></canvas></div>
           </div>
-
-          <div class="glass-card p-3.5 rounded-3xl flex flex-col justify-between">
-            <h3 class="font-extrabold text-slate-800 text-xs mb-2">Perbandingan Arus Kas</h3>
-            <div class="w-full h-52 relative flex items-center justify-center">
-              <canvas id="chart-pie-kas"></canvas>
-            </div>
+          <div class="glass-card p-3.5 rounded-3xl">
+            <h3 class="font-extrabold text-slate-800 text-xs mb-2">Perbandingan Kas</h3>
+            <div class="w-full h-52 relative flex items-center justify-center"><canvas id="chart-pie-kas"></canvas></div>
           </div>
         </div>
       </section>
 
-      <!-- TAB CUSTOM STRUK, AKUN, OPSI QRIS DUAL & SHIFT LOG -->
-      <section id="tab-pengaturan" class="hidden space-y-3 overflow-y-auto fade-in w-full max-w-full">
+      <!-- TAB 8: PENGATURAN SUPER APP -->
+      <section id="tab-pengaturan" class="hidden space-y-3 overflow-y-auto fade-in w-full">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-          
-          <div class="glass-card p-4 rounded-3xl">
-            <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider">Kustomisasi Toko & QRIS</h2>
-            <form onsubmit="simpanSettings(event)" class="space-y-2.5">
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Toko</label>
-                <input type="text" id="set-nama-toko" required class="w-full p-2 glass-input rounded-xl text-xs">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Alamat Toko</label>
-                <input type="text" id="set-alamat-toko" class="w-full p-2 glass-input rounded-xl text-xs">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Kasir Default</label>
-                <input type="text" id="set-nama-kasir" class="w-full p-2 glass-input rounded-xl text-xs">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Unggah Logo Toko</label>
-                <input type="file" id="set-logo-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600/10 file:text-blue-700">
-              </div>
-
-              <!-- PILIHAN OPSIONAL QRIS -->
-              <div class="p-2.5 rounded-2xl bg-blue-50/70 border border-blue-200/60 space-y-2">
-                <label class="block text-xs font-extrabold text-blue-900">Pengaturan QRIS Pembayaran</label>
+          <div class="glass-card p-4 rounded-3xl space-y-3">
+            <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">Toko, Pajak & QRIS</h2>
+            <form onsubmit="simpanSettings(event)" class="space-y-2">
+              <input type="text" id="set-nama-toko" placeholder="Nama Toko" required class="w-full p-2 glass-input rounded-xl text-xs">
+              <input type="text" id="set-alamat-toko" placeholder="Alamat Toko" class="w-full p-2 glass-input rounded-xl text-xs">
+              
+              <!-- Setup Pajak & Service Charge -->
+              <div class="grid grid-cols-2 gap-2">
                 <div>
-                  <label class="block text-[10px] text-slate-600 mb-0.5">Tipe QRIS Toko</label>
-                  <select id="set-qris-type" onchange="toggleQrisSettingsView()" class="w-full p-1.5 glass-input rounded-xl text-xs outline-none">
-                    <option value="statis">QRIS Gambar (Upload Manual)</option>
-                    <option value="gateway">Payment Gateway (Dinamis / Otomatis)</option>
-                  </select>
+                  <label class="block text-[10px] font-bold text-slate-600">Pajak PB1 (%)</label>
+                  <input type="number" id="set-tax-percent" value="10" class="w-full p-1.5 glass-input rounded-lg text-xs">
                 </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Biaya Layanan (%)</label>
+                  <input type="number" id="set-service-percent" value="0" class="w-full p-1.5 glass-input rounded-lg text-xs">
+                </div>
+              </div>
 
+              <!-- Setup QRIS -->
+              <div class="p-2 rounded-xl bg-blue-50/70 border border-blue-200/60 space-y-1.5">
+                <label class="block text-xs font-extrabold text-blue-900">Pengaturan QRIS</label>
+                <select id="set-qris-type" onchange="toggleQrisSettingsView()" class="w-full p-1.5 glass-input rounded-xl text-xs">
+                  <option value="statis">QRIS Gambar (Upload Manual)</option>
+                  <option value="gateway">Payment Gateway (Dinamis / Otomatis)</option>
+                </select>
                 <div id="box-set-qris-statis">
-                  <label class="block text-[10px] text-slate-600 mb-1">Unggah File Barcode QRIS Toko</label>
-                  <input type="file" id="set-qris-file" accept="image/*" class="w-full text-[11px] text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white">
+                  <input type="file" id="set-qris-file" accept="image/*" class="w-full text-[10px]">
                 </div>
-
-                <div id="box-set-qris-gateway" class="hidden space-y-1.5 pt-1">
-                  <div>
-                    <label class="block text-[10px] text-slate-600">Penyedia Gateway</label>
-                    <select id="set-qris-provider" class="w-full p-1.5 glass-input rounded-lg text-xs">
-                      <option value="midtrans">Midtrans</option>
-                      <option value="tripay">Tripay</option>
-                      <option value="xendit">Xendit</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-[10px] text-slate-600">API Key / Server Key</label>
-                    <input type="text" id="set-qris-apikey" placeholder="SK-xxxxxxx" class="w-full p-1.5 glass-input rounded-lg text-xs">
-                  </div>
-                  <div>
-                    <label class="block text-[10px] text-slate-600">Merchant Code / ID</label>
-                    <input type="text" id="set-qris-merchantid" placeholder="M-xxxxxxx" class="w-full p-1.5 glass-input rounded-lg text-xs">
-                  </div>
+                <div id="box-set-qris-gateway" class="hidden space-y-1 pt-1">
+                  <select id="set-qris-provider" class="w-full p-1 glass-input rounded-lg text-xs">
+                    <option value="midtrans">Midtrans</option>
+                    <option value="tripay">Tripay</option>
+                    <option value="xendit">Xendit</option>
+                  </select>
+                  <input type="text" id="set-qris-apikey" placeholder="API Key" class="w-full p-1 glass-input rounded-lg text-xs">
+                  <input type="text" id="set-qris-merchantid" placeholder="Merchant ID" class="w-full p-1 glass-input rounded-lg text-xs">
                 </div>
               </div>
 
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Pesan Struk Footer</label>
-                <input type="text" id="set-header-struk" class="w-full p-2 glass-input rounded-xl text-xs">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Warna UI Kasir</label>
-                <input type="color" id="set-warna" class="w-full h-8 p-0.5 border rounded-lg cursor-pointer">
-              </div>
-              <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold rounded-xl text-xs transition shadow-md shadow-blue-500/20">Simpan Pengaturan Toko</button>
+              <input type="text" id="set-header-struk" placeholder="Pesan Footer Struk" class="w-full p-2 glass-input rounded-xl text-xs">
+              <button type="submit" class="w-full py-2 bg-blue-600 text-white font-bold rounded-xl text-xs">Simpan Pengaturan</button>
             </form>
           </div>
 
           <div class="space-y-3">
+            <!-- Form Ganti Password -->
             <div class="glass-card p-4 rounded-3xl">
-              <h2 class="text-xs font-extrabold mb-3 text-slate-800 uppercase tracking-wider flex items-center">
-                <svg class="w-3.5 h-3.5 mr-1.5 fill-current text-slate-700" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-                Ganti Password Toko
-              </h2>
-              <form onsubmit="gantiPasswordToko(event)" class="space-y-2.5">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Password Baru</label>
-                  <input type="password" id="pass-baru" required placeholder="Masukkan password baru" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Konfirmasi Password Baru</label>
-                  <input type="password" id="pass-konfirmasi" required placeholder="Ulangi password baru" class="w-full p-2 glass-input rounded-xl text-xs outline-none">
-                </div>
-                <button type="submit" class="w-full py-2 bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white font-bold rounded-xl text-xs transition shadow-md">Perbarui Password</button>
+              <h2 class="text-xs font-extrabold mb-2 text-slate-800 uppercase tracking-wider">Ganti Password Toko</h2>
+              <form onsubmit="gantiPasswordToko(event)" class="space-y-2">
+                <input type="password" id="pass-baru" required placeholder="Password baru" class="w-full p-2 glass-input rounded-xl text-xs">
+                <input type="password" id="pass-konfirmasi" required placeholder="Ulangi password baru" class="w-full p-2 glass-input rounded-xl text-xs">
+                <button type="submit" class="w-full py-2 bg-slate-800 text-white font-bold rounded-xl text-xs">Perbarui Password</button>
               </form>
             </div>
 
-            <div class="glass-card p-4 rounded-3xl">
-              <div class="flex justify-between items-center mb-2">
-                <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center">
-                  <svg class="w-3.5 h-3.5 mr-1.5 fill-current text-slate-700" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-                  Riwayat Shift & Login Kasir
-                </h2>
-                <button onclick="hapusRiwayatShift()" class="text-[10px] text-rose-500 hover:underline font-semibold">Bersihkan Log</button>
+            <!-- Katalog Menu QR Digital -->
+            <div class="glass-card p-4 rounded-3xl text-center space-y-2">
+              <h2 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">QR Code Menu Digital Pelanggan</h2>
+              <div class="flex justify-center">
+                <img id="img-qr-katalog" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/" class="w-28 h-28 border rounded-lg">
               </div>
-              <div class="overflow-y-auto max-h-48 rounded-xl border border-slate-200/50">
-                <table class="w-full text-left text-xs">
-                  <thead class="bg-white/60 text-slate-500 border-b border-slate-200/50 sticky top-0">
-                    <tr>
-                      <th class="p-2 font-bold">Kasir Shift</th>
-                      <th class="p-2 font-bold">Waktu Masuk</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tabel-shift-kasir" class="divide-y divide-slate-200/40"></tbody>
-                </table>
-              </div>
+              <p class="text-[10px] text-slate-500">Pajang QR ini di meja agar pelanggan dapat melihat menu secara mandiri.</p>
             </div>
-
           </div>
-
         </div>
       </section>
 
@@ -545,6 +562,9 @@
     let keranjang = [];
     let allProducts = [];
     let allTransactions = [];
+    let bahanBakuList = [];
+    let antreanDapur = [];
+    let absensiList = [];
     let metodePembayaran = 'tunai';
 
     let chartKeuanganInstance = null;
@@ -642,54 +662,12 @@
 
       document.getElementById('kasir-bertugas').value = namaKasir;
 
-      catatRiwayatShift(namaKasir);
-
       document.getElementById('view-modal-kasir').classList.add('hidden');
       document.getElementById('view-app').classList.remove('hidden');
 
       terapkanUI(activeUser);
       loadProduk();
       loadTransaksi();
-      renderRiwayatShift();
-    }
-
-    function catatRiwayatShift(namaKasir) {
-      let shifts = JSON.parse(localStorage.getItem('kasirin_shift_history')) || [];
-      shifts.unshift({
-        kasir: namaKasir,
-        waktu: formatWaktuLengkap(new Date())
-      });
-      localStorage.setItem('kasirin_shift_history', JSON.stringify(shifts));
-    }
-
-    function renderRiwayatShift() {
-      const tbody = document.getElementById('tabel-shift-kasir');
-      if (!tbody) return;
-      
-      let shifts = JSON.parse(localStorage.getItem('kasirin_shift_history')) || [];
-      tbody.innerHTML = '';
-
-      if (shifts.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="2" class="p-3 text-center text-slate-400 text-xs">Belum ada riwayat shift</td></tr>`;
-        return;
-      }
-
-      shifts.forEach(s => {
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-white/40';
-        tr.innerHTML = `
-          <td class="p-2 font-bold text-slate-800">${s.kasir}</td>
-          <td class="p-2 text-slate-500 text-[11px]">${s.waktu}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function hapusRiwayatShift() {
-      if (!confirm('Bersihkan semua catatan riwayat shift kasir?')) return;
-      localStorage.removeItem('kasirin_shift_history');
-      renderRiwayatShift();
-      showToast('Riwayat Shift Dibersihkan');
     }
 
     async function gantiPasswordToko(e) {
@@ -697,47 +675,34 @@
       const passBaru = document.getElementById('pass-baru').value;
       const passKonfirmasi = document.getElementById('pass-konfirmasi').value;
 
-      if (passBaru !== passKonfirmasi) {
-        return alert('Konfirmasi password baru tidak cocok!');
-      }
+      if (passBaru !== passKonfirmasi) return alert('Konfirmasi password tidak cocok!');
 
       try {
         const res = await fetch(`/api/users/${activeUser.id}/settings`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...activeUser,
-            password: passBaru
-          })
+          body: JSON.stringify({ ...activeUser, password: passBaru })
         });
 
         if (res.ok) {
-          showToast('Password Berhasil Diperbarui!');
+          showToast('Password Diperbarui!');
           e.target.reset();
-        } else {
-          alert('Gagal memperbarui password!');
         }
-      } catch (err) {
-        alert('Terjadi kesalahan jaringan!');
-      }
+      } catch (err) { alert('Gagal memperbarui password!'); }
     }
 
-    function logout() {
-      initApp();
+    function logout() { initApp(); }
+
+    function gantiOutlet() {
+      const outletName = document.getElementById('select-outlet').value;
+      showToast(`Beralih ke ${outletName}`);
+      loadTransaksi();
     }
 
     function toggleQrisSettingsView() {
       const type = document.getElementById('set-qris-type').value;
-      const boxStatis = document.getElementById('box-set-qris-statis');
-      const boxGateway = document.getElementById('box-set-qris-gateway');
-
-      if (type === 'statis') {
-        boxStatis.classList.remove('hidden');
-        boxGateway.classList.add('hidden');
-      } else {
-        boxStatis.classList.add('hidden');
-        boxGateway.classList.remove('hidden');
-      }
+      document.getElementById('box-set-qris-statis').classList.toggle('hidden', type !== 'statis');
+      document.getElementById('box-set-qris-gateway').classList.toggle('hidden', type === 'statis');
     }
 
     function terapkanUI(u) {
@@ -747,70 +712,39 @@
       document.getElementById('main-header').style.backgroundColor = u.warna_ui || '#2563eb';
       document.getElementById('btn-proses-bayar').style.backgroundColor = u.warna_ui || '#2563eb';
 
-      const img = document.getElementById('ui-logo');
-      if (u.logo_data) {
-        img.src = u.logo_data;
-        img.classList.remove('hidden');
-      } else {
-        img.classList.add('hidden');
-      }
-
       document.getElementById('set-nama-toko').value = u.nama_toko || '';
       document.getElementById('set-alamat-toko').value = u.alamat_toko || '';
-      document.getElementById('set-nama-kasir').value = u.nama_kasir || 'Kasir 1';
-      document.getElementById('set-warna').value = u.warna_ui || '#2563eb';
       document.getElementById('set-header-struk').value = u.header_struk || 'Terima kasih!';
 
-      document.getElementById('set-qris-type').value = u.qris_type || 'statis';
-      document.getElementById('set-qris-provider').value = u.qris_provider || 'midtrans';
-      document.getElementById('set-qris-apikey').value = u.qris_apikey || '';
-      document.getElementById('set-qris-merchantid').value = u.qris_merchantid || '';
+      document.getElementById('label-tax-percent').innerText = u.pajak_persen || 10;
+      document.getElementById('label-service-percent').innerText = u.layanan_persen || 0;
+      document.getElementById('set-tax-percent').value = u.pajak_persen || 10;
+      document.getElementById('set-service-percent').value = u.layanan_persen || 0;
 
       toggleQrisSettingsView();
     }
 
     function switchTab(tab) {
-      ['kasir', 'produk', 'keuangan', 'analitik', 'pengaturan'].forEach(t => {
+      ['kasir', 'dapur', 'ppob', 'produk', 'karyawan', 'keuangan', 'analitik', 'pengaturan'].forEach(t => {
         const el = document.getElementById(`tab-${t}`);
         if (el) el.classList.add('hidden');
       });
       const activeEl = document.getElementById(`tab-${tab}`);
       if (activeEl) activeEl.classList.remove('hidden');
 
-      if (tab === 'analitik') {
-        renderAnalitik();
-      } else if (tab === 'pengaturan') {
-        renderRiwayatShift();
-      }
+      if (tab === 'dapur') renderAntreanDapur();
+      if (tab === 'analitik') renderAnalitik();
     }
 
     function pilihMetodeBayar(m) {
       metodePembayaran = m;
-      const btnTunai = document.getElementById('btn-metode-tunai');
-      const btnQris = document.getElementById('btn-metode-qris');
-      const btnKasbon = document.getElementById('btn-metode-kasbon');
-      const boxTunai = document.getElementById('box-pembayaran-tunai');
-      const boxQris = document.getElementById('box-pembayaran-qris');
-      const boxKasbon = document.getElementById('box-pembayaran-kasbon');
+      document.getElementById('btn-metode-tunai').className = m === 'tunai' ? 'py-1 rounded-lg bg-blue-600 text-white' : 'py-1 rounded-lg text-slate-600';
+      document.getElementById('btn-metode-qris').className = m === 'qris' ? 'py-1 rounded-lg bg-blue-600 text-white' : 'py-1 rounded-lg text-slate-600';
+      document.getElementById('btn-metode-kasbon').className = m === 'kasbon' ? 'py-1 rounded-lg bg-amber-600 text-white' : 'py-1 rounded-lg text-slate-600';
 
-      btnTunai.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
-      btnQris.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
-      btnKasbon.className = 'py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
-
-      boxTunai.classList.add('hidden');
-      boxQris.classList.add('hidden');
-      boxKasbon.classList.add('hidden');
-
-      if (m === 'tunai') {
-        btnTunai.className = 'py-1 rounded-lg bg-blue-600 text-white shadow-xs transition';
-        boxTunai.classList.remove('hidden');
-      } else if (m === 'qris') {
-        btnQris.className = 'py-1 rounded-lg bg-blue-600 text-white shadow-xs transition';
-        boxQris.classList.remove('hidden');
-      } else if (m === 'kasbon') {
-        btnKasbon.className = 'py-1 rounded-lg bg-amber-600 text-white shadow-xs transition';
-        boxKasbon.classList.remove('hidden');
-      }
+      document.getElementById('box-pembayaran-tunai').classList.toggle('hidden', m !== 'tunai');
+      document.getElementById('box-pembayaran-qris').classList.toggle('hidden', m !== 'qris');
+      document.getElementById('box-pembayaran-kasbon').classList.toggle('hidden', m !== 'kasbon');
     }
 
     function hitungSubtotal() {
@@ -820,45 +754,134 @@
     function hitungTotalTagihanAkhir() {
       const subtotal = hitungSubtotal();
       const diskon = Number(document.getElementById('input-diskon')?.value) || 0;
-      return Math.max(0, subtotal - diskon);
+      const taxPercent = Number(activeUser?.pajak_persen || 10);
+      const servicePercent = Number(activeUser?.layanan_persen || 0);
+
+      const afterDiskon = Math.max(0, subtotal - diskon);
+      const taxVal = (afterDiskon * taxPercent) / 100;
+      const serviceVal = (afterDiskon * servicePercent) / 100;
+
+      document.getElementById('label-subtotal').innerText = `Rp ${subtotal.toLocaleString('id-ID')}`;
+      document.getElementById('label-tax-val').innerText = `Rp ${taxVal.toLocaleString('id-ID')}`;
+      document.getElementById('label-service-val').innerText = `Rp ${serviceVal.toLocaleString('id-ID')}`;
+
+      return Math.round(afterDiskon + taxVal + serviceVal);
     }
 
     function bukaModalQRIS() {
       const total = hitungTotalTagihanAkhir();
-      if (total <= 0) return alert('Keranjang belanja masih kosong!');
+      if (total <= 0) return alert('Keranjang belanja kosong!');
 
       const namaToko = (activeUser && activeUser.nama_toko) ? activeUser.nama_toko : 'KasirinAja';
       document.getElementById('qris-nama-toko').innerText = namaToko.toUpperCase();
       document.getElementById('qris-nominal-tagihan').innerText = `Rp ${total.toLocaleString('id-ID')}`;
 
-      const imgQris = document.getElementById('img-qris-code');
-      const txtInstruksi = document.getElementById('qris-keterangan-instruksi');
-
-      if (activeUser && activeUser.qris_type === 'gateway') {
-        const provider = activeUser.qris_provider || 'MIDTRANS';
-        const merchant = activeUser.qris_merchantid || 'DEMO';
-        const payload = `GATEWAY-${provider.toUpperCase()}-MERCHANT-${merchant}-AMOUNT-${total}`;
-        imgQris.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}`;
-        txtInstruksi.innerText = `[${provider.toUpperCase()}] QRIS Dinamis Otomatis nominal Rp ${total.toLocaleString('id-ID')}.`;
-      } else if (activeUser && activeUser.qris_image_data) {
-        imgQris.src = activeUser.qris_image_data;
-        txtInstruksi.innerText = `Pindai QRIS di atas dengan m-Banking atau E-Wallet.`;
-      } else {
-        const payloadDefault = `QRIS-${encodeURIComponent(namaToko)}-AMOUNT-${total}`;
-        imgQris.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${payloadDefault}`;
-        txtInstruksi.innerText = `Pindai QRIS di atas dengan m-Banking atau E-Wallet.`;
-      }
-
+      const payload = `QRIS-${encodeURIComponent(namaToko)}-AMOUNT-${total}`;
+      document.getElementById('img-qris-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${payload}`;
       document.getElementById('modal-qris-display').classList.remove('hidden');
     }
 
-    function tutupModalQRIS() {
-      document.getElementById('modal-qris-display').classList.add('hidden');
+    function tutupModalQRIS() { document.getElementById('modal-qris-display').classList.add('hidden'); }
+    function prosesBayarQRISSelesai() { tutupModalQRIS(); prosesBayarCetak(); }
+
+    function kirimKeDapur() {
+      if (!keranjang || keranjang.length === 0) return alert('Keranjang kosong!');
+      const noMeja = document.getElementById('nomor-meja').value || 'Tanpa Meja';
+      
+      antreanDapur.push({
+        id: Date.now(),
+        meja: noMeja,
+        waktu: formatWaktuLengkap(new Date()),
+        items: [...keranjang],
+        status: 'Diproses'
+      });
+
+      showToast(`Pesanan Meja ${noMeja} Dikirim ke Dapur!`);
     }
 
-    function prosesBayarQRISSelesai() {
-      tutupModalQRIS();
-      prosesBayarCetak();
+    function renderAntreanDapur() {
+      const container = document.getElementById('grid-antrean-dapur');
+      container.innerHTML = '';
+
+      if (antreanDapur.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-center text-xs text-slate-400 py-8">Tidak ada pesanan aktif di dapur</div>`;
+        return;
+      }
+
+      antreanDapur.forEach(a => {
+        let itemsHtml = a.items.map(i => `<div class="flex justify-between text-xs"><span>${i.nama_produk}</span><span class="font-bold">x${i.qty}</span></div>`).join('');
+        const div = document.createElement('div');
+        div.className = 'glass-card p-3 rounded-2xl space-y-2 border-l-4 border-l-blue-600';
+        div.innerHTML = `
+          <div class="flex justify-between items-center text-xs font-bold border-b pb-1">
+            <span>Meja: ${a.meja}</span>
+            <span class="text-[10px] text-slate-500">${a.waktu}</span>
+          </div>
+          <div class="space-y-1">${itemsHtml}</div>
+          <button onclick="selesaikanPesananDapur(${a.id})" class="w-full py-1.5 bg-emerald-600 text-white font-bold rounded-xl text-xs">Tandai Selesai</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function selesaikanPesananDapur(id) {
+      antreanDapur = antreanDapur.filter(a => a.id !== id);
+      renderAntreanDapur();
+      showToast('Pesanan Dapur Selesai!');
+    }
+
+    function prosesPPOB(e) {
+      e.preventDefault();
+      const jenis = document.getElementById('ppob-jenis').value;
+      const nomor = document.getElementById('ppob-nomor').value;
+      const nominal = document.getElementById('ppob-nominal').value;
+
+      showToast(`PPOB ${jenis} ${nomor} Berhasil!`);
+      e.target.reset();
+    }
+
+    function tambahBahanBaku(e) {
+      e.preventDefault();
+      const nama = document.getElementById('bahan-nama').value;
+      const stok = document.getElementById('bahan-stok').value;
+      const satuan = document.getElementById('bahan-satuan').value;
+
+      bahanBakuList.push({ nama, stok, satuan });
+      renderBahanBaku();
+      e.target.reset();
+      showToast('Bahan Baku Disimpan!');
+    }
+
+    function renderBahanBaku() {
+      const tbody = document.getElementById('tabel-bahan-baku');
+      tbody.innerHTML = '';
+      bahanBakuList.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="p-1.5 font-bold">${b.nama}</td><td class="p-1.5">${b.stok}</td><td class="p-1.5 text-slate-500">${b.satuan}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function catatAbsensi(e) {
+      e.preventDefault();
+      const nama = document.getElementById('absen-nama').value;
+      const tipe = document.getElementById('absen-tipe').value;
+      const waktu = formatWaktuLengkap(new Date());
+
+      absensiList.unshift({ nama, tipe, waktu });
+      renderAbsensi();
+      e.target.reset();
+      showToast('Absensi Dicatat!');
+    }
+
+    function renderAbsensi() {
+      const tbody = document.getElementById('tabel-absensi');
+      tbody.innerHTML = '';
+      absensiList.forEach(a => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="p-2 font-bold">${a.nama}</td><td class="p-2 font-bold ${a.tipe === 'MASUK' ? 'text-emerald-600' : 'text-rose-600'}">${a.tipe}</td><td class="p-2 text-slate-500">${a.waktu}</td>`;
+        tbody.appendChild(tr);
+      });
     }
 
     function filterProduk() {
@@ -868,12 +891,8 @@
       if (!Array.isArray(allProducts)) allProducts = [];
       let filtered = allProducts;
 
-      if (kat) {
-        filtered = filtered.filter(p => (p.kategori || 'Lainnya') === kat);
-      }
-      if (q) {
-        filtered = filtered.filter(p => p.nama_produk && p.nama_produk.toLowerCase().includes(q));
-      }
+      if (kat) filtered = filtered.filter(p => (p.kategori || 'Lainnya') === kat);
+      if (q) filtered = filtered.filter(p => p.nama_produk && p.nama_produk.toLowerCase().includes(q));
       renderGridProduk(filtered);
     }
 
@@ -884,10 +903,7 @@
         const data = await res.json();
         allProducts = Array.isArray(data) ? data : [];
         renderGridProduk(allProducts);
-      } catch (err) {
-        allProducts = [];
-        renderGridProduk([]);
-      }
+      } catch (err) { renderGridProduk([]); }
     }
 
     function renderGridProduk(prods) {
@@ -900,16 +916,12 @@
       }
 
       prods.forEach(p => {
-        const stok = Number(p.stok) || 0;
         const div = document.createElement('div');
-        div.className = 'glass-card rounded-2xl p-2 text-center cursor-pointer transition-all duration-200 active:scale-95 hover:shadow-md hover:bg-white/80 flex flex-col justify-between select-none relative group h-auto';
+        div.className = 'glass-card rounded-2xl p-2 text-center cursor-pointer transition-all active:scale-95 hover:shadow-md flex flex-col justify-between select-none relative';
         div.innerHTML = `
-          <button onclick="hapusProduk('${p.id}', event)" class="absolute top-1 right-1 w-5 h-5 bg-rose-500/90 text-white rounded-full flex items-center justify-center hover:bg-rose-600 transition active:scale-90 z-10" title="Hapus Produk">
-            <svg class="w-2.5 h-2.5 stroke-current" viewBox="0 0 24 24" fill="none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
-          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-16 sm:h-20 object-cover rounded-xl mb-1 shadow-xs">
-          <div class="font-bold text-[11px] leading-tight truncate text-slate-800 px-1">${p.nama_produk}</div>
-          <div class="text-[9px] font-semibold text-slate-400 truncate">[${p.kategori || 'Umum'}] Stok: ${stok}</div>
+          <img src="${p.foto_data || 'https://via.placeholder.com/150'}" class="w-full h-16 object-cover rounded-xl mb-1">
+          <div class="font-bold text-[11px] truncate text-slate-800">${p.nama_produk}</div>
+          <div class="text-[9px] text-slate-400">Stok: ${p.stok || 0}</div>
           <div class="text-[10px] text-emerald-600 font-extrabold mt-0.5">Rp ${Number(p.harga || 0).toLocaleString('id-ID')}</div>
         `;
         div.onclick = () => tambahKeKeranjang(p);
@@ -917,78 +929,12 @@
       });
     }
 
-    async function hapusProduk(id, e) {
-      if (e) e.stopPropagation();
-      if (!confirm('Yakin ingin menghapus produk ini dari katalog?')) return;
-
-      try {
-        const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
-        if (res.ok) {
-          keranjang = keranjang.filter(k => k.id !== id);
-          renderKeranjang();
-          loadProduk();
-          showToast('Produk dihapus');
-        } else {
-          alert('Gagal menghapus produk!');
-        }
-      } catch (err) {
-        alert('Terjadi kesalahan!');
-      }
-    }
-
     function tambahKeKeranjang(p) {
-      const stokAvailable = Number(p.stok) || 0;
       const exist = keranjang.find(k => k.id === p.id);
-      const currentQty = exist ? exist.qty : 0;
-
-      if (stokAvailable > 0 && currentQty >= stokAvailable) {
-        return alert(`Stok ${p.nama_produk} tidak mencukupi (Tersisa: ${stokAvailable})!`);
-      }
-
       if (exist) exist.qty += 1;
       else keranjang.push({ ...p, qty: 1 });
-      
       renderKeranjang();
       showToast(`+1 ${p.nama_produk}`);
-      
-      const cartBox = document.getElementById('cart-container');
-      if (cartBox) {
-        cartBox.classList.remove('pop-bump');
-        void cartBox.offsetWidth;
-        cartBox.classList.add('pop-bump');
-      }
-    }
-
-    function tambahQty(id) {
-      const item = keranjang.find(k => k.id === id);
-      const originalProd = allProducts.find(p => p.id === id);
-      const stokAvailable = originalProd ? Number(originalProd.stok) || 0 : 999;
-
-      if (item) {
-        if (stokAvailable > 0 && item.qty >= stokAvailable) {
-          return alert('Stok produk telah mencapai batas maksimum!');
-        }
-        item.qty += 1;
-        renderKeranjang();
-      }
-    }
-
-    function kurangQty(id) {
-      const item = keranjang.find(k => k.id === id);
-      if (item) {
-        if (item.qty > 1) {
-          item.qty -= 1;
-        } else {
-          hapusDariKeranjang(id);
-          return;
-        }
-        renderKeranjang();
-      }
-    }
-
-    function hapusDariKeranjang(id) {
-      keranjang = keranjang.filter(k => k.id !== id);
-      renderKeranjang();
     }
 
     function renderKeranjang() {
@@ -996,53 +942,35 @@
       container.innerHTML = '';
       let totalItems = 0;
 
-      if (!Array.isArray(keranjang)) keranjang = [];
-
       keranjang.forEach(k => {
         const sub = (Number(k.harga) || 0) * (k.qty || 1);
         totalItems += (k.qty || 1);
 
         const row = document.createElement('div');
-        row.className = 'flex justify-between items-center py-1 text-xs gap-1.5 transition-all';
+        row.className = 'flex justify-between items-center py-1 text-xs';
         row.innerHTML = `
-          <div class="flex-1 min-w-0">
-            <div class="font-bold text-slate-800 text-[11px] truncate leading-tight">${k.nama_produk}</div>
-            <div class="text-[9px] text-slate-500 font-medium">Rp ${Number(k.harga || 0).toLocaleString('id-ID')}</div>
-          </div>
-          <div class="flex items-center space-x-1 shrink-0 bg-slate-100/70 p-0.5 rounded-lg border border-slate-200/50">
-            <button onclick="kurangQty('${k.id}')" class="w-4 h-4 rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">-</button>
-            <span class="text-[10px] font-extrabold px-1 text-center">${k.qty}</span>
-            <button onclick="tambahQty('${k.id}')" class="w-4 h-4 rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center shrink-0">+</button>
-          </div>
-          <div class="text-right shrink-0 min-w-[50px]">
-            <div class="font-extrabold text-[10px] text-slate-800">Rp ${sub.toLocaleString('id-ID')}</div>
-            <button onclick="hapusDariKeranjang('${k.id}')" class="text-[8px] text-rose-500 font-semibold hover:underline">Hapus</button>
-          </div>
+          <div class="flex-1 truncate"><div class="font-bold text-[11px]">${k.nama_produk}</div><div class="text-[9px] text-slate-500">Rp ${Number(k.harga).toLocaleString('id-ID')}</div></div>
+          <div class="flex items-center space-x-1"><button onclick="kurangQty('${k.id}')" class="w-4 h-4 bg-white rounded font-bold">-</button><span class="text-[10px] font-extrabold px-1">${k.qty}</span><button onclick="tambahQty('${k.id}')" class="w-4 h-4 bg-white rounded font-bold">+</button></div>
+          <div class="text-right min-w-[45px] font-extrabold text-[10px]">Rp ${sub.toLocaleString('id-ID')}</div>
         `;
         container.appendChild(row);
       });
 
       const totalAkhir = hitungTotalTagihanAkhir();
-
       document.getElementById('total-bayar').innerText = `Rp ${totalAkhir.toLocaleString('id-ID')}`;
       document.getElementById('label-qris-btn').innerText = totalAkhir.toLocaleString('id-ID');
       document.getElementById('badge-total-items').innerText = `${totalItems} Item`;
       hitungKembalian();
     }
 
+    function tambahQty(id) { const k = keranjang.find(i => i.id === id); if (k) { k.qty++; renderKeranjang(); } }
+    function kurangQty(id) { const k = keranjang.find(i => i.id === id); if (k) { k.qty--; if (k.qty <= 0) keranjang = keranjang.filter(i => i.id !== id); renderKeranjang(); } }
+
     function hitungKembalian() {
       const total = hitungTotalTagihanAkhir();
       const uang = Number(document.getElementById('uang-diterima').value) || 0;
       const kembalian = uang - total;
-
-      const spanKembalian = document.getElementById('uang-kembalian');
-      if (kembalian >= 0) {
-        spanKembalian.innerText = `Rp ${kembalian.toLocaleString('id-ID')}`;
-        spanKembalian.className = 'text-xs font-bold text-blue-600 py-1 truncate';
-      } else {
-        spanKembalian.innerText = `Kurang Rp ${Math.abs(kembalian).toLocaleString('id-ID')}`;
-        spanKembalian.className = 'text-xs font-bold text-rose-600 py-1 truncate';
-      }
+      document.getElementById('uang-kembalian').innerText = kembalian >= 0 ? `Rp ${kembalian.toLocaleString('id-ID')}` : `Kurang Rp ${Math.abs(kembalian).toLocaleString('id-ID')}`;
     }
 
     async function prosesBayarCetak() {
@@ -1050,15 +978,11 @@
       const total = hitungTotalTagihanAkhir();
       const uang = Number(document.getElementById('uang-diterima').value) || 0;
 
-      if (metodePembayaran === 'tunai' && uang < total) {
-        return alert('Uang pembayaran tunai kurang!');
-      }
+      if (metodePembayaran === 'tunai' && uang < total) return alert('Uang pembayaran kurang!');
 
       const namaKasir = document.getElementById('kasir-bertugas').value || 'Kasir';
       const namaPelanggan = document.getElementById('pelanggan-nama').value || 'Umum';
-      const cetakStruk = document.getElementById('option-cetak-struk').checked;
-
-      let ketBayar = `Penjualan ${metodePembayaran.toUpperCase()} (Kasir: ${namaKasir}, Pelanggan: ${namaPelanggan})`;
+      const noMeja = document.getElementById('nomor-meja').value || '-';
 
       try {
         const res = await fetch('/api/transactions', {
@@ -1068,117 +992,26 @@
             user_id: activeUser.id,
             tipe: 'pemasukan',
             jumlah: total,
-            keterangan: ketBayar
+            keterangan: `Penjualan ${metodePembayaran.toUpperCase()} (Kasir: ${namaKasir}, Meja: ${noMeja}, Member: ${namaPelanggan})`
           })
         });
 
-        if (!res.ok) {
-          alert('Gagal menyimpan transaksi!');
-          return;
+        if (res.ok) {
+          showToast('Transaksi Disimpan!');
+          keranjang = [];
+          document.getElementById('uang-diterima').value = '';
+          renderKeranjang();
+          loadTransaksi();
         }
-
-        if (cetakStruk) {
-          const nominalDiterima = (metodePembayaran === 'qris' || metodePembayaran === 'kasbon') ? total : uang;
-          const nominalKembali = (metodePembayaran === 'qris' || metodePembayaran === 'kasbon') ? 0 : (uang - total);
-          cetakStrukThermal(total, nominalDiterima, nominalKembali, namaKasir, namaPelanggan);
-        } else {
-          showToast('Transaksi Berhasil Disimpan!');
-        }
-
-        keranjang = [];
-        document.getElementById('uang-diterima').value = '';
-        document.getElementById('input-diskon').value = '';
-        renderKeranjang();
-        loadTransaksi();
-        loadProduk();
-      } catch (err) {
-        alert('Terjadi kesalahan saat memproses transaksi!');
-      }
-    }
-
-    function cetakStrukThermal(total, uang, kembalian, namaKasir, namaPelanggan) {
-      let printFrame = document.getElementById('print-iframe');
-      if (!printFrame) {
-        printFrame = document.createElement('iframe');
-        printFrame.id = 'print-iframe';
-        printFrame.style.position = 'fixed';
-        printFrame.style.right = '0';
-        printFrame.style.bottom = '0';
-        printFrame.style.width = '0';
-        printFrame.style.height = '0';
-        printFrame.style.border = '0';
-        document.body.appendChild(printFrame);
-      }
-
-      const tanggalWaktu = formatWaktuLengkap(new Date());
-
-      let items = '';
-      keranjang.forEach(k => {
-        items += `<div style="display:flex;justify-content:space-between;font-size:11px;"><span>${k.nama_produk} x${k.qty}</span><span>${((Number(k.harga) || 0) * k.qty).toLocaleString('id-ID')}</span></div>`;
-      });
-
-      const logoHtml = activeUser && activeUser.logo_data ? `<div style="text-align:center;"><img src="${activeUser.logo_data}" style="max-width:40px;margin-bottom:4px;"></div>` : '';
-
-      const content = `
-        <html>
-          <head>
-            <title>Struk Pembayaran</title>
-            <style>
-              body { font-family: monospace; width: 58mm; padding: 4px; font-size: 11px; margin: 0; }
-              .center { text-align: center; }
-              .flex-between { display: flex; justify-content: space-between; }
-              hr { border-top: 1px dashed #000; margin: 4px 0; }
-            </style>
-          </head>
-          <body>
-            ${logoHtml}
-            <div class="center">
-              <strong>${(activeUser && activeUser.nama_toko) || 'Toko'}</strong><br>
-              <span style="font-size:10px;">${(activeUser && activeUser.alamat_toko) || ''}</span>
-            </div>
-            <hr>
-            <div style="font-size:10px;">
-              <div>Waktu  : ${tanggalWaktu}</div>
-              <div>Kasir  : ${namaKasir}</div>
-              <div>Member : ${namaPelanggan}</div>
-              <div>Metode : ${metodePembayaran.toUpperCase()}</div>
-            </div>
-            <hr>
-            ${items}
-            <hr>
-            <div class="flex-between" style="font-weight:bold;"><span>TOTAL</span><span>Rp ${total.toLocaleString('id-ID')}</span></div>
-            <div class="flex-between"><span>BAYAR</span><span>Rp ${uang.toLocaleString('id-ID')}</span></div>
-            <div class="flex-between"><span>KEMBALI</span><span>Rp ${kembalian.toLocaleString('id-ID')}</span></div>
-            <hr>
-            <div class="center" style="font-size:10px;"><p>${(activeUser && activeUser.header_struk) || 'Terima Kasih!'}</p></div>
-          </body>
-        </html>
-      `;
-
-      const frameDoc = printFrame.contentWindow.document;
-      frameDoc.open();
-      frameDoc.write(content);
-      frameDoc.close();
-
-      setTimeout(() => {
-        printFrame.contentWindow.focus();
-        printFrame.contentWindow.print();
-      }, 300);
+      } catch (err) { alert('Terjadi kesalahan!'); }
     }
 
     async function hubungkanBluetoothPrinter() {
-      if (!('bluetooth' in navigator)) {
-        return alert('Web Bluetooth API tidak didukung pada browser ini. Gunakan Google Chrome!');
-      }
+      if (!('bluetooth' in navigator)) return alert('Web Bluetooth API tidak didukung browser ini!');
       try {
-        const device = await navigator.bluetooth.requestDevice({
-          acceptAllDevices: true,
-          optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb']
-        });
-        showToast(`Bluetooth terhubung: ${device.name}`);
-      } catch (err) {
-        alert('Gagal menghubungkan Bluetooth Printer.');
-      }
+        const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+        showToast(`Terhubung: ${device.name}`);
+      } catch (err) { alert('Gagal terhubung ke printer Bluetooth.'); }
     }
 
     async function tambahProduk(e) {
@@ -1201,16 +1034,12 @@
         });
 
         if (res.ok) {
-          showToast('Produk Berhasil Disimpan!');
+          showToast('Produk Disimpan!');
           e.target.reset();
           loadProduk();
           switchTab('kasir');
-        } else {
-          alert('Gagal menyimpan produk!');
         }
-      } catch (err) {
-        alert('Terjadi kesalahan jaringan!');
-      }
+      } catch (err) { alert('Gagal menyimpan produk!'); }
     }
 
     async function catatTransaksi(e, tipe) {
@@ -1228,15 +1057,11 @@
         });
 
         if (res.ok) {
-          showToast('Transaksi Dicatat!');
+          showToast('Transaksi Keuangan Dicatat!');
           e.target.reset();
           loadTransaksi();
-        } else {
-          alert('Gagal mencatat transaksi!');
         }
-      } catch (err) {
-        alert('Terjadi kesalahan!');
-      }
+      } catch (err) { alert('Gagal mencatat transaksi!'); }
     }
 
     async function loadTransaksi() {
@@ -1251,7 +1076,7 @@
 
         allTransactions.forEach(t => {
           const tr = document.createElement('tr');
-          tr.className = 'border-b border-slate-200/30 hover:bg-white/40 transition';
+          tr.className = 'border-b border-slate-200/30';
           tr.innerHTML = `
             <td class="p-2 text-[11px] text-slate-500 font-medium">${formatWaktuLengkap(t.created_at)}</td>
             <td class="p-2 font-bold text-[11px] ${t.tipe === 'pemasukan' ? 'text-emerald-600' : 'text-rose-600'}">${(t.tipe || '').toUpperCase()}</td>
@@ -1261,27 +1086,19 @@
           tbody.appendChild(tr);
         });
 
-        if (!document.getElementById('tab-analitik').classList.contains('hidden')) {
-          renderAnalitik();
-        }
-      } catch (err) {
-        allTransactions = [];
-      }
+        if (!document.getElementById('tab-analitik').classList.contains('hidden')) renderAnalitik();
+      } catch (err) { allTransactions = []; }
     }
 
     function eksporLaporanCSV() {
-      if (!allTransactions || allTransactions.length === 0) {
-        return alert('Tidak ada transaksi untuk diekspor!');
-      }
-      let csv = 'Waktu,Tipe,Jumlah,Keterangan\n';
-      allTransactions.forEach(t => {
-        csv += `"${formatWaktuLengkap(t.created_at)}","${t.tipe}","${t.jumlah}","${t.keterangan || ''}"\n`;
-      });
+      if (!allTransactions || allTransactions.length === 0) return alert('Tidak ada transaksi!');
+      let csv = 'Waktu Presisi,Tipe,Jumlah,Keterangan\n';
+      allTransactions.forEach(t => { csv += `"${formatWaktuLengkap(t.created_at)}","${t.tipe}","${t.jumlah}","${t.keterangan || ''}"\n`; });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.setAttribute('href', url);
-      a.setAttribute('download', `Laporan_Keuangan_${Date.now()}.csv`);
+      a.setAttribute('download', `Laporan_SuperApp_${Date.now()}.csv`);
       a.click();
     }
 
@@ -1298,90 +1115,49 @@
           const d = t.created_at ? new Date(t.created_at).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' }) : 'Hari ini';
 
           if (!groupDates[d]) groupDates[d] = { masuk: 0, keluar: 0 };
-
-          if (t.tipe === 'pemasukan') {
-            totalOmset += val;
-            groupDates[d].masuk += val;
-          } else {
-            totalPengeluaran += val;
-            groupDates[d].keluar += val;
-          }
+          if (t.tipe === 'pemasukan') { totalOmset += val; groupDates[d].masuk += val; }
+          else { totalPengeluaran += val; groupDates[d].keluar += val; }
         });
       }
 
-      const labaBersih = totalOmset - totalPengeluaran;
-
-      const elOmset = document.getElementById('kpi-omset');
-      const elPengeluaran = document.getElementById('kpi-pengeluaran');
-      const elLaba = document.getElementById('kpi-laba');
-      const elTrxCount = document.getElementById('kpi-transaksi-count');
-
-      if (elOmset) elOmset.innerText = `Rp ${totalOmset.toLocaleString('id-ID')}`;
-      if (elPengeluaran) elPengeluaran.innerText = `Rp ${totalPengeluaran.toLocaleString('id-ID')}`;
-      if (elLaba) elLaba.innerText = `Rp ${labaBersih.toLocaleString('id-ID')}`;
-      if (elTrxCount) elTrxCount.innerText = `${(Array.isArray(allTransactions) ? allTransactions.length : 0)} TRX`;
+      document.getElementById('kpi-omset').innerText = `Rp ${totalOmset.toLocaleString('id-ID')}`;
+      document.getElementById('kpi-pengeluaran').innerText = `Rp ${totalPengeluaran.toLocaleString('id-ID')}`;
+      document.getElementById('kpi-laba').innerText = `Rp ${(totalOmset - totalPengeluaran).toLocaleString('id-ID')}`;
+      document.getElementById('kpi-transaksi-count').innerText = `${allTransactions.length} TRX`;
 
       const canvas1 = document.getElementById('chart-keuangan');
       const canvas2 = document.getElementById('chart-pie-kas');
       if (!canvas1 || !canvas2) return;
 
-      if (chartKeuanganInstance) { chartKeuanganInstance.destroy(); chartKeuanganInstance = null; }
-      if (chartPieInstance) { chartPieInstance.destroy(); chartPieInstance = null; }
+      if (chartKeuanganInstance) chartKeuanganInstance.destroy();
+      if (chartPieInstance) chartPieInstance.destroy();
 
       const labels = Object.keys(groupDates);
       const dataMasuk = labels.map(l => groupDates[l].masuk);
       const dataKeluar = labels.map(l => groupDates[l].keluar);
 
-      try {
-        const ctx1 = canvas1.getContext('2d');
-        chartKeuanganInstance = new Chart(ctx1, {
-          type: 'bar',
-          data: {
-            labels: labels.length ? labels : ['Hari Ini'],
-            datasets: [
-              {
-                label: 'Pemasukan (Rp)',
-                data: dataMasuk.length ? dataMasuk : [0],
-                backgroundColor: 'rgba(16, 185, 129, 0.75)',
-                borderRadius: 6,
-              },
-              {
-                label: 'Pengeluaran (Rp)',
-                data: dataKeluar.length ? dataKeluar : [0],
-                backgroundColor: 'rgba(244, 63, 94, 0.75)',
-                borderRadius: 6,
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } },
-            scales: { y: { beginAtZero: true } }
-          }
-        });
+      const ctx1 = canvas1.getContext('2d');
+      chartKeuanganInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: labels.length ? labels : ['Hari Ini'],
+          datasets: [
+            { label: 'Pemasukan', data: dataMasuk.length ? dataMasuk : [0], backgroundColor: 'rgba(16, 185, 129, 0.75)' },
+            { label: 'Pengeluaran', data: dataKeluar.length ? dataKeluar : [0], backgroundColor: 'rgba(244, 63, 94, 0.75)' }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
 
-        const ctx2 = canvas2.getContext('2d');
-        chartPieInstance = new Chart(ctx2, {
-          type: 'doughnut',
-          data: {
-            labels: ['Pemasukan', 'Pengeluaran'],
-            datasets: [{
-              data: [totalOmset || (totalPengeluaran ? 0 : 1), totalPengeluaran || 0],
-              backgroundColor: ['#10b981', '#f43f5e'],
-              borderWidth: 2,
-              borderColor: '#ffffff'
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
-          }
-        });
-      } catch (err) {
-        console.error('Gagal membuat grafik:', err);
-      }
+      const ctx2 = canvas2.getContext('2d');
+      chartPieInstance = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Pemasukan', 'Pengeluaran'],
+          datasets: [{ data: [totalOmset || 1, totalPengeluaran], backgroundColor: ['#10b981', '#f43f5e'] }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
     }
 
     async function simpanSettings(e) {
@@ -1392,17 +1168,8 @@
       let logo_data = activeUser ? activeUser.logo_data : '';
       let qris_image_data = activeUser ? activeUser.qris_image_data : '';
 
-      if (logoFile) {
-        logo_data = await compressImageToBase64(logoFile);
-      }
-      if (qrisFile) {
-        qris_image_data = await compressImageToBase64(qrisFile, 400);
-      }
-
-      const qris_type = document.getElementById('set-qris-type').value;
-      const qris_provider = document.getElementById('set-qris-provider').value;
-      const qris_apikey = document.getElementById('set-qris-apikey').value;
-      const qris_merchantid = document.getElementById('set-qris-merchantid').value;
+      if (logoFile) logo_data = await compressImageToBase64(logoFile);
+      if (qrisFile) qris_image_data = await compressImageToBase64(qrisFile, 400);
 
       try {
         const res = await fetch(`/api/users/${activeUser.id}/settings`, {
@@ -1411,29 +1178,20 @@
           body: JSON.stringify({
             nama_toko: document.getElementById('set-nama-toko').value,
             alamat_toko: document.getElementById('set-alamat-toko').value,
-            nama_kasir: document.getElementById('set-nama-kasir').value,
-            warna_ui: document.getElementById('set-warna').value,
+            pajak_persen: document.getElementById('set-tax-percent').value,
+            layanan_persen: document.getElementById('set-service-percent').value,
             logo_data,
-            qris_type,
             qris_image_data,
-            qris_provider,
-            qris_apikey,
-            qris_merchantid,
             header_struk: document.getElementById('set-header-struk').value
           })
         });
 
         if (res.ok) {
-          const updated = await res.json();
-          activeUser = updated;
+          activeUser = await res.json();
           showToast('Pengaturan Disimpan!');
           terapkanUI(activeUser);
-        } else {
-          alert('Gagal menyimpan pengaturan!');
         }
-      } catch (err) {
-        alert('Terjadi kesalahan jaringan!');
-      }
+      } catch (err) { alert('Terjadi kesalahan jaringan!'); }
     }
 
     window.onload = initApp;
